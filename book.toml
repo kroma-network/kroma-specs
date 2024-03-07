@@ -1,0 +1,20 @@
+[book]
+authors = ["kroma-network"]
+language = "en"
+multilingual = false
+src = "specs"
+title = "Kroma-network Specification"
+
+[preprocessor.katex]
+after = ["links"]
+
+[preprocessor.mermaid]
+command = "mdbook-mermaid"
+
+[output.html]
+git-repository-url = "https://github.com/kroma-network/specs"
+edit-url-template = "https://github.com/kroma-network/specs/edit/main/{path}"
+default-theme = "ayu"
+additional-js = ["specs/static/solidity.min.js", "specs/static/mermaid.min.js", "specs/static/mermaid-init.js"]
+
+[output.linkcheck]
