@@ -1,0 +1,46 @@
+name: Book Deployment
+
+on:
+  push:
+    branches:
+      - main
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: write
+      deployments: write
+    name: Publish to GitHub Pages
+    steps:
+      - name: Checkout sources
+        uses: actions/checkout@v4
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::${{ secrets.ACCOUNT_ID }}:role/${{ secrets.KROMA_GITHUB_ACTION_ROLE }}
+          aws-region: ${{ secrets.AWS_REGION }}
+      - name: Install Rust stable toolchain
+        uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+        with:
+          cache-on-failure: true
+      - name: Setup mdbook
+        uses: peaceiris/actions-mdbook@v1
+        with:
+          mdbook-version: "latest"
+      - name: Install mdbook plugins
+        run: |
+          cargo install mdbook-katex mdbook-linkcheck mdbook-mermaid
+      - name: Build book
+        run: mdbook build
+      - name: Sync to S3
+        env:
+          AWS_S3_BUCKET: ${{ secrets.AWS_S3_BUCKET }}
+        run: |
+          aws s3 sync ./book/html/ s3://$AWS_S3_BUCKET/
+      - name: Invalidate CloudFront cache
+        env:
+          DISTRIBUTION_ID: ${{ secrets.DISTRIBUTION_ID }}
+        run: |
+          aws cloudfront create-invalidation --distribution-id $DISTRIBUTION_ID --paths "/*"
