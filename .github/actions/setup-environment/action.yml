@@ -1,0 +1,46 @@
+name: "Setup Node.js environment with pnpm"
+description: "Installs Node.js, pnpm, and project dependencies"
+inputs:
+  node-version:
+    description: "Node.js version to setup"
+    required: true
+    default: "16"
+  pnpm-version:
+    description: "pnpm version to setup"
+    required: true
+    default: "8"
+runs:
+  using: "composite"
+  steps:
+    - name: Checkout sources
+      uses: actions/checkout@v4
+    - name: Install Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ inputs.node-version }}
+    - name: Install pnpm
+      uses: pnpm/action-setup@v3
+      with:
+        version: ${{ inputs.pnpm-version }}
+        run_install: false
+    - name: Get pnpm store directory
+      run: |
+        echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+      shell: bash
+    - name: Setup pnpm cache
+      uses: actions/cache@v3
+      with:
+        path: ${{ env.STORE_PATH }}
+        key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+        restore-keys: |
+          ${{ runner.os }}-pnpm-store-
+    - name: Install dependencies
+      run: |
+        pnpm install
+      shell: bash
+    - name: Setup just
+      uses: extractions/setup-just@v1
+    - name: Install deps
+      run: |
+        just deps
+      shell: bash

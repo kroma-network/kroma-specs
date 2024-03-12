@@ -1,0 +1,23 @@
+name: Lint Links
+
+on:
+  schedule:
+    - cron: "0 0 * * *"
+jobs:
+  lint-links:
+    runs-on: ubuntu-latest
+    name: check lint links
+    steps:
+      - name: Checkout sources
+        uses: actions/checkout@v4
+      - name: Setup Environment
+        uses: ./.github/actions/setup-environment
+      - name: lint links
+        run: just lint-links
+      - uses: 8398a7/action-slack@v3
+        with:
+          status: ${{ job.status }}
+          fields: repo,commit,author,action
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        if: failure()
