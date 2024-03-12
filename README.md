@@ -9,7 +9,7 @@
 
 ## Kroma network Specification
 
-This repository contains the [Specs Book](https://kroma-specs.kroma.network).
+This repository contains the [Specs Book](https://specs.kroma.network).
 
 ## Contributing
 
