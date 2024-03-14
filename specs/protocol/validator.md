@@ -4,6 +4,7 @@
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**
 
+- [Overview](#overview)
 - [Submitting L2 Output Commitments](#submitting-l2-output-commitments)
 - [L2 Output Commitment Construction](#l2-output-commitment-construction)
   - [Output Payload(Version 0)](#output-payloadversion-0)

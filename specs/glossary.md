@@ -26,7 +26,6 @@
   - [Priority Gas Auction](#priority-gas-auction)
 - [Sequencing](#sequencing)
   - [Sequencer](#sequencer)
-  - [Maximal Extractable Value](#maximal-extractable-value)
   - [Sequencing Window](#sequencing-window)
   - [Sequencing Epoch](#sequencing-epoch)
   - [L1 Origin](#l1-origin)
