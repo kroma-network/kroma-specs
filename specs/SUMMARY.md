@@ -1,7 +1,7 @@
 <!-- DOCTOC SKIP -->
 
 # Summary
- 
+
 - [Root](./root.md)
 - [Introduction](./introduction.md)
 - [Kroma Protocol](./protocol/overview.md)

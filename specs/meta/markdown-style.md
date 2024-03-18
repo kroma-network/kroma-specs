@@ -44,7 +44,7 @@ In general:
 - Example: [Rollup Node Specification source][rollup-node]
 
 [glossary]: ../glossary.md
-[rollup-node]: ../rollup-node.md
+[rollup-node]: ../protocol/rollup-node.md
 
 ## Internal (In-File) Links
 

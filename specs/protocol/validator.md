@@ -4,6 +4,7 @@
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**
 
+- [Overview](#overview)
 - [Submitting L2 Output Commitments](#submitting-l2-output-commitments)
 - [L2 Output Commitment Construction](#l2-output-commitment-construction)
   - [Output Payload(Version 0)](#output-payloadversion-0)
@@ -176,8 +177,8 @@ When submitting the output, the validator must bond Ethereum for `REQUIRED_BOND_
 rewarded to the L2 `ValidatorRewardVault` contract when the output is finalized.
 
 Also, validators should stake their bond for disputing challenge. This bond will be given to the winner of the challenge
-as a reward. When this reward distributed, a [tax](../fault-proof/challenge.md) is imposed to prevent collusive attacks of asserter
-and challenger.
+as a reward. When this reward distributed, a [tax](../fault-proof/challenge.md) is imposed to prevent collusive attacks
+of asserter and challenger.
 
 Validator Pool Smart Contract implements the following interface:
 

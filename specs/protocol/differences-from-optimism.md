@@ -2,11 +2,11 @@
 
 <!-- All glossary references in this file. -->
 
-[g-l2-output-root]: glossary.md#l2-output-root
-[g-mpt]: glossary.md#merkle-patricia-trie
-[g-zktrie]: glossary.md#zk-trie
-[g-zk-fault-proof]: glossary.md#zk-fault-proof
-[g-system-config]: glossary.md#system-configuration
+[g-l2-output-root]: ../glossary.md#l2-output-root
+[g-mpt]: ../glossary.md#merkle-patricia-trie
+[g-zktrie]: ../glossary.md#zk-trie
+[g-zk-fault-proof]: ../glossary.md#zk-fault-proof
+[g-system-config]: ../glossary.md#system-configuration
 [g-validation-rewards]: validator.md#validation-rewards
 [g-output-payload-v0]: validator.md#output-payloadversion-0
 
@@ -29,9 +29,9 @@
 
 There are two types of network participants in the OP Stack:
 
-- [Sequencers](https://github.com/ethereum-optimism/optimism/blob/develop/specs/introduction.md#sequencers) consolidate
+- [Sequencers](https://specs.optimism.io/introduction.html#sequencers) consolidate
  users' on/off chain transactions into blocks. They submit checkpoint outputs as well as batch transactions.
-- [Verifiers](https://github.com/ethereum-optimism/optimism/blob/develop/specs/introduction.md#verifiers) verify rollup
+- [Verifiers](https://specs.optimism.io/introduction.html#verifiers) verify rollup
    integrity and dispute invalid assertions.
 
 It is crucial to have at least one honest verifier who can verify the integrity of the rollup chain to ensure the
@@ -75,7 +75,7 @@ be expanded to other clients for pragmatic decentralization.
 
 The `ValidatorRewardScalar` field was added to [system configuration][g-system-config].
 
-```
+```go
 type L1BlockInfo struct {
     Number    uint64
     Time      uint64
@@ -94,9 +94,8 @@ type L1BlockInfo struct {
 }
 ```
 
-<pre>
-<a href="https://github.com/kroma-network/kroma/blob/dev/op-node/rollup/derive/l1_block_info.go">Code link here</a>
-</pre>
+[Code here](https://github.com/kroma-network/kroma/blob/dev/op-node/rollup/derive/l1_block_info.go)
+
 This value is set via the `SystemConfig` contract on L1 and passed through the L2 derivation process and used as an
 ingredient in the reward calculation. (Detailed calculations : [Validation Rewards][g-validation-rewards])
 
@@ -104,7 +103,7 @@ ingredient in the reward calculation. (Detailed calculations : [Validation Rewar
 
 The `next_block_hash` field was added to [Output Payload][g-output-payload-v0].
 
-```
+```go
 type OutputV0 struct {
     StateRoot                Bytes32
     MessagePasserStorageRoot Bytes32
@@ -115,9 +114,8 @@ type OutputV0 struct {
 }
 ```
 
-<pre>
-<a href="https://github.com/kroma-network/kroma/blob/dev/op-service/eth/output.go">Code here</a>
-</pre>
+[Code here](https://github.com/kroma-network/kroma/blob/dev/op-service/eth/output.go")
+
 This value is used as an additional material for the [verification process][g-zk-fault-proof] of the fault
 proof system.
 It is used to validate the relationship between the Source OutputRootProof and Dest OutputRootProof, and the validation

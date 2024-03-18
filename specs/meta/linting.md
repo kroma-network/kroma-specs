@@ -51,7 +51,7 @@ To update the TOC, we run [doctoc], installed through the dev-dependencies in `p
 
 See
 
-- [golangci-lint docs](https://golangci-lint.run/usage/install/#local-installation)
+- [golangci-lint docs](https://golangci-lint.run/welcome/install/#local-installation)
 - [golangci-lint github](https://github.com/golangci/golangci-lint)
 - [github action github](https://github.com/golangci/golangci-lint-action)
 

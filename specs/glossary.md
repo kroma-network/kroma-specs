@@ -26,7 +26,6 @@
   - [Priority Gas Auction](#priority-gas-auction)
 - [Sequencing](#sequencing)
   - [Sequencer](#sequencer)
-  - [Maximal Extractable Value](#maximal-extractable-value)
   - [Sequencing Window](#sequencing-window)
   - [Sequencing Epoch](#sequencing-epoch)
   - [L1 Origin](#l1-origin)
@@ -114,8 +113,8 @@ refers to the Ethereum blockchain.
 
 Can refer to an [L1] block, or to an [L2] block, which are structured similarly.
 
-A block is a sequential list of transactions, along with a couple of properties stored in the *header* of the block. A
-description of these properties can be found in code comments [here][nano-header], or in the [Ethereum yellow paper
+A block is a sequential list of transactions, along with a couple of properties stored in the *header* of the block.
+A description of these properties can be found in code comments [here][nano-header], or in the [Ethereum yellow paper
 (pdf)][yellow], section 4.3.
 
 It is useful to distinguish between input block properties, which are known before executing the transactions in the
@@ -196,8 +195,8 @@ proof to be constructed for any key-value mapping encoded in the tree. Such a pr
 verified against the Merkle root.
 
 Whereas [L1] uses [MPT][mpt] to represent state, [L2] uses ZKT. This is because ZKT enables faster proof
-generation by avoiding [Keccak][keccak] and [RLP encoding][RLP format]. To accomplish this, ZKT uses poseidon hash to calculate
-the path and concatenates leaf values in bytes.
+generation by avoiding [Keccak][keccak] and [RLP encoding][RLP format].
+To accomplish this, ZKT uses poseidon hash to calculate the path and concatenates leaf values in bytes.
 
 ## Chain Re-Organization
 
@@ -773,7 +772,8 @@ The unsafe L2 head is the highest [unsafe L2 block][unsafe-l2-block] that a [rol
 
 [consolidation]: glossary.md#unsafe-block-consolidation
 
-Unsafe block consolidation is the process through which the [rollup node][rollup-node] attempts to move the [safe-L2-head] a block forward, so that the oldest [unsafe L2 block][unsafe-l2-block] becomes the new safe L2 head.
+Unsafe block consolidation is the process through which the [rollup node][rollup-node] attempts to move the
+[safe-L2-head] a block forward, so that the oldest [unsafe L2 block][unsafe-l2-block] becomes the new safe L2 head.
 
 In order to perform consolidation, the node verifies that the [payload attributes][payload-attr] derived from the L1
 chain match the oldest unsafe L2 block exactly.
@@ -786,7 +786,7 @@ See the [Engine Queue section][engine-queue] of the L2 chain derivatiaon spec fo
 
 [finalized-l2-head]: glossary.md#finalized-l2-head
 
-The finalized L2 head is the highest L2 block that can be derived from _[finalized][finality]_ L1 blocks — i.e. L1
+The finalized L2 head is the highest L2 block that can be derived from *[finalized][finality]* L1 blocks — i.e. L1
 blocks older than two L1 epochs (64 L1 [time slots][time-slot]).
 
 [finality]: https://hackmd.io/@prysmaticlabs/finality
