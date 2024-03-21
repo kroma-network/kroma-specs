@@ -1,6 +1,9 @@
 name: Lint Links
 
 on:
+  pull_request:
+    paths:
+      - "specs/**"
   schedule:
     - cron: "0 0 * * *"
 jobs:
@@ -20,4 +23,4 @@ jobs:
           fields: repo,commit,author,action
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-        if: failure()
+        if: failure() && github.event_name == 'schedule'
