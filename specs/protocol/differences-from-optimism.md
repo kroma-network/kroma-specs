@@ -114,7 +114,7 @@ type OutputV0 struct {
 }
 ```
 
-[Code here](https://github.com/kroma-network/kroma/blob/dev/op-service/eth/output.go")
+[Code here](https://github.com/kroma-network/kroma/blob/dev/op-service/eth/output.go)
 
 This value is used as an additional material for the [verification process][g-zk-fault-proof] of the fault
 proof system.
