@@ -25,15 +25,17 @@ all actions are carried out through multi-sig transaction or governance processe
 When an undeniable bug occurs within the [ZK Fault Proof System](../glossary.md#zk-fault-proof), assets locked in
 Layer 2 may be exposed to potential risks. To prevent this, the Security Council has the authority to rectify such
 issues. The Security Council intervenes in cases where two valid and contradictory ZK proofs exist
-([ZK soundness error](../fault-proof/challenge.mdhallenge.md#dismiss-challenge)) or fail to prove with a valid proof
-([ZK completeness error](../fault-proof/challenge.mdhallenge.md#force-delete-output)). Their intervention aims to prevent invalid outputs from
-being finalized, thereby safeguarding the assets locked in Layer 2.
+([ZK soundness error](../fault-proof/challenge.md#dismiss-challenge)) or fail to prove with a valid proof
+([ZK completeness error](../fault-proof/challenge.md#force-delete-output)).
+Their intervention aims to prevent invalid outputs from being finalized,
+thereby safeguarding the assets locked in Layer 2.
 
 ## Guardian of Bridge
 
 If potential threats exposing Layer 2 assets within the Bridge, the Security Council possesses the authority to promptly
 pause/unpause the bridge through a multi-sig transaction. The `GUARDIAN` in the
-[`KromaPortal.sol`](../packages/contracts/contracts/L1/KromaPortal.sol) is configured to be Security Council.
+[`KromaPortal.sol`](https://github.com/kroma-network/kroma/blob/main/packages/contracts/contracts/L1/KromaPortal.sol)
+is configured to be Security Council.
 
 ```solidity
     /**

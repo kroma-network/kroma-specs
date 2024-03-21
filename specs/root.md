@@ -4,7 +4,6 @@
 This directory contains the plain english specs for Kroma, a minimal optimistic rollup protocol
 that maintains 1:1 compatibility with Ethereum.
 
-
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**

@@ -20,7 +20,6 @@
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-
 <!-- All glossary references in this file. -->
 
 [g-deposits]: ../glossary.md#deposits

@@ -54,7 +54,7 @@ Proxies are set at each possible predeploy address except for the `ProxyAdmin` a
 
 ## ProxyAdmin
 
-[Implementation](https://github.com/kroma-network/kroma/blob/main/packages/contracts/contracts/ProxyAdmin.sol)
+[Implementation](https://github.com/kroma-network/kroma/blob/main/packages/contracts/contracts/universal/ProxyAdmin.sol)
 
 Address: `0x4200000000000000000000000000000000000000`
 
