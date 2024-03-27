@@ -17,6 +17,7 @@
   - [L1 Attributes Depositor Account](#l1-attributes-depositor-account)
   - [L1 Attributes Predeployed Contract](#l1-attributes-predeployed-contract)
     - [L1 Attributes Predeployed Contract: Reference Implementation](#l1-attributes-predeployed-contract-reference-implementation)
+    - [Mint Token](#mint-token)
 - [User-Deposited Transactions](#user-deposited-transactions)
   - [Deposit Contract](#deposit-contract)
     - [Address Aliasing](#address-aliasing)
@@ -304,6 +305,11 @@ A reference implementation of the L1 Attributes predeploy contract can be found 
 After running `pnpm build` in the `packages/contracts` directory, the bytecode to add to the genesis
 file will be located in the `deployedBytecode` field of the build artifacts file at
 `/packages/contracts/artifacts/contracts/L2/L1Block.sol/L1Block.json`.
+
+#### Mint Token
+
+After storing all attributes of the L1 block, call the mint function of the MintManager contract to mint tokens.
+See [MintManager](./mint-manager.md) specification.
 
 ## User-Deposited Transactions
 
