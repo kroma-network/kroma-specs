@@ -279,5 +279,5 @@ the operation within the engine is the exact same as with L1 (although with an E
 [engine_forkchoiceUpdatedV2]: https://github.com/ethereum/execution-apis/blob/584905270d8ad665718058060267061ecfd79ca5/src/engine/shanghai.md#engine_forkchoiceupdatedv2
 [engine_newPayloadV2]: https://github.com/ethereum/execution-apis/blob/584905270d8ad665718058060267061ecfd79ca5/src/engine/shanghai.md#engine_newpayloadv2
 [engine_getPayloadV2]: https://github.com/ethereum/execution-apis/blob/584905270d8ad665718058060267061ecfd79ca5/src/engine/shanghai.md#engine_getpayloadv2
-[HEX value encoding]: https://eth.wiki/json-rpc/API#hex-value-encoding
+[HEX value encoding]: https://ethereum.org/en/developers/docs/apis/json-rpc/#hex-encoding
 [JSON-RPC-API]: https://github.com/ethereum/execution-apis
