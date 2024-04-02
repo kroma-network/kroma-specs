@@ -67,7 +67,7 @@ def get_mint_amount_per_block(block_number):
 
 ## Initial Minting
 
-Mints the amount of tokens that should have been minted from the genesis block to the current block.
+Mints the amount of tokens that should have been minted from the L2 genesis block to the current block.
 This function operates only if it has never been minted through the MintManager contract before.
 
 ```python
