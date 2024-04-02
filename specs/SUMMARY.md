@@ -20,6 +20,7 @@
     - [Batcher](./protocol/batcher.md)
   - [Predeploys](./protocol/predeploys.md)
   - [SystemConfig](./protocol/system-config.md)
+  - [Mint Manager](./protocol/mint-manager.md)
 - [Fault Proof]()
   - [Challenge](./fault-proof/challenge.md)
   - [zkEVM Prover](./fault-proof/zkevm-prover.md)
