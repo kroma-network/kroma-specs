@@ -16,7 +16,7 @@
 
 [g-deposited]: ../glossary.md#deposited-transaction
 [g-l1-attr-deposit]: ../glossary.md#l1-attributes-deposited-transaction
-[g-l1-attr-predeploy]: glossary.md#l1-attributes-predeployed-contract
+[g-l1-attr-predeploy]: ../glossary.md#l1-attributes-predeployed-contract
 [g-eoa]: ../glossary.md#eoa
 
 ## Overview
