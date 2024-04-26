@@ -1,5 +1,5 @@
 <!-- DOCTOC SKIP -->
-# Kroma specs
+# Kroma Specs
 
 This directory contains the plain english specs for Kroma, a minimal optimistic rollup protocol
 that maintains 1:1 compatibility with Ethereum.
