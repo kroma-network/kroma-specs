@@ -7,7 +7,9 @@
 - [Overview](#overview)
 - [System config contents (version 0)](#system-config-contents-version-0)
   - [`batcherHash` (`bytes32`)](#batcherhash-bytes32)
-  - [`overhead` and `scalar` (`uint256,uint256`)](#overhead-and-scalar-uint256uint256)
+  - [Scalars](#scalars)
+    - [Pre-Ecotone `scalar`, `overhead` (`uint256,uint256`)](#pre-ecotone-scalar-overhead-uint256uint256)
+    - [Ecotone `scalar`, `overhead` (`uint256,uint256`) change](#ecotone-scalar-overhead-uint256uint256-change)
   - [`gasLimit` (`uint64`)](#gaslimit-uint64)
   - [`unsafeBlockSigner` (`address`)](#unsafeblocksigner-address)
   - [`validatorRewardScalar` (`uint256`)](#validatorrewardscalar-uint256)
@@ -41,10 +43,67 @@ Version `0` embeds the current batch submitter ethereum address (`bytes20`) in t
 In the future, this versioned hash may become a commitment to a more extensive configuration,
 to enable more extensive redundancy and/or rotation configurations.
 
-### `overhead` and `scalar` (`uint256,uint256`)
+### Scalars
 
-The L1 fee parameters, also known as [Gas Price Oracle (GPO)](predeploys.md#gaspriceoracle) parameters,
-are updated in conjunction and apply new [L1][g-l1] costs to the [L2][g-l2] transactions.
+The L1 fee parameters, also known as Gas Price Oracle (GPO) parameters, are used to compute the L1
+data fee applied to an L2 transaction. The specific parameters used depend on the upgrades that
+are active.
+
+Fee parameter updates are signaled to L2 through the `GAS_CONFIG` log-event of the `SystemConfig`.
+
+#### Pre-Ecotone `scalar`, `overhead` (`uint256,uint256`)
+
+The `overhead` and `scalar` are consulted and passed to the L2 via L1 attribute info.
+
+The values are interpreted as big-endian `uint256`.
+
+#### Ecotone `scalar`, `overhead` (`uint256,uint256`) change
+
+After Ecotone activation:
+
+- The `scalar` attribute encodes additional scalar information, in a versioned encoding scheme.
+- The `overhead` value is ignored: it does not affect the L2 state-transition output.
+
+The `scalar` is encoded as big-endian `uint256`, interpreted as `bytes32`, and composed as following:
+
+\*Byte ranges are indicated with `[` (inclusive) and `)` (exclusive).
+
+- `0`: scalar-version byte
+- `[1, 32)`: depending scalar-version:
+  - Scalar-version `0`:
+    - `[1, 28)`: padding, should be zero.
+    - `[28, 32)`: big-endian `uint32`, encoding the L1-fee `baseFeeScalar`
+    - This version implies the L1-fee `blobBaseFeeScalar` is set to 0.
+    - In the event there are non-zero bytes in the padding area, `baseFeeScalar` must be set to MaxUint32.
+    - This version is compatible with the pre-Ecotone `scalar` value (assuming a `uint32` range).
+  - Scalar-version `1`:
+    - `[1, 24)`: padding, must be zero.
+    - `[24, 28)`: big-endian `uint32`, encoding the `blobBaseFeeScalar`
+    - `[28, 32)`: big-endian `uint32`, encoding the `baseFeeScalar`
+    - This version is meant to configure the EIP-4844 blob fee component, once blobs are used for data-availability.
+  - Other scalar-version values: unrecognized.
+    OP-Stack forks are recommended to utilize the `>= 128` scalar-version range and document their `scalar` encoding.
+
+Invalid and unrecognized scalar event-data should be ignored,
+and the last valid configuration should continue to be utilized.
+
+The `baseFeeScalar` and `blobBaseFeeScalar` are incorporated into the L2 through the
+[Ecotone L1 attributes deposit transaction calldata](deposits.md#l1-attributes---ecotone).
+
+Future upgrades of the `SystemConfig` contract may provide additional typed getters/setters
+for the versioned scalar information.
+
+In Ecotone the existing `setGasConfig` function, and `scalar` and `overhead` getters, continue to function.
+
+When the batch-submitter utilizes EIP-4844 blob data for data-availability
+it can adjust the scalars to accurately price the resources:
+
+- `baseFeeScalar` to correspond to the share of the user-transaction (per byte)
+  in the total regular L1 EVM gas usage consumed by the data-transaction of the batch-submitter.
+  For blob transactions this is the fixed intrinsic gas cost of the L1 transaction.
+
+- `blobBaseFeeScalar` to correspond to share of a user-transaction (per byte)
+  in the total Blob data that is introduced by the data-transaction of the batch-submitter.
 
 ### `gasLimit` (`uint64`)
 
@@ -85,7 +144,9 @@ A rollup node initializes its derivation process by finding a starting point bas
 - When started from L2 genesis, the initial system configuration is retrieved from the rollup chain configuration.
 - When started from an existing L2 chain, a previously included L1 block is determined as derivation starting point,
   and the system config can thus be retrieved from the last L2 block that referenced the L1 block as L1 origin:
-  - `batcherHash`, `overhead` and `scalar` are retrieved from the L1 block info transaction.
+  - If the chain state precedes the Ecotone upgrade, `batcherHash`, `overhead` and `scalar` are
+    retrieved from the L1 block info transaction. Otherwise, `batcherHash`, `baseFeeScalar`, and
+    `blobBaseFeeScalar` are retrieved instead.
   - `gasLimit` is retrieved from the L2 block header.
   - other future variables may also be retrieved from other contents of the L2 block, such as the header.
 
@@ -101,9 +162,14 @@ The contained log events are filtered and processed as follows:
 - the remaining event data is opaque, encoded as ABI bytes (i.e. includes offset and length data),
   and encodes the configuration update. In version `0` the following types are supported:
   - type `0`: `batcherHash` overwrite, as `bytes32` payload.
-  - type `1`: `overhead` and `scalar` overwrite, as two packed `uint256` entries.
+  - type `1`: Pre-Ecotone, `overhead` and `scalar` overwrite, as two packed `uint256`
+    entries. After Ecotone upgrade, `overhead` is ignored and `scalar` interpreted as a [versioned
+    encoding](#ecotone-scalar-overhead-uint256uint256-change) that updates `baseFeeScalar` and
+    `blobBaseFeeScalar`.
   - type `2`: `gasLimit` overwrite, as `uint64` payload.
   - type `3`: `unsafeBlockSigner` overwrite, as `address` payload.
+
+[encodePacked]: https://docs.soliditylang.org/en/latest/abi-spec.html#non-standard-packed-mode
 
 Note that individual derivation stages may be processing different L1 blocks,
 and should thus maintain individual system configuration copies,

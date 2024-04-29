@@ -1,14 +1,13 @@
 # Span-batches
 
-<!-- All glossary references in this file. -->
-[g-deposit-tx-type]: ../glossary.md#deposited-transaction-type
-
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**
 
 - [Introduction](#introduction)
 - [Span batch format](#span-batch-format)
+  - [Max span-batch size](#max-span-batch-size)
+  - [Future batch-format extension](#future-batch-format-extension)
 - [Span batch Activation Rule](#span-batch-activation-rule)
 - [Optimization Strategies](#optimization-strategies)
   - [Truncating information and storing only necessary data](#truncating-information-and-storing-only-necessary-data)
@@ -27,13 +26,14 @@
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-> The span-batches spec is experimental :shipit:
->
-> *this feature is in active R&D and not yet part of any hard fork
+<!-- All glossary references in this file. -->
+
+[g-deposit-tx-type]: ../glossary.md#deposited-transaction-type
 
 ## Introduction
 
-Span-batches reduce overhead of OP-stack chains.
+Span-batch is a new batching spec that reduces overhead of OP-stack chains,
+introduced in Delta network upgrade.
 This enables sparse and low-throughput OP-stack chains.
 
 The overhead is reduced by representing a span of
@@ -72,7 +72,7 @@ encode *a range of consecutive* L2 blocks at the same time.
 Introduce version `1` to the [batch-format](./derivation.md#batch-format) table:
 
 | `batch_version` | `content`           |
-|-----------------|---------------------|
+| --------------- | ------------------- |
 | 1               | `prefix ++ payload` |
 
 Notation:
@@ -106,7 +106,7 @@ Where:
   - `block_tx_counts`: for each block, a `uvarint` of `len(block.transactions)`.
   - `txs`: L2 transactions which is reorganized and encoded as below.
 - `txs = contract_creation_bits ++ y_parity_bits ++
-        tx_sigs ++ tx_tos ++ tx_datas ++ tx_nonces ++ tx_gases ++ protected_bits`
+tx_sigs ++ tx_tos ++ tx_datas ++ tx_nonces ++ tx_gases ++ protected_bits`
   - `contract_creation_bits`: standard bitlist of `sum(block_tx_counts)` bits:
     1 bit per L2 transactions, indicating if transaction is a contract creation transaction.
   - `y_parity_bits`: standard bitlist of `sum(block_tx_counts)` bits:
@@ -121,17 +121,37 @@ Where:
     - `1`: ([EIP-2930]): `0x01 ++ rlp_encode(value, gasPrice, data, accessList)`
     - `2`: ([EIP-1559]): `0x02 ++ rlp_encode(value, max_priority_fee_per_gas, max_fee_per_gas, data, access_list)`
   - `tx_nonces`: concatenated list of `uvarint` of `nonce` field.
-  - `tx_gases`:  concatenated list of `uvarint` of gas limits.
+  - `tx_gases`: concatenated list of `uvarint` of gas limits.
     - `legacy`: `gasLimit`
     - `1`: ([EIP-2930]): `gasLimit`
     - `2`: ([EIP-1559]): `gas_limit`
   - `protected_bits`: standard bitlist of length of number of legacy transactions:
     1 bit per L2 legacy transactions, indicating if transaction is protected([EIP-155]) or not.
 
-Introduce version `2` to the [batch-format](./derivation.md#batch-format) table:
+[EIP-2718]: https://eips.ethereum.org/EIPS/eip-2718
+[EIP-2930]: https://eips.ethereum.org/EIPS/eip-2930
+[EIP-1559]: https://eips.ethereum.org/EIPS/eip-1559
+[EIP-155]: https://eips.ethereum.org/EIPS/eip-155
+
+### Max span-batch size
+
+Total size of encoded span batch is limited to `MAX_SPAN_BATCH_SIZE` (currently 10,000,000 bytes,
+equal to `MAX_RLP_BYTES_PER_CHANNEL`). Therefore every field size of span batch will be implicitly limited to
+`MAX_SPAN_BATCH_SIZE` . There can be at least single span batch per channel, and channel size is limited
+to `MAX_RLP_BYTES_PER_CHANNEL` and you may think that there is already an implicit limit. However, having an explicit
+limit for span batch is helpful for several reasons. We may save computation costs by avoiding malicious input while
+decoding. For example, let's say bad batcher wrote span batch which `block_count = max.Uint64`. We may early return
+using the explicit limit, not trying to consume data until EOF is reached. We can also safely preallocate memory for
+decoding because we know the upper limit of memory usage.
+
+### Future batch-format extension
+
+This is an experimental extension of the span-batch format, and not activated with the Delta upgrade yet.
+
+Introduce version `2` to the [batch-format](derivation.md#batch-format) table:
 
 | `batch_version` | `content`           |
-|-----------------|---------------------|
+| --------------- | ------------------- |
 | 2               | `prefix ++ payload` |
 
 Where:
@@ -146,23 +166,6 @@ Where:
     - `fee_recipients_set`: concatenated list of unique L2 fee recipient address.
     - `fee_recipients_idxs`: for each block,
       `uvarint` number of index to decode fee recipients from `fee_recipients_set`.
-
-[EIP-2718]: https://eips.ethereum.org/EIPS/eip-2718
-
-[EIP-2930]: https://eips.ethereum.org/EIPS/eip-2930
-
-[EIP-1559]: https://eips.ethereum.org/EIPS/eip-1559
-
-[EIP-155]: https://eips.ethereum.org/EIPS/eip-155
-
-Total size of encoded span batch is limited to `MAX_SPAN_BATCH_SIZE` (currently 10,000,000 bytes,
-equal to `MAX_RLP_BYTES_PER_CHANNEL`). Therefore every field size of span batch will be implicitly limited to
-`MAX_SPAN_BATCH_SIZE` . There can be at least single span batch per channel, and channel size is limited
-to `MAX_RLP_BYTES_PER_CHANNEL` and you may think that there is already an implicit limit. However, having an explicit
-limit for span batch is helpful for several reasons. We may save computation costs by avoiding malicious input while
-decoding. For example, lets say bad batcher wrote span batch which `block_count = max.Uint64`. We may early return using
-the explicit limit, not trying to consume data until EOF is reached. We can also safely preallocate memory for decoding
-because we know the upper limit of memory usage.
 
 ## Span batch Activation Rule
 
@@ -203,7 +206,7 @@ This adds more complexity, but organizes data for improved compression by groupi
 ### RLP encoding for only variable length fields
 
 Further size optimization can be done by packing variable length fields, such as `access_list`.
-However, doing this will introduce much more code complexity, comparing to benefiting by size reduction.
+However, doing this will introduce much more code complexity, compared to benefiting from size reduction.
 
 Our goal is to find the sweet spot on code complexity - span batch size tradeoff.
 I decided that using RLP for all variable length fields will be the best option,
@@ -259,7 +262,7 @@ The assumption makes upper inequality to hold. Therefore, we decided to manage `
 - Transactions
   - Deposit transactions can be derived from its L1 origin, identical with V0 batch.
   - User transactions can be derived by following way:
-    - Recover `V` value of TX signature from `y_parity_bits` and L2 chainId, as described in optimization strategies.
+    - Recover `V` value of TX signature from `y_parity_bits` and L2 chain id, as described in optimization strategies.
     - When parsing `tx_tos`, `contract_creation_bits` is used to determine if the TX has `to` value or not.
 
 ## Integration

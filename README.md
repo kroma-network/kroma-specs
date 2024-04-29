@@ -13,6 +13,8 @@ This repository contains the [Specs Book](https://specs.kroma.network).
 
 ## Contributing
 
+We welcome your contributions. 
+
 ### Dependencies
 
 **Rust Toolchain**
@@ -25,6 +27,12 @@ curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 
 ```sh
 cargo install mdbook mdbook-katex mdbook-linkcheck mdbook-mermaid
+```
+
+**`just` [installation](https://github.com/casey/just?tab=readme-ov-file#installation)**
+
+```sh
+brew install just
 ```
 
 ### Serving the book locally
@@ -64,4 +72,4 @@ To lint links:
 just lint-links
 ```
 
-[lychee][lychee] is used for linting links.
+[lychee](https://github.com/lycheeverse/lychee) is used for linting links.
