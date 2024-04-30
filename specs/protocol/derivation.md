@@ -1212,7 +1212,7 @@ This transaction updates the L1Block Proxy ERC-1967 implementation slot to point
 A deposit transaction is derived with the following attributes:
 
 - `from`: `0x0000000000000000000000000000000000000000`
-- `to`: `0x4200000000000000000000000000000000000015` (L1Block Proxy)
+- `to`: `0x4200000000000000000000000000000000000002` (L1Block Proxy)
 - `mint`: `0`
 - `value`: `0`
 - `gasLimit`: `50,000`
@@ -1242,7 +1242,7 @@ deployment.
 A deposit transaction is derived with the following attributes:
 
 - `from`: `0x0000000000000000000000000000000000000000`
-- `to`: `0x420000000000000000000000000000000000000F` (Gas Price Oracle Proxy)
+- `to`: `0x4200000000000000000000000000000000000005` (Gas Price Oracle Proxy)
 - `mint`: `0`
 - `value`: `0`
 - `gasLimit`: `50,000`
@@ -1271,7 +1271,7 @@ This transaction informs the GasPriceOracle to start using the Ecotone gas calcu
 A deposit transaction is derived with the following attributes:
 
 - `from`: `0xDeaDDEaDDeAdDeAdDEAdDEaddeAddEAdDEAd0001` (Depositer Account)
-- `to`: `0x420000000000000000000000000000000000000F` (Gas Price Oracle Proxy)
+- `to`: `0x4200000000000000000000000000000000000005` (Gas Price Oracle Proxy)
 - `mint`: `0`
 - `value`: `0`
 - `gasLimit`: `80,000`

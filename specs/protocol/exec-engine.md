@@ -172,11 +172,11 @@ The two base fee values and their respective scalars can be accessed in two inte
 
 - read from the deposited L1 attributes (`l1BaseFeeScalar`, `l1BlobBaseFeeScalar`, `basefee`,
   `blobBaseFee`) of the current L2 block
-- read from the L1 Block Info contract (`0x4200000000000000000000000000000000000015`)
+- read from the L1 Block Info contract (`0x4200000000000000000000000000000000000002`)
   - using the respective solidity getter functions
   - using direct storage-reads:
     - basefee `uint256` in slot `1`
-    - blobBaseFee `uint256` in slot `7`
+    - blobBaseFee `uint256` in slot `8`
     - l1BaseFeeScalar big-endian `uint32` slot `3` at offset `12`
     - l1BlobBaseFeeScalar big-endian `uint32` in slot `3` at offset `8`
 
