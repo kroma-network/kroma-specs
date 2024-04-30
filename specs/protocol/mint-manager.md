@@ -22,8 +22,9 @@
 The `GovernanceToken` of Kroma is minted every block by the `MintManager` contract on L2 and distributed to recipients.
 `MintManager` is a predeployed contract on L2 at address `0x4200000000000000000000000000000000000070`.
 
-In the [L1 Attributes Deposited Transaction][g-l1-attr-deposit], the [L1 Attributes Predeployed Contract]
-[g-l1-attr-predeploy] calls the mint function of the MintManager contract to mint tokens.
+In the [L1 Attributes Deposited Transaction][g-l1-attr-deposit], the
+[L1 Attributes Predeployed Contract][g-l1-attr-predeploy] calls the mint function of the MintManager contract to mint
+tokens.
 
 > Note that the mint function of the MintManager contract can only called by the
 [L1 Attributes Predeployed Contract][g-l1-attr-predeploy]

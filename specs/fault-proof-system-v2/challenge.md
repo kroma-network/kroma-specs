@@ -29,7 +29,6 @@
     - [Confirm By Time](#confirm-by-time)
     - [Confirm By ZK Proof](#confirm-by-zk-proof)
 - [ZK Proving Scheme](#zk-proving-scheme)
-- [Constants](#constants)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -516,9 +515,3 @@ STFVerify(x.StateRoot_{src}, x.StateRoot_{dst}, ComputeTxRoot(w.Block_{dst}.tran
 TargetBlobs = GetTargetBlobs(Blobs[:], w.TargetBlobIndices)
 \end{array}
 ```
-
-## Constants
-
-| Name                | Value  | Unit   |
-|---------------------|--------|--------|
-| `PROPOSAL_INTERVAL` | `1800` | blocks |

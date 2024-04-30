@@ -17,7 +17,6 @@
 - [`L2OutputOracle` Interface](#l2outputoracle-interface)
   - [Output Proposal](#output-proposal)
   - [Output Finalization](#output-finalization)
-- [Constants](#constants)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -67,7 +66,7 @@ executed the same transactions in the target block in the
 [previous ZK proof verification process](../fault-proof/challenge.md#proving-fault). The elimination of
 `next_block_hash` is feasible now that [transaction data is verifiable on-chain](./transaction-data-commitment.md). This
 change addresses the incorrect identification of the first disagreeing block in dissection, as noted in the
-[Background](./README.md#background).
+[Background](./overview.md#background).
 
 ## `L2OutputOracle` Interface
 
@@ -182,9 +181,3 @@ function finalizeOutput(bytes32 outputRoot, bytes32 winningEdgeId) external only
     // 5. Change the status of the output to FINALIZED
 }
 ```
-
-## Constants
-
-| Name                | Value  | Unit   |
-|---------------------|--------|--------|
-| `PROPOSAL_INTERVAL` | `1800` | blocks |
