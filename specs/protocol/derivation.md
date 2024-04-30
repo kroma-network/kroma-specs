@@ -816,12 +816,12 @@ To interact with the engine, the [execution engine API][exec-engine] is used, wi
   instructs the engine to start building an execution payload if the payload attributes parameter is not `null`.
 - [`engine_getPayloadV3`] — retrieves a previously requested execution payload build.
 - `engine_newPayload`
-  - [`engine_newPayloadV2`] — executes a Bedrock/Canyon/Delta execution payload to create a block.
+  - [`engine_newPayloadV2`] — executes a Genesis/Canyon/Delta execution payload to create a block.
   - [`engine_newPayloadV3`] — executes an Ecotone execution payload to create a block.
 
 The current version of `op-node` uses the `v3` Engine API RPC methods as well as `engine_newPayloadV2`, due to
 `engine_newPayloadV3` only supporting Ecotone execution payloads. Both `engine_forkchoiceUpdatedV3` and
-`engine_getPayloadV3` are backwards compatible with Bedrock, Canyon & Delta payloads.
+`engine_getPayloadV3` are backwards compatible with Genesis, Canyon & Delta payloads.
 
 Prior versions of `op-node` used `v2` and `v1` methods.
 
@@ -878,7 +878,7 @@ safe head.
 
 The following fields of the derived L2 payload attributes are checked for equality with the L2 block:
 
-- Bedrock, Canyon, Delta, Ecotone Blocks
+- Genesis, Canyon, Delta, Ecotone Blocks
   - `parent_hash`
   - `timestamp`
   - `randao`
@@ -951,7 +951,7 @@ To process unsafe payloads, the payload must:
 
 The payload is then processed with a sequence of:
 
-- Bedrock/Canyon/Delta Payloads
+- Genesis/Canyon/Delta Payloads
   - `engine_newPayloadV2`: process the payload. It does not become canonical yet.
   - `engine_forkchoiceUpdatedV2`: make the payload the canonical unsafe L2 head, and keep the safe/finalized L2 heads.
 - Ecotone Payloads
@@ -1133,7 +1133,7 @@ A deposit transaction is derived with the following attributes:
 - `to`: `null`
 - `mint`: `0`
 - `value`: `0`
-- `gasLimit`: `375,000`
+- `gasLimit`: `500,000`
 - `data`: `0x60806040523480156100105...` ([full bytecode](../static/bytecode/ecotone-l1-block-deployment.txt))
 - `sourceHash`: `0x877a6077205782ea15a6dc8699fa5ebcec5e0f4389f09cb8eda09488231346f8`,
   computed with the "Upgrade-deposited" type, with `intent = "Ecotone: L1 Block Deployment"
@@ -1151,17 +1151,6 @@ Verify `sourceHash`:
 cast keccak $(cast concat-hex 0x0000000000000000000000000000000000000000000000000000000000000002 $(cast keccak "Ecotone: L1 Block Deployment"))
 # 0x877a6077205782ea15a6dc8699fa5ebcec5e0f4389f09cb8eda09488231346f8
 ```
-
-Verify `data`:
-
-```bash
-git checkout 5996d0bc1a4721f2169ba4366a014532f31ea932
-pnpm clean && pnpm install && pnpm build
-jq -r ".bytecode.object" packages/contracts-bedrock/forge-artifacts/L1Block.sol/L1Block.json
-```
-
-This transaction MUST deploy a contract with the following code hash
-`0xc88a313aa75dc4fbf0b6850d9f9ae41e04243b7008cf3eadb29256d4a71c1dfd`.
 
 ##### GasPriceOracle Deployment
 
@@ -1193,17 +1182,6 @@ Verify `sourceHash`:
 ❯ cast keccak $(cast concat-hex 0x0000000000000000000000000000000000000000000000000000000000000002 $(cast keccak "Ecotone: Gas Price Oracle Deployment"))
 # 0xa312b4510adf943510f05fcc8f15f86995a5066bd83ce11384688ae20e6ecf42
 ```
-
-Verify `data`:
-
-```bash
-git checkout 5996d0bc1a4721f2169ba4366a014532f31ea932
-pnpm clean && pnpm install && pnpm build
-jq -r ".bytecode.object" packages/contracts-bedrock/forge-artifacts/GasPriceOracle.sol/GasPriceOracle.json
-```
-
-This transaction MUST deploy a contract with the following code hash
-`0x8b71360ea773b4cfaf1ae6d2bd15464a4e1e2e360f786e475f63aeaed8da0ae5`.
 
 ##### L1Block Proxy Update
 
@@ -1319,7 +1297,6 @@ A Deposit transaction is derived with the following attributes:
 - `isCreation`: `true`
 - `data`:
   `0x60618060095f395ff33373fffffffffffffffffffffffffffffffffffffffe14604d57602036146024575f5ffd5b5f35801560495762001fff810690815414603c575f5ffd5b62001fff01545f5260205ff35b5f5ffd5b62001fff42064281555f359062001fff015500`
-- `isSystemTx`: `false`, as per the Regolith upgrade, even the system-generated transactions spend gas.
 - `sourceHash`: `0x69b763c48478b9dc2f65ada09b3d92133ec592ea715ec65ad6e7f3dc519dc00c`,
   computed with the "Upgrade-deposited" type, with `intent = "Ecotone: beacon block roots contract deployment"`
 

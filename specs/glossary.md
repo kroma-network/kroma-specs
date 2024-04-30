@@ -734,14 +734,9 @@ See also the [Building The Payload Attributes][building-payload-attr] section of
 
 The L2 genesis [block] is the first block of the [L2] chain in its current version.
 
-The state of the L2 genesis block comprises:
+The state of the L2 genesis block contains [Predeployed contracts][predeploy].
 
-- State inherited from the previous version of the L2 chain.
-  - This state was possibly modified by "state surgeries". For instance, the migration to Bedrock entailed changes on
-    how native ETH balances were stored in the storage trie.
-- [Predeployed contracts][predeploy]
-
-The timestamp of the L2 genesis block must be a multiple of the [block time][block-time] (i.e. a even number, since the
+The timestamp of the L2 genesis block must be a multiple of the [block time][block-time] (i.e. an even number, since the
 block time is 2 seconds).
 
 When updating the rollup protocol to a new version, we may perform a *squash fork*, a process that entails the creation

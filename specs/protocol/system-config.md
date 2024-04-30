@@ -168,6 +168,7 @@ The contained log events are filtered and processed as follows:
     `blobBaseFeeScalar`.
   - type `2`: `gasLimit` overwrite, as `uint64` payload.
   - type `3`: `unsafeBlockSigner` overwrite, as `address` payload.
+  - type `4`: `validatorRewardScalar` overwrite, as `uint256` payload.
 
 [encodePacked]: https://docs.soliditylang.org/en/latest/abi-spec.html#non-standard-packed-mode
 

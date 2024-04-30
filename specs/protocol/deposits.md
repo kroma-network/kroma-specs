@@ -271,20 +271,21 @@ The overall calldata layout is as follows:
 
 [ecotone-upgrade-txs]: derivation.md#network-upgrade-automation-transactions
 
-| Input arg         | Type    | Calldata bytes | Segment |
-| ----------------- | ------- | -------------- | ------- |
-| {0x440a5e20}      |         | 0-3            | n/a     |
-| baseFeeScalar     | uint32  | 4-7            | 1       |
-| blobBaseFeeScalar | uint32  | 8-11           |         |
-| sequenceNumber    | uint64  | 12-19          |         |
-| l1BlockTimestamp  | uint64  | 20-27          |         |
-| l1BlockNumber     | uint64  | 28-35          |         |
-| basefee           | uint256 | 36-67          | 2       |
-| blobBaseFee       | uint256 | 68-99          | 3       |
-| l1BlockHash       | bytes32 | 100-131        | 4       |
-| batcherHash       | bytes32 | 132-163        | 5       |
+| Input arg             | Type    | Calldata bytes | Segment |
+|-----------------------| ------- |----------------|---------|
+| {0x440a5e20}          |         | 0-3            | n/a     |
+| baseFeeScalar         | uint32  | 4-7            | 1       |
+| blobBaseFeeScalar     | uint32  | 8-11           |         |
+| sequenceNumber        | uint64  | 12-19          |         |
+| l1BlockTimestamp      | uint64  | 20-27          |         |
+| l1BlockNumber         | uint64  | 28-35          |         |
+| basefee               | uint256 | 36-67          | 2       |
+| blobBaseFee           | uint256 | 68-99          | 3       |
+| l1BlockHash           | bytes32 | 100-131        | 4       |
+| batcherHash           | bytes32 | 132-163        | 5       |
+| validatorRewardScalar | uint256 | 164-195        | 6       |
 
-Total calldata length MUST be exactly 164 bytes, implying the sixth and final segment is only
+Total calldata length MUST be exactly 196 bytes, implying the seventh and final segment is only
 partially filled. This helps to slow database growth as every L2 block includes a L1 Attributes
 deposit transaction.
 
@@ -374,7 +375,7 @@ file will be located in the `deployedBytecode` field of the build artifacts file
 #### Ecotone L1Block upgrade
 
 The L1 Attributes Predeployed contract, `L1Block.sol`, is upgraded as part of the Ecotone upgrade.
-The version is incremented to `1.2.0`, one new storage slot is introduced, and one existing slot
+The version is incremented to `1.1.0`, one new storage slot is introduced, and one existing slot
 begins to store additional data:
 
 - `blobBaseFee` (`uint256`): The L1 blob base fee.
