@@ -58,6 +58,7 @@
   - [Channel Frame](#channel-frame)
   - [Batcher](#batcher)
   - [Batcher Transaction](#batcher-transaction)
+  - [Batch submission frequency](#batch-submission-frequency)
   - [Channel Timeout](#channel-timeout)
 - [L2 Chain Derivation](#l2-chain-derivation)
   - [L2 Derivation Inputs](#l2-derivation-inputs)
@@ -276,7 +277,7 @@ pre-confirm the transactions before the L1 confirms the data.
 
 A sequencer is either a [rollup node][rollup-node] ran in sequencer mode, or the operator of this rollup node.
 
-The sequencer is a priviledged actor, which receives L2 transactions from L2 users, creates L2 blocks using them, which
+The sequencer is a privileged actor, which receives L2 transactions from L2 users, creates L2 blocks using them, which
 it then submits to [data availability provider][avail-provider] (via a [batcher]). It also submits [output
 roots][l2-output] to L1.
 
@@ -568,8 +569,7 @@ Availability][data-availability] for more information on what this means.
 
 Ideally, a good data availability provider provides strong *verifiable* guarantees of data availability
 
-Currently, the only supported data availability provider is Ethereum call data. [Ethereum data blobs][eip4844] will be
-supported when they get deployed on Ethereum.
+At present, the supported data availability providers include Ethereum call data and blob data.
 
 ## Sequencer Batch
 
@@ -615,7 +615,7 @@ batcher transaction.
 
 [batcher]: glossary.md#batcher
 
-A batcher is a software component (independant program) that is responsible to make channels available on a data
+A batcher is a software component (independent program) that is responsible to make channels available on a data
 availability provider. The batcher communicates with the rollup node in order to retrieve the channels. The channels are
 then made available using [batcher transactions][batcher-transaction].
 
@@ -634,6 +634,22 @@ When submitted to Ethereum calldata, the batcher transaction's receiver must be 
 transaction must also be signed by a recognized batch submitter account. The recognized batch submitter account
 is stored in the [System Configuration][system-config].
 
+## Batch submission frequency
+
+Within the [sequencing-window] constraints the batcher is permitted by the protocol to submit L2 blocks for
+data-availability at any time. The batcher software allows for dynamic policy configuration by its operator.
+The rollup enforces safety guarantees and liveness through the sequencing window, if the batcher does not submit
+data within this allotted time.
+
+By submitting new L2 data in smaller more frequent steps, there is less delay in confirmation of the L2 block
+inputs. This allows verifiers to ensure safety of L2 blocks sooner. This also reduces the time to finality of
+the data on L1, and thus the time to L2 input-finality.
+
+By submitting new L2 data in larger less frequent steps, there is more time to aggregate more L2 data, and
+thus reduce fixed overhead of the batch-submission work. This can reduce batch-submission costs, especially
+for lower throughput chains that do not fill data-transactions (typically 128 KB of calldata, or 800 KB
+of blobdata) as quickly.
+
 ## Channel Timeout
 
 [channel-timeout]: glossary.md#channel-timeout
@@ -643,7 +659,7 @@ The channel timeout is a duration (in L1 blocks) during which [channel frames][c
 
 The acceptable time range for the frames of a [channel][channel] is `[channel_id.timestamp, channel_id.timestamp +
 CHANNEL_TIMEOUT]`. The acceptable L1 block range for these frames are any L1 block whose timestamp falls inside this
-time range. (Note that `channel_id.timetamp` must be lower than the L1 block timestamp of any L1 block in which frames
+time range. (Note that `channel_id.timestamp` must be lower than the L1 block timestamp of any L1 block in which frames
 of the channel are seen, or else these frames are ignored.)
 
 The purpose of channel timeouts is dual:
@@ -651,8 +667,8 @@ The purpose of channel timeouts is dual:
 - Avoid keeping old unclosed channel data around forever (an unclosed channel is a channel whose final frame was not
   sent).
 - Bound the number of L1 blocks we have to look back in order to decode [sequencer batches][sequencer-batch] from
-  channels. This is particularly relevant during L1 re-orgs, see the [Resetting Pipeline][reset-pipeline]
-  section of the L2 Chain Derivation specifiction for more information.
+  channels. This is particularly relevant during L1 re-orgs, see the [Resetting Channel Buffering][reset-pipeline]
+  section of the L2 Chain Derivation specification for more information.
 
 [reset-pipeline]: ./protocol/derivation.md#resetting-the-pipeline
 
@@ -682,6 +698,7 @@ L2 derivation inputs include:
   - block number
   - timestamp
   - basefee
+  - blob base fee
 - [deposits] (as log data)
 - [sequencer batches][sequencer-batch] (as transaction data)
 - [System configuration][system-config] updates (as log data)
@@ -907,7 +924,7 @@ of even benign consensus issues.
 
 The L2 block time is 2 second, meaning there is an L2 block at every 2s [time slot][time-slot].
 
-Post-[merge], it could be said the that L1 block time is 12s as that is the L1 [time slot][time-slot]. However, in
+Post-[merge], it could be said that the L1 block time is 12s as that is the L1 [time slot][time-slot]. However, in
 reality the block time is variable as some time slots might be skipped.
 
 Pre-merge, the L1 block time is variable, though it is on average 13s.
