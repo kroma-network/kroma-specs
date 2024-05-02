@@ -265,7 +265,7 @@ meaning that `setL1BlockValuesEcotone` is not guaranteed to exist yet.
 
 Every subsequent L1 Attributes transaction should include a call to the `setL1BlockValuesEcotone()` function.
 The input args are no longer ABI encoded function parameters,
-but are instead packed into 5 32-byte aligned segments (starting after the function selector).
+but are instead packed into 6 32-byte aligned segments (starting after the function selector).
 Each unsigned integer argument is encoded as big-endian using a number of bytes corresponding to the underlying type.
 The overall calldata layout is as follows:
 
