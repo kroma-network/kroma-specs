@@ -29,9 +29,9 @@
 
 There are two types of network participants in the OP Stack:
 
-- [Sequencers](https://specs.optimism.io/introduction.html#sequencers) consolidate
+- [Sequencers](https://specs.optimism.io/background.html#sequencers) consolidate
  users' on/off chain transactions into blocks. They submit checkpoint outputs as well as batch transactions.
-- [Verifiers](https://specs.optimism.io/introduction.html#verifiers) verify rollup
+- [Verifiers](https://specs.optimism.io/background.html#verifiers) verify rollup
    integrity and dispute invalid assertions.
 
 It is crucial to have at least one honest verifier who can verify the integrity of the rollup chain to ensure the
