@@ -33,4 +33,5 @@
     - [Security Council Intervention](./fault-proof-system-v2/security-council-intervention.md)
     - [Improvements](./fault-proof-system-v2/improvements.md)
   - [Validator System V2](./validator-system-v2/overview.md)
+    - [Asset Manager](./validator-system-v2/asset-manager.md)
 - [Glossary](./glossary.md)

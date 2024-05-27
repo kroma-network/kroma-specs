@@ -48,3 +48,4 @@ probability and share rewards.
 ## Contents
 
 - Specifications
+  - [Asset Manager](./asset-manager.md)
