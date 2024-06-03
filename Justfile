@@ -34,7 +34,7 @@ lint-specs-toc:
 lint-links:
     docker run --init -v `pwd`:/input lycheeverse/lychee --verbose --no-progress --exclude-loopback \
     		--exclude twitter.com --exclude explorer.optimism.io --exclude linux-mips.org --exclude vitalik.ca \
-    		--exclude-mail /input/README.md "/input/specs/**/*.md"
+    		--exclude medium.com --exclude-mail /input/README.md "/input/specs/**/*.md"
 
 # Serves the mdbook locally
 serve *args='':
