@@ -24,7 +24,6 @@
   - [Challenge](./fault-proof/challenge.md)
   - [zkEVM Prover](./fault-proof/zkevm-prover.md)
 - [Experimental]()
-  - [Mint Manager](./protocol/mint-manager.md)
   - [Fault Proof System V2](./fault-proof-system-v2/overview.md)
     - [Definitions](./fault-proof-system-v2/definitions.md)
     - [Transaction Data Commitment](./fault-proof-system-v2/transaction-data-commitment.md)
