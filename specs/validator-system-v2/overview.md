@@ -1,10 +1,12 @@
 # Validator System V2
 
 <!-- All glossary references in this file. -->
+
 [g-l2-output]: ../glossary.md#l2-output-root
-[g-validator]: ../glossary.md#validator
 [g-zk-fault-proof]: ../glossary.md#zk-fault-proof
 [g-validator-pool-contract]: ../glossary.md#validator-pool-contract
+[g-validator]: ../glossary.md#validator
+[g-validator-reward]: ../glossary.md#validator-reward
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
@@ -12,40 +14,94 @@
 
 - [Background](#background)
 - [Overview](#overview)
-- [Contents](#contents)
+  - [Participants](#participants)
+    - [Validators](#validators)
+    - [KRO Delegators](#kro-delegators)
+    - [KGH Delegators](#kgh-delegators)
+  - [Priority Validator Selection](#priority-validator-selection)
+  - [Reward Distribution](#reward-distribution)
+- [Contracts](#contracts)
+- [Summary of Definitions](#summary-of-definitions)
+  - [Constants](#constants)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 ## Background
 
-The current permissionless [validator][g-validator] system of Kroma Network ensures economic security by
-bonding 0.2 ETH each time a [L2 output root][g-l2-output] is submitted. While successfully involving over 360
-validators (as of 6/3/24), there are a few drawbacks in the current system that need to be addressed:
+The [current permissionless validator system](../protocol/validator.md) of Kroma ensures economic security by bonding
+`REQUIRED_BOND_AMOUNT` of ETH each time the validator submits an [L2 output root][g-l2-output]. While successfully
+involving over 360 validators (as of 6/3/24), there are a few drawbacks in the current system that need to be addressed:
 
-- **Economic Security**: There are some rooms to improve the economic security of current system, as submitting a
-  malicious output result in a loss of up to 0.2 ETH.
-- **Network Participation**: Despite having one of the largest validator pools among current L2 networks, only those
-  capable of running validators can participate, excluding many who wish to contribute to network security and earn
-  incentives due to technical barriers.
+- **Validator Exploitation Vulnerability**: Since the probability of being selected as a priority validator is
+  calculated to be the same if only `REQUIRED_BOND_AMOUNT` of ETH is deposited, a single validator can increase the
+  probability by splitting assets between many accounts. This behavior can have a negative impact on chain security and
+  should be improved.
+- **Poor Accessibility to Participation**: Despite having one of the largest validator pools among current L2 networks,
+  technical barriers limit participation to those who can run validators, excluding many people who would like to
+  contribute to the network security and earn incentives.
 
-These are addressed by introducing economic security and network participation improvements in the new validator
-system. Similar to Delegated Proof of Stake (DPoS) systems, the new validator system will fortify the security of the
-entire network and lower the barrier of participation, using the token delegation system based on Kroma Network's
-governance token (KRO) and Kroma Guardian House (KGH) NFT.
+These limitations are addressed by introducing Delegated Proof of Stake (DPoS) system to the new validator system. The
+new validator system will fortify the security of the entire network and lower the barrier of participation,
+incorporating delegation system based on Kroma's governance token (KRO) and Kroma Guardian House (KGH) NFT.
 
 ## Overview
 
-**Validator System V2** is a new network security model of Kroma, which incorporates KRO tokenomics to improve the
-current system. It retains current [ZK fault proof][g-zk-fault-proof] and challenge system, while introducing two
-new contracts: **Validator Manager** and **Asset Manager** contract. These contracts replace the existing
-[Validator Pool contract][g-validator-pool-contract], handling jobs such as validator registration, output submitter
-selection and probability calculation, delegation, slashing, and reward distribution.
+**Validator System V2** is a new network security model of Kroma, which introduces KRO tokenomics and delegation to the
+current validator system. It retains current [ZK fault proof][g-zk-fault-proof] and
+[challenge system](../fault-proof/challenge.md), while introducing two new contracts: **Validator Manager** and
+**Asset Manager** contract. These contracts replace the existing [Validator Pool contract][g-validator-pool-contract],
+handling jobs such as validator management, delegation, next priority validator selection, reward distribution, and
+challenge slashing.
 
-In Validator System V2, KRO token holders can stake tokens to become validators or delegate tokens to active
-validators, contributing to network security. KGH NFT holders can stake their NFTs to boost validator selection
-probability and share rewards.
+### Participants
 
-## Contents
+There are three types of participants in the Validator System V2: Validators, KRO delegators, and KGH delegators.
 
-- Specifications
-  - [Asset Manager](./asset-manager.md)
+#### Validators
+
+[Validators][g-validator] are the party who actually runs the node and submits the output root, which is the same as
+validators in the current validator system. Validators must stake their tokens (KRO) to be eligible to submit output,
+and their chances of submitting output increase proportionally to the amount of tokens they stake. If the submitted
+output is finalized, they will receive tokens as a [reward][g-validator-reward], while if the output is challenged and
+lost, a portion of the staked tokens and the output submission reward will be transferred to the challenge winner.
+
+#### KRO Delegators
+
+KRO delegators delegate their tokens (KRO) to validators and increase the probability of the validators being
+selected as a priority validator for output submission. As compensation for the delegation, KRO delegators receive a
+portion of the base reward which the validators earn for submitting output, proportional to the number of delegated
+tokens.
+
+#### KGH Delegators
+
+KGH delegators delegate KGHs to validators and increase their chances of being selected as a priority validator by the
+number of tokens (KRO) contained in the KGH and boost their output submission rewards. In return for delegation, they
+receive a portion of the base reward proportional to the number of tokens in their KGH, and share in the boosted reward.
+
+### Priority Validator Selection
+
+The probability of a validator being selected as a priority validator who has priority for the next output submission is
+proportional to the amount of tokens delegated to the validator. The amount of delegated tokens includes both the amount
+of tokens staked by themselves and the amount of tokens delegated by KRO delegators, as well as the amount of tokens
+contained in KGH delegated by KGH delegators.
+
+### Reward Distribution
+
+The token given as a reward for submitting an output consists of base reward and boosted reward. Base reward is the same
+quantity for all outputs and is divided between the validator and KRO delegators according to the commission rate set by
+the validator. At this point, the validator and the KGH delegators also share the tokens distributed to the KRO
+delegation based on the amount of tokens they delegated. Boosted reward is an increasing amount according to the amount
+of KGH delegated to the validator, and is shared by the validator and KGH delegators in proportion to the commission
+rate.
+
+## Contracts
+
+- [Asset Manager](./asset-manager.md)
+
+## Summary of Definitions
+
+### Constants
+
+| Name                   | Value                        | Unit |
+|------------------------|------------------------------|------|
+| `REQUIRED_BOND_AMOUNT` | 200000000000000000 (0.2 ETH) | wei  |
