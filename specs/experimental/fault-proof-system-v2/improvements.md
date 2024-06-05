@@ -2,9 +2,9 @@
 
 <!-- All glossary references in this file. -->
 
-[g-checkpoint-output]: ../glossary.md#checkpoint-output
-[g-validator]: ../glossary.md#validator
-[g-l2-output]: ../glossary.md#l2-output-root
+[g-checkpoint-output]: ../../glossary.md#checkpoint-output
+[g-validator]: ../../glossary.md#validator
+[g-l2-output]: ../../glossary.md#l2-output-root
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
@@ -21,7 +21,7 @@
 ## Overview
 
 Fault Proof System V2 has been designed to address the key limitations identified in
-[Fault Proof System V1](../fault-proof/challenge.md), as outlined in the [Background](./overview.md#background). This
+[Fault Proof System V1](../../fault-proof/challenge.md), as outlined in the [Background](./overview.md#background). This
 document details how each of the four main limitations of V1 has been effectively resolved in V2.
 
 ## Guaranteed Win of Valid Output

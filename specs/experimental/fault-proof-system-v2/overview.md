@@ -2,17 +2,17 @@
 
 <!-- All glossary references in this file. -->
 
-[g-validator]: ../glossary.md#validator
-[g-checkpoint-output]: ../glossary.md#checkpoint-output
-[g-zk-fault-proof]: ../glossary.md#zk-fault-proof
-[g-sequencer-batch]: ../glossary.md#sequencer-batch
-[g-l1-attr-deposit]: ../glossary.md#l1-attributes-deposited-transaction
-[g-user-deposited]: ../glossary.md#user-deposited-transaction
-[g-withdrawals]: ../glossary.md#withdrawals
-[g-l2-output]: ../glossary.md#l2-output-root
-[g-state-root]: ../glossary.md#state-root
-[g-security-council]: ../glossary.md#security-council
-[g-state]: ../glossary.md#state
+[g-validator]: ../../glossary.md#validator
+[g-checkpoint-output]: ../../glossary.md#checkpoint-output
+[g-zk-fault-proof]: ../../glossary.md#zk-fault-proof
+[g-sequencer-batch]: ../../glossary.md#sequencer-batch
+[g-l1-attr-deposit]: ../../glossary.md#l1-attributes-deposited-transaction
+[g-user-deposited]: ../../glossary.md#user-deposited-transaction
+[g-withdrawals]: ../../glossary.md#withdrawals
+[g-l2-output]: ../../glossary.md#l2-output-root
+[g-state-root]: ../../glossary.md#state-root
+[g-security-council]: ../../glossary.md#security-council
+[g-state]: ../../glossary.md#state
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
@@ -27,7 +27,7 @@
 
 ## Background
 
-The initial version, [Fault Proof System V1](../fault-proof/challenge.md) introduced a permissionless
+The initial version, [Fault Proof System V1](../../fault-proof/challenge.md) introduced a permissionless
 [validator][g-validator] system. However, it encountered several limitations:
 
 - **Challenge Invalidity**: There was no assurance that a valid [output][g-checkpoint-output] would always win in

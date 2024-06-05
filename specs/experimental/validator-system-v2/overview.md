@@ -2,13 +2,13 @@
 
 <!-- All glossary references in this file. -->
 
-[g-l2-output]: ../glossary.md#l2-output-root
-[g-zk-fault-proof]: ../glossary.md#zk-fault-proof
-[g-validator-pool-contract]: ../glossary.md#validator-pool-contract
-[g-validator]: ../glossary.md#validator
-[g-validator-reward]: ../glossary.md#validator-reward
-[g-base-reward]: ../glossary.md#base-reward
-[g-boosted-reward]: ../glossary.md#boosted-reward
+[g-l2-output]: ../../glossary.md#l2-output-root
+[g-zk-fault-proof]: ../../glossary.md#zk-fault-proof
+[g-validator-pool-contract]: ../../glossary.md#validator-pool-contract
+[g-validator]: ../../glossary.md#validator
+[g-validator-reward]: ../../glossary.md#validator-reward
+[g-base-reward]: ../../glossary.md#base-reward
+[g-boosted-reward]: ../../glossary.md#boosted-reward
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
@@ -30,7 +30,7 @@
 
 ## Background
 
-The [current permissionless validator system](../protocol/validator.md) of Kroma requires validators to bond
+The [current permissionless validator system](../../protocol/validator.md) of Kroma requires validators to bond
 `REQUIRED_BOND_AMOUNT` of ETH each time the validator submits an [L2 output root][g-l2-output]. While successfully
 involving over 360 validators (as of 6/3/24), there are a few drawbacks in the current system that need to be addressed:
 
@@ -50,7 +50,7 @@ incorporating delegation system based on Kroma's governance token (KRO) and Krom
 
 **Validator System V2** is a new network security model of Kroma, which introduces KRO tokenomics and delegation to the
 current validator system. It is compatible with current [ZK fault proof][g-zk-fault-proof] and
-[challenge system](../fault-proof/challenge.md), while introducing two new contracts: **Validator Manager** and
+[challenge system](../../fault-proof/challenge.md), while introducing two new contracts: **Validator Manager** and
 **Asset Manager** contract. These contracts replace the existing [Validator Pool contract][g-validator-pool-contract],
 handling jobs such as validator management, delegation, next priority validator selection, reward distribution, and
 challenge slashing.

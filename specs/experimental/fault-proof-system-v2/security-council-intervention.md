@@ -2,9 +2,9 @@
 
 <!-- All glossary references in this file. -->
 
-[g-checkpoint-output]: ../glossary.md#checkpoint-output
-[g-zk-fault-proof]: ../glossary.md#zk-fault-proof
-[g-security-council]: ../glossary.md#security-council
+[g-checkpoint-output]: ../../glossary.md#checkpoint-output
+[g-zk-fault-proof]: ../../glossary.md#zk-fault-proof
+[g-security-council]: ../../glossary.md#security-council
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->

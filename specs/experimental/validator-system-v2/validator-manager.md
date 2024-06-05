@@ -3,11 +3,11 @@
 
 <!-- All glossary references in this file. -->
 
-[g-validator]: ../glossary.md#validator
-[g-l2-output]: ../glossary.md#l2-output-root
-[output-oracle]: ../glossary.md#l2-output-oracle-contract
-[colosseum-contract]: ../glossary.md#colosseum-contract
-[g-validator-reward]: ../glossary.md#validator-reward
+[g-validator]: ../../glossary.md#validator
+[g-l2-output]: ../../glossary.md#l2-output-root
+[output-oracle]: ../../glossary.md#l2-output-oracle-contract
+[colosseum-contract]: ../../glossary.md#colosseum-contract
+[g-validator-reward]: ../../glossary.md#validator-reward
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
