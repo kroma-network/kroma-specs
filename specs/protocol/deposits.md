@@ -21,7 +21,6 @@
   - [L1 Attributes Predeployed Contract](#l1-attributes-predeployed-contract)
     - [L1 Attributes Predeployed Contract: Reference Implementation](#l1-attributes-predeployed-contract-reference-implementation)
     - [Ecotone L1Block upgrade](#ecotone-l1block-upgrade)
-    - [Mint Token](#mint-token)
 - [User-Deposited Transactions](#user-deposited-transactions)
   - [Deposit Contract](#deposit-contract)
     - [Address Aliasing](#address-aliasing)
@@ -395,11 +394,6 @@ The function called by the L1 attributes transaction depends on the network upgr
 
 `setL1BlockValuesEcotone` uses a tightly packed encoding for its parameters, which is described in
 [L1 Attributes Deposited Transaction Calldata](#l1-attributes-deposited-transaction-calldata).
-
-#### Mint Token
-
-After storing all attributes of the L1 block, call the mint function of the MintManager contract to mint tokens.
-See [MintManager](./mint-manager.md) specification.
 
 ## User-Deposited Transactions
 
