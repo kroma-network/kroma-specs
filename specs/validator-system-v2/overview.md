@@ -7,6 +7,8 @@
 [g-validator-pool-contract]: ../glossary.md#validator-pool-contract
 [g-validator]: ../glossary.md#validator
 [g-validator-reward]: ../glossary.md#validator-reward
+[g-base-reward]: ../glossary.md#base-reward
+[g-boosted-reward]: ../glossary.md#boosted-reward
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
@@ -28,7 +30,7 @@
 
 ## Background
 
-The [current permissionless validator system](../protocol/validator.md) of Kroma ensures economic security by bonding
+The [current permissionless validator system](../protocol/validator.md) of Kroma requires validators to bond
 `REQUIRED_BOND_AMOUNT` of ETH each time the validator submits an [L2 output root][g-l2-output]. While successfully
 involving over 360 validators (as of 6/3/24), there are a few drawbacks in the current system that need to be addressed:
 
@@ -47,7 +49,7 @@ incorporating delegation system based on Kroma's governance token (KRO) and Krom
 ## Overview
 
 **Validator System V2** is a new network security model of Kroma, which introduces KRO tokenomics and delegation to the
-current validator system. It retains current [ZK fault proof][g-zk-fault-proof] and
+current validator system. It is compatible with current [ZK fault proof][g-zk-fault-proof] and
 [challenge system](../fault-proof/challenge.md), while introducing two new contracts: **Validator Manager** and
 **Asset Manager** contract. These contracts replace the existing [Validator Pool contract][g-validator-pool-contract],
 handling jobs such as validator management, delegation, next priority validator selection, reward distribution, and
@@ -69,14 +71,15 @@ lost, a portion of the staked tokens and the output submission reward will be tr
 
 KRO delegators delegate their tokens (KRO) to validators and increase the probability of the validators being
 selected as a priority validator for output submission. As compensation for the delegation, KRO delegators receive a
-portion of the base reward which the validators earn for submitting output, proportional to the number of delegated
-tokens.
+portion of the [base reward][g-base-reward] which the validators earn for submitting output, proportional to the number
+of delegated tokens.
 
 #### KGH Delegators
 
 KGH delegators delegate KGHs to validators and increase their chances of being selected as a priority validator by the
 number of tokens (KRO) contained in the KGH and boost their output submission rewards. In return for delegation, they
-receive a portion of the base reward proportional to the number of tokens in their KGH, and share in the boosted reward.
+receive a portion of the base reward proportional to the number of tokens in their KGH, and share in the
+[boosted reward][g-boosted-reward].
 
 ### Priority Validator Selection
 
