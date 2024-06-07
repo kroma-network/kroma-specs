@@ -38,6 +38,8 @@
   - [Priority Round](#priority-round)
   - [Public Round](#public-round)
   - [Validator Reward](#validator-reward)
+  - [Base Reward](#base-reward)
+  - [Boosted Reward](#boosted-reward)
 - [Deposits](#deposits)
   - [Deposited Transaction](#deposited-transaction)
   - [L1 Attributes Deposited Transaction](#l1-attributes-deposited-transaction)
@@ -395,6 +397,23 @@ Since we're taking a conservative approach, the default value is set to false.
 
 The validator reward is calculated using the following formula:
 `(L2 base fee + L2 priority fee) * validator reward scalar / 10000`.
+
+## Base Reward
+
+[base-reward]: glossary.md#base-reward
+
+The base validator reward is given to the vault of the validator who submits the output at
+[Validator System V2][validator-system-v2]. The base reward is given in terms of a fixed amount of KRO tokens for
+each submission.
+
+## Boosted Reward
+
+[boosted-reward]: glossary.md#boosted-reward
+
+The boosted validator reward is given to the vault of the validator who submits the output at
+[Validator System V2][validator-system-v2]. The boosted reward is given in terms of KRO tokens, and is calculated using
+the following formula: $$8 \times arctan(0.01 \times G_i)$$ where $G_i$ is the total amount of KGH NFTs delegated to the
+output submitter.
 
 ---
 
