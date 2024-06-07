@@ -37,6 +37,7 @@
   - [SUBMISSION TIMEOUT](#submission-timeout)
   - [Priority Round](#priority-round)
   - [Public Round](#public-round)
+  - [Output Reward](#output-reward)
   - [Validator Reward](#validator-reward)
   - [Base Reward](#base-reward)
   - [Boosted Reward](#boosted-reward)
@@ -82,6 +83,8 @@
   - [L2 Output Root](#l2-output-root)
   - [L2 Output Oracle Contract](#l2-output-oracle-contract)
   - [Validator Pool Contract](#validator-pool-contract)
+  - [Validator Manager Contract](#validator-manager-contract)
+  - [Asset Manager Contract](#asset-manager-contract)
   - [Colosseum Contract](#colosseum-contract)
   - [ZK Fault Proof](#zk-fault-proof)
   - [Security Council](#security-council)
@@ -324,7 +327,7 @@ The L1 origin of an L2 block is the L1 block corresponding to its [sequencing ep
 Because transactions are visible to anyone, nodes can derive state. Registered [validators][validator] can submit
 [checkpoint output][checkpoint-output] every [validating epoch][validating-epoch]. Validators receive rewards
 in return. If the checkpoint output turns out to be invalid, this is challenged by another validator who acts as a
-challenger. As a result, validator who submitted invalid checkpoint output will lose their bond.
+challenger. As a result, validator who submitted invalid checkpoint output will lose their asset.
 
 ## Checkpoint Output
 
@@ -337,8 +340,12 @@ Checkpoint output is the l2 output root that denotes state transition during [va
 [validator]: glossary.md#validator
 
 A validator is a decentralized actor, who does [validation]. To participate network as a validator, one needs to
-deposit to [ValidatorPool contract][validator-pool-contract].
-Then the validator is allowed to be able to submit checkpoint.
+deposit to [Validator Pool contract][validator-pool-contract] in [Validator System V1][validator-system-v1], otherwise
+needs to register to [Validator Manager contract][validator-manager-contract] in
+[Validator System V2][validator-system-v2]. Then the validator becomes eligible to submit checkpoint output.
+
+[validator-system-v1]: ./protocol/validator.md#validator-pool-smart-contract
+[validator-system-v2]: ./experimental/validator-system-v2/overview.md
 
 ## Trusted Validator
 
@@ -375,28 +382,36 @@ A priority round is the period during which validator with output submission pri
 
 [public-round]: glossary.md#public-round
 
-A public round is the time period during which any account registered as a Validator can submit the output.
+A public round is the time period during which any account registered as a validator can submit the output. Any
+validator can participate in the public round, but only one validator is fully recognized as an output submitter.
 
-Any validator can participate in the public round, but only one validator is fully recognized as an output submitter.
+Consider a case where multiple validators competitively submit output in a public round. Except for the first-place
+validator with a valid output submission transaction in the L1 block, the remaining validators' transactions will fail
+and will not be recognized as output submitters.
 
-Consider a case where multiple validators competitively submit output in a public round.
+However, some of them will have already spent their gas. To handle this situation, we provide an option flag to indicate
+whether or not to participate in the public round. Since we're taking a conservative approach, the default value is set
+to false.
 
-Except for the first-place validator with a valid output submission transaction in the L1 block,
+## Output Reward
 
-the remaining validators' transactions will fail and will not be recognized as output submitters.
+[output-reward]: glossary.md#output-reward
 
-However, some of them will have already spent their gas.
+Output submission rewards are given as an incentive for validators to submit checkpoint output.
 
-To handle this situation, we provide an option flag to indicate whether or not to participate in the public round.
-
-Since we're taking a conservative approach, the default value is set to false.
+In [Validator System V1][validator-system-v1], the output reward is the same as the
+[validator reward][validator-reward], otherwise in [Validator System V2][validator-system-v2], it consists of the
+validator reward, [base reward][base-reward], and [boosted reward][boosted-reward].
 
 ## Validator Reward
 
 [validator-reward]: glossary.md#validator-reward
 
-The validator reward is calculated using the following formula:
+In [Validator System V1][validator-system-v1], the validator reward is calculated using the following formula:
 `(L2 base fee + L2 priority fee) * validator reward scalar / 10000`.
+
+In [Validator System V2][validator-system-v2], the validator reward is given in terms of KRO tokens, and is calculated
+as the sum of the [base reward][base-reward] and [boosted reward][boosted-reward] multiplied by the commission rate.
 
 ## Base Reward
 
@@ -413,7 +428,11 @@ each submission.
 The boosted validator reward is given to the vault of the validator who submits the output at
 [Validator System V2][validator-system-v2]. The boosted reward is given in terms of KRO tokens, and is calculated using
 the following formula: $$8 \times arctan(0.01 \times G_i)$$ where $G_i$ is the total amount of KGH NFTs delegated to the
-output submitter.
+output submitter. This is designed to have the effect that the boosted reward is constantly decreasing while the number
+of delegated KGH increases. More information on boosted reward due to KGH can be found
+[here][kgh-boosting-validator-reward].
+
+[kgh-boosting-validator-reward]: https://docs.kroma.network/kroma-guardian-house/kgh-utilities#boosting-validator-reward
 
 ---
 
@@ -903,7 +922,22 @@ An L1 contract to which [L2 output roots][l2-output] are posted by the [validato
 [validator-pool-contract]: glossary.md#validator-pool-contract
 
 An [L1] contract that determines [validator] eligibility, selects the [validator] of next round, and manages bonding for
-[L2 output roots][l2-output] submissions.
+[L2 output roots][l2-output] submissions in [Validator System V1][validator-system-v1].
+
+## Validator Manager Contract
+
+[validator-manager-contract]: glossary.md#validator-manager-contract
+
+An [L1] contract that manages the set of [validators], selects the validator of next [priority round][priority-round],
+and is an entry point of [output reward][output-reward] distribution and slash in
+[Validator System V2][validator-system-v2].
+
+## Asset Manager Contract
+
+[asset-manager-contract]: glossary.md#asset-manager-contract
+
+An [L1] contract that oversees the delegation and undelegation of assets, and manages distributed rewards and slashing
+penalties in [Validator System V2][validator-system-v2].
 
 ## Colosseum Contract
 

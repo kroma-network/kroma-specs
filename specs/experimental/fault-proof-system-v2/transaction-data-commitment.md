@@ -2,18 +2,18 @@
 
 <!-- All glossary references in this file. -->
 
-[g-zk-fault-proof]: ../glossary.md#zk-fault-proof
-[g-l1-attr-deposit]: ../glossary.md#l1-attributes-deposited-transaction
-[g-user-deposited]: ../glossary.md#user-deposited-transaction
-[g-system-config]: ../glossary.md#system-configuration
-[g-l1-attr-predeploy]: ../glossary.md#l1-attributes-predeployed-contract
-[g-state]: ../glossary.md#state
-[g-avail-provider]: ../glossary.md#data-availability-provider
-[g-sequencer]: ../glossary.md#sequencer
-[g-batcher-transaction]: ../glossary.md#batcher-transaction
-[g-channel-frame]: ../glossary.md#channel-frame
-[g-channel]: ../glossary.md#channel
-[g-sequencer-batch]: ../glossary.md#sequencer-batch
+[g-zk-fault-proof]: ../../glossary.md#zk-fault-proof
+[g-l1-attr-deposit]: ../../glossary.md#l1-attributes-deposited-transaction
+[g-user-deposited]: ../../glossary.md#user-deposited-transaction
+[g-system-config]: ../../glossary.md#system-configuration
+[g-l1-attr-predeploy]: ../../glossary.md#l1-attributes-predeployed-contract
+[g-state]: ../../glossary.md#state
+[g-avail-provider]: ../../glossary.md#data-availability-provider
+[g-sequencer]: ../../glossary.md#sequencer
+[g-batcher-transaction]: ../../glossary.md#batcher-transaction
+[g-channel-frame]: ../../glossary.md#channel-frame
+[g-channel]: ../../glossary.md#channel
+[g-sequencer-batch]: ../../glossary.md#sequencer-batch
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->

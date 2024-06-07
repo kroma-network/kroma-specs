@@ -2,9 +2,9 @@
 
 <!-- All glossary references in this file. -->
 
-[g-checkpoint-output]: ../glossary.md#checkpoint-output
-[g-state]: ../glossary.md#state
-[g-validator]: ../glossary.md#validator
+[g-checkpoint-output]: ../../glossary.md#checkpoint-output
+[g-state]: ../../glossary.md#state
+[g-validator]: ../../glossary.md#validator
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
@@ -23,12 +23,12 @@
 ## Overview
 
 This document addresses one of the limitations of
-[the previous output proposal process](../protocol/validator.md#submitting-l2-output-commitments) in Fault Proof System
-V1. When consecutive invalid [outputs][g-checkpoint-output] are proposed, the previous system's sequential
-[challenge](../fault-proof/challenge.md) and deletion mechanism for the first invalid output could lead to insufficient
-time to [prove fault](../fault-proof/challenge.md#proving-fault) in subsequent challenges before finalization.
-Additionally, the limited participation in each challenge (only designated asserters and challengers) increased the risk
-of losing challenges due to timeouts, even for honest parties.
+[the previous output proposal process](../../protocol/validator.md#submitting-l2-output-commitments) in Fault Proof
+System V1. When consecutive invalid [outputs][g-checkpoint-output] are proposed, the previous system's sequential
+[challenge](../../fault-proof/challenge.md) and deletion mechanism for the first invalid output could lead to
+insufficient time to [prove fault](../../fault-proof/challenge.md#proving-fault) in subsequent challenges before
+finalization. Additionally, the limited participation in each challenge (only designated asserters and challengers)
+increased the risk of losing challenges due to timeouts, even for honest parties.
 
 To address these limitations, we introduce **output branching model** which allows the proposal of a new branch of
 output when disagreeing with the proposed output. Through the output branching model, it is possible to safely handle
@@ -49,7 +49,7 @@ and restricted to one per index, the output branching model links outputs sequen
   $i^{th}$ output. The winner of the challenge will be the one. All other branches except the branch of the finalized
   output are deemed invalid, as are their subsequent output candidates, such as the $(i+1)^{th}$, $(i+2)^{th}$, ... etc.
 
-![output-branching-model](../static/assets/output-branching-model.svg)
+![output-branching-model](../../static/assets/output-branching-model.svg)
 
 ## L2 Output Commitment Construction
 
@@ -63,7 +63,7 @@ payload = state_root || withdrawal_storage_root || block_hash
 
 This version removes the `next_block_hash`, which was added as a means to ensure that the asserter and challenger
 executed the same transactions in the target block in the
-[previous ZK proof verification process](../fault-proof/challenge.md#proving-fault). The elimination of
+[previous ZK proof verification process](../../fault-proof/challenge.md#proving-fault). The elimination of
 `next_block_hash` is feasible now that [transaction data is verifiable on-chain](./transaction-data-commitment.md). This
 change addresses the incorrect identification of the first disagreeing block in dissection, as noted in the
 [Background](./overview.md#background).
