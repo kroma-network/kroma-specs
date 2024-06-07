@@ -400,11 +400,15 @@ The validator reward is calculated using the following formula:
 
 ## Base Reward
 
+[base-reward]: glossary.md#base-reward
+
 The base validator reward is given to the vault of the validator who submits the output at
 [Validator System V2][validator-system-v2]. The base reward is given in terms of a fixed amount of KRO tokens for
 each submission.
 
 ## Boosted Reward
+
+[boosted-reward]: glossary.md#boosted-reward
 
 The boosted validator reward is given to the vault of the validator who submits the output at
 [Validator System V2][validator-system-v2]. The boosted reward is given in terms of KRO tokens, and is calculated using
