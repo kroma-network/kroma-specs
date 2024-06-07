@@ -395,8 +395,14 @@ Since we're taking a conservative approach, the default value is set to false.
 
 [validator-reward]: glossary.md#validator-reward
 
-The validator reward is calculated using the following formula:
+In [Validator System V1][validator-system-v1], the validator reward is calculated using the following formula:
 `(L2 base fee + L2 priority fee) * validator reward scalar / 10000`.
+
+In [Validator System V2][validator-system-v2], the validator reward is given in terms of KRO tokens, and is calculated
+as the sum of the [base reward][base-reward] and [boosted reward][boosted-reward] multiplied by the commission rate.
+
+[validator-system-v1]: ./protocol/validator.md#validator-pool-smart-contract
+[validator-system-v2]: ./experimental/validator-system-v2/overview.md
 
 ## Base Reward
 
@@ -413,7 +419,11 @@ each submission.
 The boosted validator reward is given to the vault of the validator who submits the output at
 [Validator System V2][validator-system-v2]. The boosted reward is given in terms of KRO tokens, and is calculated using
 the following formula: $$8 \times arctan(0.01 \times G_i)$$ where $G_i$ is the total amount of KGH NFTs delegated to the
-output submitter.
+output submitter. This is designed to have the effect that the boosted reward is constantly decreasing while the number
+of delegated KGH increases. More information on boosted reward due to KGH can be found
+[here][kgh-boosting-validator-reward].
+
+[kgh-boosting-validator-reward]: https://docs.kroma.network/kroma-guardian-house/kgh-utilities#boosting-validator-reward
 
 ---
 

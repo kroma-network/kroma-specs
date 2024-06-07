@@ -42,8 +42,8 @@ Asset Manager incorporates a `Vault` component, inspired by the ERC-4626 standar
     - Calculates rewards for delegators based on the output root submission and manages slashing of assets when
    challenges occur.
 
-Each validator registered in `ValidatorManager` has a corresponding `Vault` struct. The `Vault` struct is defined as
-follows:
+Each validator registered in [`ValidatorManager`](./validator-manager.md) has a corresponding `Vault` struct. The
+`Vault` struct is defined as follows:
 
 ```solidity
 struct Vault {

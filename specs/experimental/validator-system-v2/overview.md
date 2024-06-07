@@ -90,15 +90,15 @@ contained in KGH delegated by KGH delegators.
 
 ### Reward Distribution
 
-The token given as a reward for submitting an output consists of base reward and boosted reward. Base reward is the same
-quantity for all outputs and is divided between the validator and KRO delegators according to the commission rate set by
-the validator. At this point, the validator and the KGH delegators also share the tokens distributed to the KRO
-delegation based on the amount of tokens they delegated. Boosted reward is an increasing amount according to the amount
-of KGH delegated to the validator, and is shared by the validator and KGH delegators in proportion to the commission
-rate.
+The token given as a reward for submitting an output consists of [base reward][g-base-reward] and
+[boosted reward][g-boosted-reward]. Base reward is divided between the validator and KRO delegators according to the
+commission rate set by the validator. At this point, the validator and the KGH delegators also share the tokens
+distributed to the KRO delegation based on the amount of tokens they delegated. Boosted reward is shared by the
+validator and KGH delegators in proportion to the commission rate.
 
 ## Contracts
 
+- [Validator Manager](./validator-manager.md)
 - [Asset Manager](./asset-manager.md)
 
 ## Summary of Definitions
