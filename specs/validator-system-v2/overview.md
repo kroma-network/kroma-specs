@@ -34,7 +34,7 @@ The [current permissionless validator system](../protocol/validator.md) of Kroma
 `REQUIRED_BOND_AMOUNT` of ETH each time the validator submits an [L2 output root][g-l2-output]. While successfully
 involving over 360 validators (as of 6/3/24), there are a few drawbacks in the current system that need to be addressed:
 
-- **Validator Exploitation Vulnerability**: Since the probability of being selected as a priority validator is
+- **Multiple Accounts on a Single Validator**: Since the probability of being selected as a priority validator is
   calculated to be the same if only `REQUIRED_BOND_AMOUNT` of ETH is deposited, a single validator can increase the
   probability by splitting assets between many accounts. This behavior can have a negative impact on chain security and
   should be improved.
@@ -61,7 +61,7 @@ There are three types of participants in the Validator System V2: Validators, KR
 
 #### Validators
 
-[Validators][g-validator] are the party who actually runs the node and submits the output root, which is the same as
+[Validators][g-validator] are the entities who actually run the node and submit the output root, which are the same as
 validators in the current validator system. Validators must stake their tokens (KRO) to be eligible to submit output,
 and their chances of submitting output increase proportionally to the amount of tokens they stake. If the submitted
 output is finalized, they will receive tokens as a [reward][g-validator-reward], while if the output is challenged and
@@ -83,7 +83,7 @@ receive a portion of the base reward proportional to the number of tokens in the
 
 ### Priority Validator Selection
 
-The probability of a validator being selected as a priority validator who has priority for the next output submission is
+The probability of a validator being selected as a validator who has priority for the next output submission is
 proportional to the amount of tokens delegated to the validator. The amount of delegated tokens includes both the amount
 of tokens staked by themselves and the amount of tokens delegated by KRO delegators, as well as the amount of tokens
 contained in KGH delegated by KGH delegators.
