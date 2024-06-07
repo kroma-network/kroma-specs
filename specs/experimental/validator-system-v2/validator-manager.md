@@ -7,7 +7,8 @@
 [g-l2-output]: ../../glossary.md#l2-output-root
 [output-oracle]: ../../glossary.md#l2-output-oracle-contract
 [colosseum-contract]: ../../glossary.md#colosseum-contract
-[g-validator-reward]: ../../glossary.md#validator-reward
+[asset-manager-contract]: ../../glossary.md#asset-manager-contract
+[g-output-reward]: ../../glossary.md#output-reward
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
@@ -32,8 +33,8 @@
 The Validator Manager manages the set of [validators][g-validator] and selects the next priority validator with the
 priority to submit the [output root][g-l2-output]. It is also the entry point for other contracts, such as the
 [L2 Output Oracle][output-oracle] and the [Colosseum][colosseum-contract], which distribute
-[output rewards][g-validator-reward] and slash the challenge losers. It makes successive calls to the
-[Asset Manager contract](./asset-manager.md) to apply changes to the validators' assets.
+[output rewards][g-output-reward] and slash the challenge losers. It makes successive calls to the
+[Asset Manager contract][asset-manager-contract] to apply changes to the validators' assets.
 
 ## Validator Registration
 
@@ -147,7 +148,7 @@ accumulated as a pending challenge reward.
 ### Reward Distribution
 
 Each time a submitted output is finalized, the reward for submitting the output is distributed to the output submitter.
-As mentioned in [Reward distribution](./overview.md#reward-distribution), each reward is calculated as follows:
+As mentioned in [Reward Distribution](./overview.md#reward-distribution), each reward is calculated as follows:
 
 | Rewards For Validation                                             | Rewards For KRO Delegations         | Rewards For KGH Delegations            |
 |--------------------------------------------------------------------|-------------------------------------|----------------------------------------|

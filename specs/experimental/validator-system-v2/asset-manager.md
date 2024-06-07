@@ -4,6 +4,7 @@
 
 [g-l2-output]: ../../glossary.md#l2-output-root
 [g-validator]: ../../glossary.md#validator
+[g-validator-manager-contract]: ../../glossary.md#validator-manager-contract
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
@@ -25,9 +26,9 @@
 ## Overview
 
 The Asset Manager oversees the delegation and undelegation of KRO tokens and Kroma Guardian House (KGH) NFTs.
-It calculates and distributes rewards based on [output root][g-l2-output] submissions and manages slashing penalties.
-KRO and KGH delegators delegate their assets into the system and receive rewards upon undelegation. The Asset Manager
-supervises the assets of all [validators][g-validator] and delegators within the Kroma validator system.
+It distributes rewards based on [output root][g-l2-output] submissions and manages slashing penalties. KRO and KGH
+delegators delegate their assets into the system and receive rewards upon undelegation. The Asset Manager supervises the
+assets of all [validators][g-validator] and delegators within the Kroma validator system.
 
 ## Composition of Asset Manager
 
@@ -37,13 +38,12 @@ Asset Manager incorporates a `Vault` component, inspired by the ERC-4626 standar
 
     - Adopts the structure of ERC-4626 to issue shares when KRO and KGH are delegated.
 
-2. Slashing and Reward Calculation
+2. Slashing and Reward Management
 
-    - Calculates rewards for delegators based on the output root submission and manages slashing of assets when
-   challenges occur.
+    - Manages rewards for delegators based on the output root submission and slashing of assets when challenges occur.
 
-Each validator registered in [`ValidatorManager`](./validator-manager.md) has a corresponding `Vault` struct. The
-`Vault` struct is defined as follows:
+Each validator registered in [Validator Manager contract][g-validator-manager-contract] has a corresponding `Vault`
+struct. The `Vault` struct is defined as follows:
 
 ```solidity
 struct Vault {
