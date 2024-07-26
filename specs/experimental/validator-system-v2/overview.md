@@ -68,7 +68,7 @@ There are three types of participants in the Validator System V2: Validators, KR
 #### Validators
 
 [Validators][g-validator] are the entities who actually run the node and submit the output root, which are the same as
-validators in the current validator system. Validators must stake their KRO tokens to be eligible to submit output, and
+validators in the previous validator system. Validators must stake their KRO tokens to be eligible to submit output, and
 their chances of submitting output increase proportionally to the amount of KRO they stake. If the submitted output is
 finalized, they will receive KRO as a [reward][g-validator-reward], while if the output is challenged and lost, a
 portion of the staked KRO and the output submission reward will be transferred to the challenge winner.
@@ -82,24 +82,21 @@ KRO.
 
 #### KGH Delegators
 
-KGH delegators delegate KGHs to validators and increase their chances of being selected as a priority validator by the
-number of KRO contained in the KGH and boost their output submission rewards. In return for delegation, they receive a
-portion of the base reward proportional to the number of KRO in their KGH, and share in the
-[boosted reward][g-boosted-reward].
+KGH delegators delegate KGHs to validators and boost their output submission rewards. In return for delegation,
+they receive a share in the [boosted reward][g-boosted-reward].
 
 ### Priority Validator Selection
 
 The probability of a validator being selected as a validator who has priority for the next
 [priority round][g-priority-round] is proportional to the amount of KRO delegated to the validator. The amount of
-delegated KRO includes both the amount of KRO staked by themselves and the amount of KRO delegated by KRO delegators, as
-well as the amount of KRO contained in KGH delegated by KGH delegators.
+delegated KRO includes both the amount of KRO staked by themselves and the amount of KRO delegated by KRO delegators.
 
 ### Reward Distribution
 
 The reward for submitting an output consists of [base reward][g-base-reward] and [boosted reward][g-boosted-reward].
 Base reward is divided between the validator and KRO delegators according to the commission rate set by the validator.
-At this point, the validator and the KGH delegators also share the reward distributed to the KRO delegation based on the
-amount of KRO they delegated. Boosted reward is shared by the validator and KGH delegators in proportion to the
+At this point, the validator also share the reward distributed to the KRO delegation based on the
+amount of KRO they deposited. Boosted reward is shared by the validator and KGH delegators in proportion to the
 commission rate.
 
 ## Contracts

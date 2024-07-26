@@ -40,11 +40,10 @@ priority to submit the [output root][g-l2-output]. It is also the entry point fo
 
 To become a validator, the first step is to register to the Validator Manager with at least `MIN_REGISTER_AMOUNT` of
 KRO tokens. Upon registration, they initiate a [vault](./asset-manager.md#composition-of-asset-manager) via
-self-delegation and set commission rate and maximum change rate of the commission rate. The commission rate is the
-percentage that the validator takes from the output reward, and the maximum change rate is the maximum range of the
-commission rate that the validator can change at once. If `COMMISSION_RATE_MIN_CHANGE_SECONDS` has not elapsed since the
-last time the validator changed the commission rate, the validator cannot change it again. These information and
-safeguards can help delegators choose which validators to delegate to.
+self-delegation and set commission rate and dedicated withdraw account. The commission rate is the
+percentage that the validator takes from the output reward. When the validator requests for commission rate change,
+he must wait for `COMMISSION_CHANGE_DELAY_SECONDS` to elapse from the moment of requesting commission rate change.
+This safeguard can help delegators choose which validators to delegate to.
 
 The `Validator` struct that represents the information of the validator is defined as follows:
 
@@ -53,14 +52,14 @@ struct Validator {
     bool isInitiated;
     uint8 noSubmissionCount;
     uint8 commissionRate;
-    uint8 commissionMaxChangeRate;
-    uint128 commissionRateChangedAt;
+    uint8 pendingCommissionRate;
+    uint128 commissionChangeInitiatedAt;
 }
 ```
 
-After registration, validators can receive delegations of KRO and KGH. When total delegated KRO, excluding KRO contained
-in KGH, exceeds `MIN_ACTIVATE_AMOUNT`, validators can be activated and become eligible to submit output. Note that if
-the validator didn't meet the activation condition during registration and weren't automatically activated, the
+After registration, validators can receive delegations of KRO and KGH. When total delegated KRO exceeds
+`MIN_ACTIVATE_AMOUNT`, validators can be activated and become eligible to submit output. Note that if the validator
+didn't meet the activation condition during registration and weren't automatically activated, the
 validator will need to activate manually.
 
 ## Validator Management
@@ -103,8 +102,8 @@ library BalancedWeightTree {
 ```
 
 As described in [Priority Validator Selection](./overview.md#priority-validator-selection), a validator's weight is
-calculated by summing self-delegated KRO, KRO delegated by KRO delegators, KRO contained in delegated KGH, and
-cumulative reward. It must be updated after each delegation, undelegation, slashing, and reward distribution. The next
+calculated by summing validator KRO, KRO delegated by KRO delegators, and cumulative reward.
+It must be updated after each delegation, undelegation, slashing, and reward distribution. The next
 priority validator is randomly selected from the validator tree based on their weight.
 
 [self-balancing-binary-search-tree]: https://github.com/yasharpm/Solidity-Weighted-Random-List
@@ -130,8 +129,8 @@ If a validator has not submitted output when it was selected as a priority valid
 `noSubmissionCount` is incremented by 1. If the validator submits output the next time it is selected as a priority
 validator, `noSubmissionCount` is reset to 0. Otherwise, if the `noSubmissionCount` exceeds `JAIL_THRESHOLD`, the
 validator is deemed to have failed to fulfill its obligations. Accordingly, the validator is sent to jail and removed
-from the validator tree. After `JAIL_PERIOD` has elapsed, the validator can be unjailed by calling `tryUnjail` function
-on its own and activated if the activation conditions are met.
+from the validator tree. After `SOFT_JAIL_PERIOD` has elapsed, the validator can be unjailed by calling `tryUnjail`
+function on its own and activated if the activation conditions are met.
 
 ## Entry Point
 
@@ -140,10 +139,13 @@ rewards. Below is a detailed description of each case.
 
 ### Slashing
 
-When the challenge ends, the challenge loser is slashed. To apply the slash to the loser, the
+Validator System V2 brings the similar bond mechanism as the previous system. The validator must stake a bond every
+time they submit an output or create a challenge. When the challenge ends, the challenge loser is slashed. Bond amount
+for each output submission or challenge creation is defined as `BOND_AMOUNT`.
+To apply the slash to the loser, the
 [Colosseum](../../fault-proof/challenge.md#contract-interface) contract calls Validator Manager, which calls Asset
-Manager to calculate the slash amount and apply the change. The loser is sent to jail and the slash amount is
-accumulated as a pending challenge reward.
+Manager to deduct the bond from the validator assets. The loser is sent to jail for`HARD_JAIL_PERIOD`, which is longer
+than the `SOFT_JAIL_PERIOD`.
 
 ### Reward Distribution
 
@@ -166,10 +168,13 @@ submitter who is the challenge winner.
 
 ### Constants
 
-| Name                                 | Value | Unit    |
-|--------------------------------------|-------|---------|
-| `MIN_REGISTER_AMOUNT`                | TBD   | KRO     |
-| `MIN_ACTIVATE_AMOUNT`                | TBD   | KRO     |
-| `COMMISSION_RATE_MIN_CHANGE_SECONDS` | TBD   | seconds |
-| `JAIL_THRESHOLD`                     | TBD   | number  |
-| `BASE_REWARD`                        | TBD   | KRO     |
+| Name                              | Value | Unit    |
+|-----------------------------------|-------|---------|
+| `MIN_REGISTER_AMOUNT`             | TBD   | KRO     |
+| `MIN_ACTIVATE_AMOUNT`             | TBD   | KRO     |
+| `COMMISSION_CHANGE_DELAY_SECONDS` | TBD   | seconds |
+| `SOFT_JAIL_PERIOD`                | TBD   | seconds |
+| `HARD_JAIL_PERIOD`                | TBD   | seconds |
+| `JAIL_THRESHOLD`                  | TBD   | number  |
+| `BOND_AMOUNT`                     | TBD   | KRO     |
+| `BASE_REWARD`                     | TBD   | KRO     |
