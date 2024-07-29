@@ -55,6 +55,15 @@ Each validator registered in [Validator Manager contract][g-validator-manager-co
 struct. The `Vault` struct is defined as follows:
 
 ```solidity
+struct Asset {
+    uint128 validatorKro;
+    uint128 validatorKroBonded;
+    uint128 totalKro;
+    uint128 totalKroShares;
+    uint128 totalKgh;
+    uint128 rewardPerKghStored;
+}
+
 struct Vault {
     address withdrawAccount;
     uint128 lastDepositedAt;
@@ -107,21 +116,9 @@ $$kroAsset = kroShare \times \frac{totalKroAssets+1}{totalKroShares+10^{offset}}
 Information related to the assets and shares of each validator is stored in the following `Asset` struct. Note that the
 base reward is added to the `totalKro` field, increasing the share price.
 
-```solidity
-struct Asset {
-    uint128 validatorKro;
-    uint128 validatorKroBonded;
-    uint128 totalKro;
-    uint128 totalKroShares;
-    uint128 totalKgh;
-    uint128 rewardPerKghStored;
-}
-```
-
 ### Boosted Rewards
 
-If a delegator delegates KGH, their `rewardPerKghStored` and `rewardPerKghStored` are decided based on the current
-state of the `Vault`.
+If a delegator delegates KGH, their `rewardPerKghStored` is decided based on the current state of the `Vault`.
 
 ```solidity
 kghDelegator.rewardPerKghStored = vault.asset.rewardPerKghStored;
@@ -157,9 +154,8 @@ recommended to store the private key of the withdraw account in a safe place**.
 
 ## Undelegation Delay of 7 days from the Delegation
 
-To prevent abuse such as attempting to receive unintended and unjustified rewards or avoiding slashing through various
-forms of manipulation, all undelegation and reward claims are subject to a one-week delay. Without this 7-day delay,
-the following abuses could occur:
+To prevent abuse such as attempting to receive unintended and unjustified rewards, all undelegation and reward claims
+are subject to a one-week delay. Without this 7-day delay, the following abuses could occur:
 
 > Exploiting the fact that output finalization takes one week, a submitter could delegate a large amount of KRO right
 before output finalization, and then undelegate it immediately after finalization. This way, the delegator could take
@@ -184,18 +180,17 @@ Validator Manager document.
 ### Non-transferable Shares
 
 Unlike ERC-4626, `kroShares` in `Vault` are designed to be non-transferable to any accounts except for the delegator
-and Asset Manager contract. This is implemented to prevent the following edge cases:
+and Asset Manager contract. This is implemented to prevent the following edge case:
 
 - Transferring shares related to the validator's `minRegisterAmount` (minimum amount of KRO to be a validator) to
   another address.
-- Transferring shares related to KRO within KGH to another address.
 
-Those cases can lead to inconsistent state management of the `Vault`, which could result in unexpected behavior.
+This case can lead to inconsistent state management of the `Vault`, which could result in unexpected behavior.
 
 ### Global Vault Structure
 
 In ERC-4626, each contract typically has a single ERC-20 share. However, `Vault` in Asset Manager manages
-self-delegation, delegation, and rewards for all validators within a single contract.
+deposit, delegation, and rewards for all validators within a single contract.
 Therefore, `Vault` operates a mapping with validator addresses as keys and stores the state of assets, shares,
 and rewards for each validator's vault within the mapping.
 
