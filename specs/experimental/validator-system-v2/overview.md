@@ -34,7 +34,7 @@
 
 ## Background
 
-The [current permissionless validator system](../../protocol/validator.md#validator-pool-smart-contract) of Kroma
+The [previous permissionless validator system](../../protocol/validator.md#validator-pool-smart-contract) of Kroma
 requires validators to bond `REQUIRED_BOND_AMOUNT` of ETH each time the validator submits an
 [L2 output root][g-l2-output]. While successfully involving over 360 validators (as of 6/3/24), there are a few
 drawbacks in the current system that need to be addressed:
@@ -54,7 +54,7 @@ incorporating delegation system based on Kroma's governance token (KRO) and Krom
 ## Overview
 
 **Validator System V2** is a new network security model of Kroma, which introduces KRO tokenomics and delegation to the
-current validator system. It is compatible with current [ZK fault proof][g-zk-fault-proof] and
+validator system. It is compatible with current [ZK fault proof][g-zk-fault-proof] and
 [challenge system](../../fault-proof/challenge.md), while introducing two new contracts:
 [**Validator Manager**][g-validator-manager-contract] and [**Asset Manager** contract][g-asset-manager-contract]. These
 contracts replace the existing [Validator Pool contract][g-validator-pool-contract], handling jobs such as validator
@@ -68,10 +68,10 @@ There are three types of participants in the Validator System V2: Validators, KR
 #### Validators
 
 [Validators][g-validator] are the entities who actually run the node and submit the output root, which are the same as
-validators in the previous validator system. Validators must stake their KRO tokens to be eligible to submit output, and
-their chances of submitting output increase proportionally to the amount of KRO they stake. If the submitted output is
-finalized, they will receive KRO as a [reward][g-validator-reward], while if the output is challenged and lost, a
-portion of the staked KRO and the output submission reward will be transferred to the challenge winner.
+validators in the previous validator system. Validators must deposit their KRO tokens to be eligible to submit output, 
+and their chances of submitting output increase proportionally to the amount of KRO they deposit. If the submitted 
+output is finalized, they will receive KRO as a [reward][g-validator-reward], while if the output is challenged and 
+lost, a portion of the deposited KRO and the output submission reward will be transferred to the challenge winner.
 
 #### KRO Delegators
 
@@ -89,7 +89,7 @@ they receive a share in the [boosted reward][g-boosted-reward].
 
 The probability of a validator being selected as a validator who has priority for the next
 [priority round][g-priority-round] is proportional to the amount of KRO delegated to the validator. The amount of
-delegated KRO includes both the amount of KRO staked by themselves and the amount of KRO delegated by KRO delegators.
+delegated KRO includes both the amount of KRO deposited by themselves and the amount of KRO delegated by KRO delegators.
 
 ### Reward Distribution
 

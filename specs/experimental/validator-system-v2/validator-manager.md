@@ -40,7 +40,7 @@ priority to submit the [output root][g-l2-output]. It is also the entry point fo
 
 To become a validator, the first step is to register to the Validator Manager with at least `MIN_REGISTER_AMOUNT` of
 KRO tokens. Upon registration, they initiate a [vault](./asset-manager.md#composition-of-asset-manager) via
-self-delegation and set commission rate and dedicated withdraw account. The commission rate is the
+depositing KRO tokens and set commission rate and dedicated withdraw account. The commission rate is the
 percentage that the validator takes from the output reward. When the validator requests for commission rate change,
 he must wait for `COMMISSION_CHANGE_DELAY_SECONDS` to elapse from the moment of requesting commission rate change.
 This safeguard can help delegators choose which validators to delegate to.
@@ -59,7 +59,7 @@ struct Validator {
 
 After registration, validators can receive delegations of KRO and KGH. When total delegated KRO exceeds
 `MIN_ACTIVATE_AMOUNT`, validators can be activated and become eligible to submit output. Note that if the validator
-didn't meet the activation condition during registration and weren't automatically activated, the
+don't meet the activation condition during registration and aren't automatically activated, the
 validator will need to activate manually.
 
 ## Validator Management
@@ -127,7 +127,7 @@ Only validators with an `ACTIVE` status can submit outputs.
 
 If a validator has not submitted output when it was selected as a priority validator, the validator's
 `noSubmissionCount` is incremented by 1. If the validator submits output the next time it is selected as a priority
-validator, `noSubmissionCount` is reset to 0. Otherwise, if the `noSubmissionCount` exceeds `JAIL_THRESHOLD`, the
+validator, the `noSubmissionCount` is reset to 0. Otherwise, if the `noSubmissionCount` exceeds `JAIL_THRESHOLD`, the
 validator is deemed to have failed to fulfill its obligations. Accordingly, the validator is sent to jail and removed
 from the validator tree. After `SOFT_JAIL_PERIOD` has elapsed, the validator can be unjailed by calling `tryUnjail`
 function on its own and activated if the activation conditions are met.
@@ -139,30 +139,28 @@ rewards. Below is a detailed description of each case.
 
 ### Slashing
 
-Validator System V2 brings the similar bond mechanism as the previous system. The validator must stake a bond every
-time they submit an output or create a challenge. When the challenge ends, the challenge loser is slashed. Bond amount
-for each output submission or challenge creation is defined as `BOND_AMOUNT`.
-To apply the slash to the loser, the
-[Colosseum](../../fault-proof/challenge.md#contract-interface) contract calls Validator Manager, which calls Asset
-Manager to deduct the bond from the validator assets. The loser is sent to jail for`HARD_JAIL_PERIOD`, which is longer
-than the `SOFT_JAIL_PERIOD`.
+Validator System V2 brings the similar bond mechanism as the previous system. The validator must bond a portion of the 
+deposited KRO every time they submit an output or create a challenge. When the challenge ends, the challenge loser is 
+slashed. Bond amount for each output submission or challenge creation is defined as `BOND_AMOUNT`. To apply the slash to
+the loser, the [Colosseum](../../fault-proof/challenge.md#contract-interface) contract calls Validator Manager, which 
+calls Asset Manager to deduct the bond from the validator assets. The loser is sent to jail for`HARD_JAIL_PERIOD`.
 
 ### Reward Distribution
 
-Each time a submitted output is finalized, the reward for submitting the output is distributed to the output submitter.
-As mentioned in [Reward Distribution](./overview.md#reward-distribution), each reward is calculated as follows:
+Each time a submitted output is finalized, the reward for submitting the output is distributed to the output submitter 
+and its delegators. As mentioned in [Reward Distribution](./overview.md#reward-distribution), each reward is calculated 
+as follows:
 
 | Rewards For Validation                                             | Rewards For KRO Delegations         | Rewards For KGH Delegations            |
 |--------------------------------------------------------------------|-------------------------------------|----------------------------------------|
 | $\verb#BASE_REWARD# \times c_i + \verb#BOOSTED_REWARD# \times c_i$ | $\verb#BASE_REWARD# \times (1-c_i)$ | $\verb#BOOSTED_REWARD# \times (1-c_i)$ |
 
-Here, $c_i$ is the commission rate the validator set during the validator registration process. Note that the rewards
-for validation are taken by the validator alone, and the rewards for KGH delegations are shared among KGH delegators
-only. Otherwise, the rewards for KRO delegation are shared by the validator, KRO delegators, and KGH delegators whose
-KGH contains KRO.
+Here, $c_i$ is the commission rate of the validator. Note that a portion of the base reward and the boosted reward is 
+given as the validator reward through the commission. The remaining boosted rewards are shared among KGH delegators. The
+remaining base rewards are shared among KRO delegators and the validator, proportional to the amount of KRO delegated 
+and deposited.
 
-In addition, any pending challenge rewards accumulated as a result of slash are distributed to the vault of the output
-submitter who is the challenge winner.
+In addition, any pending challenge rewards accumulated as a result of slash are given to the validator.
 
 ## Summary of Definitions
 
