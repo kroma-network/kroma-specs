@@ -68,9 +68,9 @@ There are three types of participants in the Validator System V2: Validators, KR
 #### Validators
 
 [Validators][g-validator] are the entities who actually run the node and submit the output root, which are the same as
-validators in the previous validator system. Validators must deposit their KRO tokens to be eligible to submit output, 
-and their chances of submitting output increase proportionally to the amount of KRO they deposit. If the submitted 
-output is finalized, they will receive KRO as a [reward][g-validator-reward], while if the output is challenged and 
+validators in the previous validator system. Validators must deposit their KRO tokens to be eligible to submit output,
+and their chances of submitting output increase proportionally to the amount of KRO they deposit. If the submitted
+output is finalized, they will receive KRO as a [reward][g-validator-reward], while if the output is challenged and
 lost, a portion of the deposited KRO and the output submission reward will be transferred to the challenge winner.
 
 #### KRO Delegators
