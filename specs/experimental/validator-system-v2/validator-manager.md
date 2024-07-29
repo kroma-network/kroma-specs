@@ -139,25 +139,25 @@ rewards. Below is a detailed description of each case.
 
 ### Slashing
 
-Validator System V2 brings the similar bond mechanism as the previous system. The validator must bond a portion of the
-deposited KRO every time they submit an output or create a challenge. When the challenge ends, the challenge loser is
+Validator System V2 brings the similar bond mechanism as the previous system. The validator must bond a portion of the 
+deposited KRO every time they submit an output or create a challenge. When the challenge ends, the challenge loser is 
 slashed. Bond amount for each output submission or challenge creation is defined as `BOND_AMOUNT`. To apply the slash to
-the loser, the [Colosseum](../../fault-proof/challenge.md#contract-interface) contract calls Validator Manager, which
+the loser, the [Colosseum](../../fault-proof/challenge.md#contract-interface) contract calls Validator Manager, which 
 calls Asset Manager to deduct the bond from the validator assets. The loser is sent to jail for`HARD_JAIL_PERIOD`.
 
 ### Reward Distribution
 
-Each time a submitted output is finalized, the reward for submitting the output is distributed to the output submitter
-and its delegators. As mentioned in [Reward Distribution](./overview.md#reward-distribution), each reward is calculated
+Each time a submitted output is finalized, the reward for submitting the output is distributed to the output submitter 
+and its delegators. As mentioned in [Reward Distribution](./overview.md#reward-distribution), each reward is calculated 
 as follows:
 
 | Rewards For Validation                                             | Rewards For KRO Delegations         | Rewards For KGH Delegations            |
 |--------------------------------------------------------------------|-------------------------------------|----------------------------------------|
 | $\verb#BASE_REWARD# \times c_i + \verb#BOOSTED_REWARD# \times c_i$ | $\verb#BASE_REWARD# \times (1-c_i)$ | $\verb#BOOSTED_REWARD# \times (1-c_i)$ |
 
-Here, $c_i$ is the commission rate of the validator. Note that a portion of the base reward and the boosted reward is
+Here, $c_i$ is the commission rate of the validator. Note that a portion of the base reward and the boosted reward is 
 given as the validator reward through the commission. The remaining boosted rewards are shared among KGH delegators. The
-remaining base rewards are shared among KRO delegators and the validator, proportional to the amount of KRO delegated
+remaining base rewards are shared among KRO delegators and the validator, proportional to the amount of KRO delegated 
 and deposited.
 
 In addition, any pending challenge rewards accumulated as a result of slash are given to the validator.

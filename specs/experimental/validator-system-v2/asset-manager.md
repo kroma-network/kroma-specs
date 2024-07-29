@@ -154,7 +154,7 @@ recommended to store the private key of the withdraw account in a safe place**.
 
 ## Undelegation Delay of 7 days from the Delegation
 
-To prevent abuse such as attempting to receive unintended and unjustified rewards, all undelegation and reward claims
+To prevent abuse such as attempting to receive unintended and unjustified rewards, all undelegation and reward claims 
 are subject to a one-week delay. Without this 7-day delay, the following abuses could occur:
 
 > Exploiting the fact that output finalization takes one week, a submitter could delegate a large amount of KRO right
