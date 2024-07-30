@@ -41,8 +41,8 @@ with a bond at stake if the proof is wrong.
 > **_NOTE:_**
 > Before the introduction of the KRO governance token, the
 > [validator system was ETH-based](./validator-v1/validator-pool.md). With introduction of KRO token, the
-> [KRO-based validator system](./validator-v2/overview.md) has been introduced, mitigating several limitations of the
-> ETH-based system.
+> system had been transited to [KRO-based validator system](./validator-v2/overview.md), mitigating several limitations
+> of the ETH-based system.
 
 The validator's role is to construct and submit output roots, which are commitments to the L2's state, to the
 `L2OutputOracle` contract on L1. To do this, the validator periodically queries the [rollup node](rollup-node.md) for
@@ -183,6 +183,4 @@ in the event of a reorg, the block hash will not match that of the block with th
 |------------------------|--------|----------------|
 | `SUBMISSION_INTERVAL`  | `1800` | blocks         |
 | `L2_BLOCK_TIME`        | `2`    | seconds        |
-| `REQUIRED_BOND_AMOUNT` | TBD    | wei            |
-| `REWARD_DIVIDER`       | `168`  | num of outputs |
 | `ROUND_DURATION`       | `30`   | minutes        |

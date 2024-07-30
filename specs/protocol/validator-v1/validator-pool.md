@@ -12,6 +12,8 @@
 - [Validator Pool Smart Contract](#validator-pool-smart-contract)
   - [Validation Rewards](#validation-rewards)
   - [Configuration of ValidatorPool](#configuration-of-validatorpool)
+- [Summary of Definitions](#summary-of-definitions)
+  - [Constants](#constants)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -182,3 +184,12 @@ Rewards received by the validator can be withdrawn to L1 via `withdraw()` in the
 ### Configuration of ValidatorPool
 
 `ROUND_DURATION` is equal to `(L2_BLOCK_TIME * SUBMISSION_INTERVAL) / 2`.
+
+## Summary of Definitions
+
+### Constants
+
+| Name                   | Value | Unit           |
+|------------------------|-------|----------------|
+| `REQUIRED_BOND_AMOUNT` | `0.2` | ETH            |
+| `REWARD_DIVIDER`       | `168` | num of outputs |

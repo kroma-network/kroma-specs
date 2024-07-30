@@ -906,8 +906,8 @@ An [L1] contract that determines [validator] eligibility, selects the [validator
 
 [validator-manager-contract]: glossary.md#validator-manager-contract
 
-An [L1] contract that manages the set of [validators], selects the validator of next [priority round][priority-round],
-and is an entry point of [output reward][output-reward] distribution and slash in
+An [L1] contract that manages the set of [validators][validator], selects the validator of next
+[priority round][priority-round], and is an entry point of [output reward][output-reward] distribution and slash in
 [KRO-based Validator System][kro-based-validator-system].
 
 ## Asset Manager Contract
