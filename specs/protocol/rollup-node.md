@@ -68,7 +68,7 @@ For a complete specification of the L2 block derivation, refer to the [L2 block 
 ## L2 Output RPC method
 
 The Rollup node has its own RPC method, `optimism_outputAtBlock` which returns a 32
-byte hash corresponding to the [L2 output root](validation#l2-output-commitment-construction).
+byte hash corresponding to the [L2 output root](validation.md#l2-output-commitment-construction).
 
 ### Structures
 

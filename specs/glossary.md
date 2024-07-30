@@ -885,7 +885,7 @@ cf. [L1 Attributes Predeployed Contract Specification](./protocol/deposits.md#l1
 
 A 32 byte value which serves as a commitment to the current state of the L2 chain.
 
-cf. [Submitting L2 output commitments](./protocol/validation#submitting-l2-output-commitments)
+cf. [Submitting L2 output commitments](./protocol/validation.md#submitting-l2-output-commitments)
 
 ## L2 Output Oracle Contract
 

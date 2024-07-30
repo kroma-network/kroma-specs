@@ -14,14 +14,14 @@
 
 We want the [validator](https://github.com/kroma-network/kroma/tree/main/kroma-validator)
 role to be decentralized. Like how the PoS mechanism works, to achieve this, a validator needs to bond ETH at every
-[output submission](../protocol/validation#submitting-l2-output-commitments).
+[output submission](../protocol/validation.md#submitting-l2-output-commitments).
 When submitting an output, the amount of bond specified by the validator is automatically bonded from
 [the ETH the validator has deposited into the `ValidatorPool`](#deposit-into-validatorpool).
 The bonded ETH is automatically unbonded when the submitted output is finalized.
 The finalization of the output is checked when the next outputs are submitted, or if the finalization period
 of the submitted output has passed, you can directly
 [trigger unbond by using the `unbond` command](#try-unbond-in-validatorpool).
-For more details about submitting an output as a validator, see [here](../protocol/validation).
+For more details about submitting an output as a validator, see [here](../protocol/validation.md).
 
 This guide teaches you how to deposit, withdraw, or try to unbond in `ValidatorPool` via CLI. You can find the proxy
 address of `ValidatorPool` on Mainnet
