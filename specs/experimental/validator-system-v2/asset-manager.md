@@ -55,6 +55,15 @@ Each validator registered in [Validator Manager contract][g-validator-manager-co
 struct. The `Vault` struct is defined as follows:
 
 ```solidity
+struct Asset {
+    uint128 validatorKro;
+    uint128 validatorKroBonded;
+    uint128 totalKro;
+    uint128 totalKroShares;
+    uint128 totalKgh;
+    uint128 rewardPerKghStored;
+}
+
 struct Vault {
     address withdrawAccount;
     uint128 lastDepositedAt;
@@ -72,7 +81,7 @@ specific to the validator.
 The `Vault` defines assets and shares for KRO and streaming-based reward for KGH, allowing for distinct reward
 distribution mechanisms for KRO delegators and KGH delegators.
 
-## Management of Rewards
+## Reward Management
 
 The base reward is given by increasing the price of `kroShare`, which is given to the delegator when he delegates KRO.
 On the other side, the boosted reward is given by increasing `rewardPerKghStored` at the `Asset` struct. The share
@@ -107,34 +116,29 @@ $$kroAsset = kroShare \times \frac{totalKroAssets+1}{totalKroShares+10^{offset}}
 Information related to the assets and shares of each validator is stored in the following `Asset` struct. Note that the
 base reward is added to the `totalKro` field, increasing the share price.
 
-```solidity
-struct Asset {
-    uint128 validatorKro;
-    uint128 validatorKroBonded;
-    uint128 totalKro;
-    uint128 totalKroShares;
-    uint128 totalKgh;
-    uint128 rewardPerKghStored;
-}
-```
-
 ### Boosted Rewards
 
-If a delegator delegates KGH, their `rewardPerKghStored` and `rewardPerKghStored` are decided based on the current
-state of the `Vault`.
+Boosted rewards are managed by calculating the expected rewards per KGH each time a submitted output is finalized and
+rewards are distributed. These are stored within the `Vault` as `rewardPerKghStored`.
 
 ```solidity
-kghDelegator.rewardPerKghStored = vault.asset.rewardPerKghStored;
-kghDelegator.rewardPerKghPaid = kghDelegator.kghNum * (vault.asset.rewardPerKghStored - kghDelegator.rewardPerKghPaid) / kghDelegator.kghNum;
+    vault.asset.rewardPerKghStored += boostedReward / vault.asset.totalKgh
 ```
 
-`_claimBoostedReward` function is responsible for executing the above logic. It is called when the delegator claims the
-boosted rewards, withdraws their delegated KGHs, or delegates more KGHs. Note that boosted reward calculated with
-`_claimBoostedReward` will be transferred directly to the delegator's account, which means that delegating more KGHs
-will lead to the automatic claim of the remaining boosted reward.
+The `boostedReward` refers to the total boosted reward from KGH delegations for the validator, and 
+`vault.asset.totalKgh` represents the total number of KGH NFTs delegated to the validator.
 
-The global `rewardPerKghStored` at `Asset` struct is updated when the validator of the vault submits an output root,
-which will be applied to the amount of boosted rewards in the claiming and undelegation process.
+When KGH delegators claim their boosted rewards, the rewards they will receive are calculated as follows and directly
+transferred to the delegator's account.
+
+```solidity
+    uint128 totalBoostedReward = kghDelegator.kghNum * (vault.asset.rewardPerKghStored - kghDelegator.rewardPerKghPaid);
+	kghDelegator.rewardPerKghPaid = vault.asset.rewardPerKghStored;
+    ASSET_TOKEN.safeTransfer(delegator, totalBoostedReward);
+```
+
+`kghDelegator.rewardPerKghPaid` stores the rewards per KGH that the current delegator has received. This ensures that
+the rewards are correctly distributed to KGH delegators when new delegations or undelegations occur.
 
 ## Validator Asset Management
 
@@ -157,11 +161,10 @@ recommended to store the private key of the withdraw account in a safe place**.
 
 ## Undelegation Delay of 7 days from the Delegation
 
-To prevent abuse such as attempting to receive unintended and unjustified rewards or avoiding slashing through various
-forms of manipulation, all undelegation and reward claims are subject to a one-week delay. Without this 7-day delay,
-the following abuses could occur:
+To prevent abuse such as attempting to receive unintended and unjustified rewards, all undelegations are subject to a
+one-week delay. Without this 7-day delay, the following abuses could occur:
 
-> Exploiting the fact that output finalization takes one week, a submitter could delegate a large amount of KRO right
+> Exploiting the fact that output finalization takes one week, a delegator could delegate a large amount of KRO right
 before output finalization, and then undelegate it immediately after finalization. This way, the delegator could take
 the rewards with almost no risk.
 
@@ -169,33 +172,22 @@ To address this edge case, funds are not be able to be undelegated for a week fr
 managed through the `lastDelegatedAt` field in the `KroDelegator` struct and `delegatedAt` mapping `KghDelegator`
 struct respectively.
 
-## Slashing
-
-Since Validator System V2 brings the same bond mechanism of the previous validator system, there is no slashing applied
-to KRO and KGH delegators. They contribute to the security of the chain by delegating to a validator and contributing
-to the probability of the validator to be selected as a priority validator. Since the reward is only given to the
-honest validator, delegators are incentivized to delegate to a validator who is honest and active.
-
-To see more about the slashing mechanism, please refer to the [Slashing](./validator-manager.md#slashing) part of
-Validator Manager document.
-
 ## Difference from ERC-4626
 
 ### Non-transferable Shares
 
 Unlike ERC-4626, `kroShares` in `Vault` are designed to be non-transferable to any accounts except for the delegator
-and Asset Manager contract. This is implemented to prevent the following edge cases:
+and Asset Manager contract. This is implemented to prevent the following edge case:
 
 - Transferring shares related to the validator's `minRegisterAmount` (minimum amount of KRO to be a validator) to
   another address.
-- Transferring shares related to KRO within KGH to another address.
 
-Those cases can lead to inconsistent state management of the `Vault`, which could result in unexpected behavior.
+This case can lead to inconsistent state management of the `Vault`, which could result in unexpected behavior.
 
 ### Global Vault Structure
 
 In ERC-4626, each contract typically has a single ERC-20 share. However, `Vault` in Asset Manager manages
-self-delegation, delegation, and rewards for all validators within a single contract.
+deposit, delegation, and rewards for all validators within a single contract.
 Therefore, `Vault` operates a mapping with validator addresses as keys and stores the state of assets, shares,
 and rewards for each validator's vault within the mapping.
 
