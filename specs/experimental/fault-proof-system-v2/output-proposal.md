@@ -23,7 +23,7 @@
 ## Overview
 
 This document addresses one of the limitations of
-[the previous output proposal process](../../protocol/validator.md#submitting-l2-output-commitments) in Fault Proof
+[the previous output proposal process](../../protocol/validation.md#submitting-l2-output-commitments) in Fault Proof
 System V1. When consecutive invalid [outputs][g-checkpoint-output] are proposed, the previous system's sequential
 [challenge](../../fault-proof/challenge.md) and deletion mechanism for the first invalid output could lead to
 insufficient time to [prove fault](../../fault-proof/challenge.md#proving-fault) in subsequent challenges before

@@ -1,18 +1,4 @@
-# Validator System V2
-
-<!-- All glossary references in this file. -->
-
-[g-l2-output]: ../../glossary.md#l2-output-root
-[g-zk-fault-proof]: ../../glossary.md#zk-fault-proof
-[g-validator-pool-contract]: ../../glossary.md#validator-pool-contract
-[g-validator-manager-contract]: ../../glossary.md#validator-manager-contract
-[g-asset-manager-contract]: ../../glossary.md#asset-manager-contract
-[g-validator]: ../../glossary.md#validator
-[g-output-reward]: ../../glossary.md#output-reward
-[g-validator-reward]: ../../glossary.md#validator-reward
-[g-base-reward]: ../../glossary.md#base-reward
-[g-boosted-reward]: ../../glossary.md#boosted-reward
-[g-priority-round]: ../../glossary.md#priority-round
+# KRO-based Validator System
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
@@ -32,12 +18,26 @@
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
+<!-- All glossary references in this file. -->
+
+[g-l2-output]: ../../glossary.md#l2-output-root
+[g-zk-fault-proof]: ../../glossary.md#zk-fault-proof
+[g-validator-pool-contract]: ../../glossary.md#validator-pool-contract
+[g-validator-manager-contract]: ../../glossary.md#validator-manager-contract
+[g-asset-manager-contract]: ../../glossary.md#asset-manager-contract
+[g-validator]: ../../glossary.md#validator
+[g-output-reward]: ../../glossary.md#output-reward
+[g-validator-reward]: ../../glossary.md#validator-reward
+[g-base-reward]: ../../glossary.md#base-reward
+[g-boosted-reward]: ../../glossary.md#boosted-reward
+[g-priority-round]: ../../glossary.md#priority-round
+
 ## Background
 
-The [previous permissionless validator system](../../protocol/validator.md#validator-pool-smart-contract) of Kroma
-requires validators to bond `REQUIRED_BOND_AMOUNT` of ETH each time the validator submits an
-[L2 output root][g-l2-output]. While successfully involving over 360 validators (as of 6/3/24), there are a few
-drawbacks in the previous system that need to be addressed:
+The [previous permissionless validator system](../validator-v1/validator-pool.md) of Kroma requires validators to bond
+`REQUIRED_BOND_AMOUNT` of ETH each time the validator submits an [L2 output root][g-l2-output]. While successfully
+involving over 360 validators (as of 6/3/24), there are a few drawbacks in the previous system that need to be
+addressed:
 
 - **Multiple Accounts on a Single Validator**: Since the probability of being selected as a priority validator is
   calculated to be the same if only `REQUIRED_BOND_AMOUNT` of ETH is deposited, a single validator can increase the
@@ -101,8 +101,8 @@ commission rate.
 
 ## Contracts
 
-- [Validator Manager](./validator-manager.md)
-- [Asset Manager](./asset-manager.md)
+- [Validator Manager](validator-manager.md)
+- [Asset Manager](asset-manager.md)
 
 ## Summary of Definitions
 

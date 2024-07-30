@@ -332,12 +332,13 @@ Checkpoint output is the l2 output root that denotes state transition during [va
 [validator]: glossary.md#validator
 
 A validator is a decentralized actor, who does [validation]. To participate network as a validator, one needs to
-deposit to [Validator Pool contract][validator-pool-contract] in [Validator System V1][validator-system-v1], otherwise
-needs to register to [Validator Manager contract][validator-manager-contract] in
-[Validator System V2][validator-system-v2]. Then the validator becomes eligible to submit checkpoint output.
+deposit to [Validator Pool contract][validator-pool-contract] in
+[ETH-based Validator System][eth-based-validator-system], otherwise needs to register to
+[Validator Manager contract][validator-manager-contract] in [KRO-based Validator System][kro-based-validator-system].
+Then the validator becomes eligible to submit checkpoint output.
 
-[validator-system-v1]: ./protocol/validator.md#validator-pool-smart-contract
-[validator-system-v2]: ./experimental/validator-system-v2/overview.md
+[eth-based-validator-system]: ./protocol/validator-v1/validator-pool.md
+[kro-based-validator-system]: ./protocol/validator-v2/overview.md
 
 ## Trusted Validator
 
@@ -387,37 +388,38 @@ to false.
 
 Output submission rewards are given as an incentive for validators to submit checkpoint output.
 
-In [Validator System V1][validator-system-v1], the output reward is the same as the
-[validator reward][validator-reward], otherwise in [Validator System V2][validator-system-v2], it consists of the
-validator reward, [base reward][base-reward], and [boosted reward][boosted-reward].
+In [ETH-based Validator System][eth-based-validator-system], the output reward is the same as the
+[validator reward][validator-reward], otherwise in [KRO-based Validator System][kro-based-validator-system], it consists
+of the validator reward, [base reward][base-reward], and [boosted reward][boosted-reward].
 
 ## Validator Reward
 
 [validator-reward]: glossary.md#validator-reward
 
-In [Validator System V1][validator-system-v1], the validator reward is calculated using the following formula:
-`(L2 base fee + L2 priority fee) * validator reward scalar / 10000`.
+In [ETH-based Validator System][eth-based-validator-system], the validator reward is calculated using the following
+formula: `(L2 base fee + L2 priority fee) * validator reward scalar / 10000`.
 
-In [Validator System V2][validator-system-v2], the validator reward is given in terms of KRO tokens, and is calculated
-as the sum of the [base reward][base-reward] and [boosted reward][boosted-reward] multiplied by the commission rate.
+In [KRO-based Validator System][kro-based-validator-system], the validator reward is given in terms of KRO tokens, and
+is calculated as the sum of the [base reward][base-reward] and [boosted reward][boosted-reward] multiplied by the
+commission rate.
 
 ## Base Reward
 
 [base-reward]: glossary.md#base-reward
 
 The base validator reward is given to the vault of the validator who submits the output at
-[Validator System V2][validator-system-v2]. The base reward is given in terms of a fixed amount of KRO tokens for
-each submission.
+[KRO-based Validator System][kro-based-validator-system]. The base reward is given in terms of a fixed amount of KRO
+tokens for each submission.
 
 ## Boosted Reward
 
 [boosted-reward]: glossary.md#boosted-reward
 
 The boosted validator reward is given to the vault of the validator who submits the output at
-[Validator System V2][validator-system-v2]. The boosted reward is given in terms of KRO tokens, and is calculated using
-the following formula: $$8 \times arctan(0.01 \times G_i)$$ where $G_i$ is the total amount of KGH NFTs delegated to the
-output submitter. This is designed to have the effect that the boosted reward is constantly decreasing while the number
-of delegated KGH increases. More information on boosted reward due to KGH can be found
+[KRO-based Validator System][kro-based-validator-system]. The boosted reward is given in terms of KRO tokens, and is
+calculated using the following formula: $$8 \times arctan(0.01 \times G_i)$$ where $G_i$ is the total amount of KGH NFTs
+delegated to the output submitter. This is designed to have the effect that the boosted reward is constantly decreasing
+while the number of delegated KGH increases. More information on boosted reward due to KGH can be found
 [here][kgh-boosting-validator-reward].
 
 [kgh-boosting-validator-reward]: https://docs.kroma.network/kroma-guardian-house/kgh-utilities#boosting-validator-reward
@@ -883,7 +885,7 @@ cf. [L1 Attributes Predeployed Contract Specification](./protocol/deposits.md#l1
 
 A 32 byte value which serves as a commitment to the current state of the L2 chain.
 
-cf. [Submitting L2 output commitments](./protocol/validator.md#submitting-l2-output-commitments)
+cf. [Submitting L2 output commitments](./protocol/validation.md#submitting-l2-output-commitments)
 
 ## L2 Output Oracle Contract
 
@@ -898,20 +900,20 @@ An L1 contract to which [L2 output roots][l2-output] are posted by the [validato
 [validator-pool-contract]: glossary.md#validator-pool-contract
 
 An [L1] contract that determines [validator] eligibility, selects the [validator] of next round, and manages bonding for
-[L2 output roots][l2-output] submissions in [Validator System V1][validator-system-v1].
+[L2 output roots][l2-output] submissions in [ETH-based Validator System][eth-based-validator-system].
 
 ## Validator Manager Contract
 
 [validator-manager-contract]: glossary.md#validator-manager-contract
 
-An [L1] contract that manages the set of [validators], selects the validator of next [priority round][priority-round],
-and is an entry point of [output reward][output-reward] distribution and slash in
-[Validator System V2][validator-system-v2].
+An [L1] contract that manages the set of [validators][validator], selects the validator of next
+[priority round][priority-round], and is an entry point of [output reward][output-reward] distribution and slash in
+[KRO-based Validator System][kro-based-validator-system].
 
 ## Asset Manager Contract
 
 An [L1] contract that oversees the delegation and undelegation of assets, and manages distributed rewards and slashing
-penalties in [Validator System V2][validator-system-v2].
+penalties in [KRO-based Validator System][kro-based-validator-system].
 
 ## Colosseum Contract
 

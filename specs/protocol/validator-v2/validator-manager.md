@@ -1,14 +1,4 @@
-
 # Validator Manager
-
-<!-- All glossary references in this file. -->
-
-[g-validator]: ../../glossary.md#validator
-[g-l2-output]: ../../glossary.md#l2-output-root
-[output-oracle]: ../../glossary.md#l2-output-oracle-contract
-[colosseum-contract]: ../../glossary.md#colosseum-contract
-[asset-manager-contract]: ../../glossary.md#asset-manager-contract
-[g-output-reward]: ../../glossary.md#output-reward
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
@@ -29,6 +19,15 @@
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
+<!-- All glossary references in this file. -->
+
+[g-validator]: ../../glossary.md#validator
+[g-l2-output]: ../../glossary.md#l2-output-root
+[output-oracle]: ../../glossary.md#l2-output-oracle-contract
+[colosseum-contract]: ../../glossary.md#colosseum-contract
+[asset-manager-contract]: ../../glossary.md#asset-manager-contract
+[g-output-reward]: ../../glossary.md#output-reward
+
 ## Overview
 
 The Validator Manager manages the set of [validators][g-validator] and selects the next priority validator with the
@@ -40,7 +39,7 @@ priority to submit the [output root][g-l2-output]. It is also the entry point fo
 ## Validator Registration
 
 To become a validator, the first step is to register to the Validator Manager with at least `MIN_REGISTER_AMOUNT` of
-KRO tokens. Upon registration, they initiate a [vault](./asset-manager.md#composition-of-asset-manager) via
+KRO tokens. Upon registration, they initiate a [vault](asset-manager.md#composition-of-asset-manager) via
 deposit and set commission rate and dedicated withdraw account. The commission rate is the
 percentage that the validator takes from the output reward. When the validator requests for commission rate change,
 he must wait for `COMMISSION_CHANGE_DELAY_SECONDS` to elapse from the moment of requesting commission rate change.
@@ -109,7 +108,7 @@ library BalancedWeightTree {
 }
 ```
 
-As described in [Priority Validator Selection](./overview.md#priority-validator-selection), a validator's weight is
+As described in [Priority Validator Selection](overview.md#priority-validator-selection), a validator's weight is
 calculated by summing KRO deposited by validator, KRO delegated by KRO delegators, and cumulative reward.
 It must be updated after each delegation, undelegation, slashing, and reward distribution. The next
 priority validator is randomly selected from the validator tree based on their weight.
@@ -164,7 +163,7 @@ Manager, which calls Asset Manager's slash function to deduct the bond from the 
 ### Reward Distribution
 
 Each time a submitted output is finalized, the reward for submitting the output is distributed to the output submitter.
-As mentioned in [Reward Distribution](./overview.md#reward-distribution), each reward is calculated as follows:
+As mentioned in [Reward Distribution](overview.md#reward-distribution), each reward is calculated as follows:
 
 | Rewards For Validation                                             | Rewards For KRO Delegations         | Rewards For KGH Delegations            |
 |--------------------------------------------------------------------|-------------------------------------|----------------------------------------|
