@@ -10,9 +10,6 @@
   - [Output Payload(Version 0)](#output-payloadversion-0)
 - [L2 Output Oracle Smart Contract](#l2-output-oracle-smart-contract)
   - [Configuration of L2OutputOracle](#configuration-of-l2outputoracle)
-- [Validator Pool Smart Contract](#validator-pool-smart-contract)
-  - [Validation Rewards](#validation-rewards)
-  - [Configuration of ValidatorPool](#configuration-of-validatorpool)
 - [Security Considerations](#security-considerations)
   - [L1 Reorgs](#l1-reorgs)
 - [Summary of Definitions](#summary-of-definitions)
@@ -26,8 +23,6 @@
 [g-l2]: ../glossary.md#layer-2-l2
 [g-zk-fault-proof]: ../glossary.md#zk-fault-proof
 [g-zktrie]: ../glossary.md#zk-trie
-[g-l2-output]: ../glossary.md#l2-output-root
-[g-validator]: ../glossary.md#validator
 [g-priority-round]: ../glossary.md#priority-round
 [g-public-round]: ../glossary.md#public-round
 
@@ -43,21 +38,25 @@ with a bond at stake if the proof is wrong.
 
 ## Submitting L2 Output Commitments
 
-The validator's role is to construct and submit output roots, which are commitments to the L2's state,
-to the `L2OutputOracle` contract on L1. To do this, the validator periodically
-queries the [rollup node](rollup-node.md) for the latest output root derived from the latest
-[finalized][finality] L1 block. It then takes the output root and
-submits it to the `L2OutputOracle` contract on L1.
+> **_NOTE:_**
+> Before the introduction of the KRO governance token, the
+> [validator system was ETH-based](./validator-v1/validator-pool.md). With introduction of KRO token, the
+> [KRO-based validator system](./validator-v2/overview.md) has been introduced, mitigating several limitations of the
+> ETH-based system.
+
+The validator's role is to construct and submit output roots, which are commitments to the L2's state, to the
+`L2OutputOracle` contract on L1. To do this, the validator periodically queries the [rollup node](rollup-node.md) for
+the latest output root derived from the latest [finalized][finality] L1 block. It then takes the output root and submits
+it to the `L2OutputOracle` contract on L1.
 
 [finality]: https://hackmd.io/@prysmaticlabs/finality
 
-The validator that submits the output root is determined by the `ValidatorPool` contract on L1.
+The validator that submits the output root is determined by the validator system.
 The output submission rounds are divided into [Priority Round][g-priority-round] and [Public Round][g-public-round],
-and the time limit of each round is configured as `ROUND_DURATION` in the ValidatorPool contract.
-A prioritized validator is selected by a random function in the `ValidatorPool` contract, and the prioritized validator
-must submit output within the `Priority Round` time.
-If the prioritized validator fails to submit within the `Priority Round`, the round moves to the `Public Round`, where
-all validators can submit output regardless of priority.
+and the time limit of each round is configured as `ROUND_DURATION` in the validator contract.
+A prioritized validator is selected randomly by validator system, and the prioritized validator must submit output
+within the `Priority Round` time. If the prioritized validator fails to submit within the `Priority Round`, the round
+moves to the `Public Round`, where all validators can submit output regardless of priority.
 
 The validator is expected to submit output roots on a deterministic
 interval based on the configured `SUBMISSION_INTERVAL` in the `L2OutputOracle`. The larger
@@ -70,7 +69,7 @@ the L2 block number that corresponds to the next output root that must be submit
 assumes a connection to an `op-node` to be able to query the `kroma_syncStatus` RPC endpoint.
 
 Once your submitted output is [finalized][finality], the submitter becomes eligible for a reward.
-For more information on this, see [Validation Rewards](#validation-rewards).
+For more information on this, see [Validation Rewards](./validator-v2/validator-manager.md#reward-distribution).
 
 ```python
 import time
@@ -166,174 +165,6 @@ The `startingTimestamp` MUST be the same as the timestamp of the first recorded 
 
 Thus, the first `outputRoot` submitted will be at height `startingBlockNumber`, and each subsequent one will be at
 height incremented by `SUBMISSION_INTERVAL`.
-
-## Validator Pool Smart Contract
-
-Only accounts registered as [Validator][g-validator] can submit [output][g-l2-output] to
-the [L2 Output Oracle](#l2-output-oracle-smart-contract).
-To register as a [Validator][g-validator], you must deposit at least `REQUIRED_BOND_AMOUNT` of ETH into
-the `ValidatorPool` contract.
-When submitting the output, the validator must bond Ethereum for `REQUIRED_BOND_AMOUNT`, which will be unbonded and
-rewarded to the L2 `ValidatorRewardVault` contract when the output is finalized.
-
-Also, validators should stake their bond for disputing challenge. This bond will be given to the winner of the challenge
-as a reward. When this reward distributed, a [tax](../fault-proof/challenge.md) is imposed to prevent collusive attacks
-of asserter and challenger.
-
-Validator Pool Smart Contract implements the following interface:
-
-```solidity
-interface ValidatorPool {
-    /**
-     * @notice Emitted when a validator bonds.
-     *
-     * @param submitter   Address of submitter.
-     * @param outputIndex Index of the L2 checkpoint output index.
-     * @param amount      Amount of bonded.
-     * @param expiresAt   The expiration timestamp of bond.
-     */
-    event Bonded(
-        address indexed submitter,
-        uint256 indexed outputIndex,
-        uint128 amount,
-        uint128 expiresAt
-    );
-
-    /**
-     * @notice Emitted when the pending bond is added.
-     *
-     * @param outputIndex Index of the L2 checkpoint output.
-     * @param challenger  Address of the challenger.
-     * @param amount      Amount of bond added.
-     */
-    event PendingBondAdded(uint256 indexed outputIndex, address indexed challenger, uint128 amount);
-
-    /**
- * @notice Emitted when the bond is increased.
-     *
-     * @param outputIndex Index of the L2 checkpoint output.
-     * @param challenger  Address of the challenger.
-     * @param amount      Amount of bond increased.
-     */
-    event BondIncreased(uint256 indexed outputIndex, address indexed challenger, uint128 amount);
-
-    /**
-     * @notice Emitted when the pending bond is released(refunded).
-     *
-     * @param outputIndex  Index of the L2 checkpoint output.
-     * @param challenger   Address of the challenger.
-     * @param recipient    Address to receive amount from a pending bond.
-     * @param amount       Amount of bond released.
-     */
-    event PendingBondReleased(
-        uint256 indexed outputIndex,
-        address indexed challenger,
-        address indexed recipient,
-        uint128 amount
-    );
-
-    /**
-     * @notice Emitted when a validator unbonds.
-     *
-     * @param outputIndex Index of the L2 checkpoint output.
-     * @param recipient   Address of the recipient.
-     * @param amount      Amount of unbonded.
-     */
-    event Unbonded(uint256 indexed outputIndex, address indexed recipient, uint128 amount);
-
-    /**
-     * @notice Deposit ETH to be used as bond.
-     */
-    function deposit() external payable;
-
-    /**
-     * @notice Withdraw a given amount.
-     *
-     * @param _amount Amount to withdraw.
-     */
-    function withdraw(uint256 _amount) external;
-
-    /**
-     * @notice Bond asset corresponding to the given output index.
-     *         This function is called when submitting output.
-     *
-     * @param _outputIndex Index of the L2 checkpoint output.
-     * @param _expiresAt   The expiration timestamp of bond.
-     */
-    function createBond(
-        uint256 _outputIndex,
-        uint128 _expiresAt
-    ) external;
-
-    /**
-     * @notice Adds a pending bond to the challenge corresponding to the given output index and challenger address.
-     *         The pending bond is added to the bond when the challenge is proven or challenger is timed out,
-     *         or refunded when the challenge is canceled.
-     *
-     * @param _outputIndex Index of the L2 checkpoint output.
-     * @param _challenger  Address of the challenger.
-     */
-    function addPendingBond(uint256 _outputIndex, address _challenger) external;
-
-    /**
-     * @notice Releases the corresponding pending bond to the given output index and challenger address
-     *         if a challenge is canceled.
-     *
-     * @param _outputIndex  Index of the L2 checkpoint output.
-     * @param _challenger   Address of the challenger.
-     * @param _recipient    Address to receive amount from a pending bond.
-     */
-    function releasePendingBond(
-        uint256 _outputIndex,
-        address _challenger,
-        address _recipient
-    ) external;
-
-    /**
-     * @notice Increases the bond amount corresponding to the given output index by the pending bond amount.
-     *         This is when taxes are charged, and note that taxes are a means of preventing collusive attacks by
-     *         the asserter and challenger.
-     *
-     * @param _outputIndex Index of the L2 checkpoint output.
-     * @param _challenger  Address of the challenger.
-     */
-    function increaseBond(uint256 _outputIndex, address _challenger) external;
-
-    /**
-     * @notice Attempt to unbond. Reverts if unbond is not possible.
-     */
-    function unbond() external;
-
-    /**
-     * @notice Returns the balance of given address.
-     *
-     * @param _addr Address of validator.
-     *
-     * @return Balance of given address.
-     */
-    function balanceOf(address _addr) external view returns (uint256);
-
-    /**
-     * @notice Determines who can submit the L2 output next.
-     *
-     * @return The address of the validator.
-     */
-    function nextValidator() public view returns (address);
-}
-```
-
-### Validation Rewards
-
-A validator who submits an output can receive a reward from L2 `ValidatorRewardVault` contract when the output is
-finalized, it is called validation reward. When the output is finalized, the `ValidatorPool` contract sends a message
-to pay the reward in the L2 `ValidatorRewardVault` via the `KromaPortal` contract.
-The reward is calculated by `ValidatorRewardVault` divided by `REWARD_DIVIDER`, which is the number of outputs
-in a week.
-Rewards received by the validator can be withdrawn to L1 via `withdraw()` in the ValidatorRewardVault.
-
-### Configuration of ValidatorPool
-
-`ROUND_DURATION` is equal to `(L2_BLOCK_TIME * SUBMISSION_INTERVAL) / 2`.
 
 ## Security Considerations
 

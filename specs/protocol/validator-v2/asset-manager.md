@@ -1,11 +1,5 @@
 # Asset Manager
 
-<!-- All glossary references in this file. -->
-
-[g-l2-output]: ../../glossary.md#l2-output-root
-[g-validator]: ../../glossary.md#validator
-[g-validator-manager-contract]: ../../glossary.md#validator-manager-contract
-
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**
@@ -25,6 +19,12 @@
   - [Virtual Share](#virtual-share)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
+<!-- All glossary references in this file. -->
+
+[g-l2-output]: ../../glossary.md#l2-output-root
+[g-validator]: ../../glossary.md#validator
+[g-validator-manager-contract]: ../../glossary.md#validator-manager-contract
 
 ## Overview
 
