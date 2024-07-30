@@ -121,7 +121,7 @@ Boosted rewards are managed by calculating the expected rewards per KGH each tim
 rewards are distributed. These are stored within the `Vault` as `rewardPerKghStored`.
 
 ```solidity
-    vault.asset.rewardPerKghStored += boostedReward / vault.asset.totalKgh
+    vault.asset.rewardPerKghStored += boostedReward / vault.asset.totalKgh;
 ```
 
 The `boostedReward` refers to the total boosted reward from KGH delegations for the validator, and
