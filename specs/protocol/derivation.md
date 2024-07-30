@@ -355,7 +355,6 @@ where:
 - `is_last` is a single byte with a value of 1 if the frame is the last in the channel, 0 if there are frames in the
   channel. Any other value makes the frame invalid (it must be ignored by the rollup node).
 
-
 ### Channel Format
 
 A channel is encoded as `channel_encoding`, defined as:
@@ -434,7 +433,6 @@ This section describes how the L2 chain is produced from the L1 batches using a 
 A validator may implement this differently, but must be semantically equivalent to not diverge from the L2 chain.
 
 ## L2 Chain Derivation Pipeline
-
 
 Our architecture decomposes the derivation process into a pipeline made up of the following stages:
 
@@ -1314,7 +1312,6 @@ cast keccak $(cast concat-hex 0x000000000000000000000000000000000000000000000000
 [EIP-155]: https://eips.ethereum.org/EIPS/eip-155
 
 ## Building Individual Payload Attributes
-
 
 After deriving the transactions list, the rollup node constructs a [`PayloadAttributesV2`][extended-attributes] as
 follows:

@@ -168,7 +168,6 @@ The contained log events are filtered and processed as follows:
   - type `3`: `unsafeBlockSigner` overwrite, as `address` payload.
   - type `4`: `validatorRewardScalar` overwrite, as `uint256` payload.
 
-
 Note that individual derivation stages may be processing different L1 blocks,
 and should thus maintain individual system configuration copies,
 and apply the event-based changes as the stage traverses to the next L1 block.

@@ -132,7 +132,6 @@ software, and complexity in general.
 
 ### Validation and Authorization of Deposited Transactions
 
-
 As noted above, the deposited transaction type does not include a signature for validation. Rather,
 authorization is handled by the [L2 chain derivation][g-derivation] process, which when correctly
 applied will only derive transactions with a `from` address attested to by the logs of the [L1
