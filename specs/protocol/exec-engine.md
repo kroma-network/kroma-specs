@@ -91,7 +91,10 @@ The proxies are backed by vault contract deployments, based on `FeeVault`, to ro
 
 Transaction fees in Kroma are different from [eip-1559] specification.
 The Base Fee is not burned, and there is no distinction between Base Fee and Priority Fee.
-The transaction fee is distributed to two vaults, Validator Reward Vault and Protocol Fee.
+The transaction fee is distributed to two vaults, Validator Reward Vault and Protocol Fee, during
+[ETH-based Validator System](./validator-v1/validator-pool.md) is live. After transiting to
+[KRO-based Validator System](./validator-v2/overview.md), the transaction fee is only accumulated to Protocol Fee with
+zero `ValidatorRewardScalar`.
 
 - Validator Reward Vault: `(baseFee + priorityFee) * ValidatorRewardScalar / 10000`
 - Protocol Vault: `(baseFee + priorityFee) * (10000 - ValidatorRewardScalar) / 10000`
