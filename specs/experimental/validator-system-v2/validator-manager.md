@@ -146,8 +146,8 @@ rewards. Below is a detailed description of each case.
 ### Bond
 
 Validator System V2 brings the similar bond mechanism as the previous system. The validator must stake a portion of KRO
-deposited as a bond every time they submit an output or create a challenge. Bond amount for each output submission or 
-challenge creation is defined as `BOND_AMOUNT`. If there is not enough deposited KRO to bond, the validator will no 
+deposited as a bond every time they submit an output or create a challenge. Bond amount for each output submission or
+challenge creation is defined as `BOND_AMOUNT`. If there is not enough deposited KRO to bond, the validator will no
 longer be able to submit outputs or create challenges.
 
 ### Slashing
@@ -157,7 +157,7 @@ challenge creation. Namely, the delegated KROs from KRO delegators are not subje
 concludes, the bond of the loser is slashed, with a portion imposed as tax to the security council and the remainder
 awarded to the validator who won the challenge.
 
-When the bond is slashed, [Colosseum](../../fault-proof/challenge.md#contract-interface) contract calls Validator 
+When the bond is slashed, [Colosseum](../../fault-proof/challenge.md#contract-interface) contract calls Validator
 Manager, which calls Asset Manager's slash function to deduct the bond from the validator's assets.
 
 ### Reward Distribution

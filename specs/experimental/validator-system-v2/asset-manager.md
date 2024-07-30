@@ -125,7 +125,7 @@ rewards are distributed. These are stored within the `Vault` as `rewardPerKghSto
     vault.asset.rewardPerKghStored += boostedReward / vault.asset.totalKgh
 ```
 
-The `boostedReward` refers to the total boosted reward from KGH delegations for the validator, and 
+The `boostedReward` refers to the total boosted reward from KGH delegations for the validator, and
 `vault.asset.totalKgh` represents the total number of KGH NFTs delegated to the validator.
 
 When KGH delegators claim their boosted rewards, the rewards they will receive are calculated as follows and directly
@@ -133,7 +133,7 @@ transferred to the delegator's account.
 
 ```solidity
     uint128 totalBoostedReward = kghDelegator.kghNum * (vault.asset.rewardPerKghStored - kghDelegator.rewardPerKghPaid);
-	kghDelegator.rewardPerKghPaid = vault.asset.rewardPerKghStored;
+    kghDelegator.rewardPerKghPaid = vault.asset.rewardPerKghStored;
     ASSET_TOKEN.safeTransfer(delegator, totalBoostedReward);
 ```
 
