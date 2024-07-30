@@ -169,8 +169,6 @@ A [Merkle Patricia Trie][mpt] that represents storage slots.
 
 ## Storage Root
 
-[storage-root]: glossary.md#storage-root
-
 A merkle root of [Storage Trie][storage-trie].
 
 ## Keccak
@@ -192,8 +190,6 @@ proof to be constructed for any key-value mapping encoded in the tree. Such a pr
 verified against the Merkle root.
 
 ## ZK Trie
-
-[zk trie]: glossary.md#zk-trie
 
 A [ZK Trie (ZKT)][zkt-details] is a binary sparse trie, which is a tree-like structure that maps keys to values.
 The root hash of a ZKT is a commitment to the contents of the tree, which allows a
@@ -266,8 +262,6 @@ very short amount of time.
 
 # Sequencing
 
-[sequencing]: glossary.md#sequencing
-
 Transactions in the rollup can be included in two ways:
 
 - Through a [deposited transaction](#deposited-transaction), enforced by the system
@@ -314,8 +308,6 @@ for more details.
 
 ## L1 Origin
 
-[l1-origin]: glossary.md#l1-origin
-
 The L1 origin of an L2 block is the L1 block corresponding to its [sequencing epoch][sequencing-epoch].
 
 ---
@@ -349,8 +341,6 @@ needs to register to [Validator Manager contract][validator-manager-contract] in
 
 ## Trusted Validator
 
-[trusted-validator]: glossary.md#trusted-validator
-
 A trusted validator is an actor who is run by Lightscale. If validations are not done until
 [submission interval][submission-timeout], trusted validator will submit output for liveness of [L2].
 
@@ -379,8 +369,6 @@ validations.
 A priority round is the period during which validator with output submission priority can submit the output.
 
 ## Public Round
-
-[public-round]: glossary.md#public-round
 
 A public round is the time period during which any account registered as a validator can submit the output. Any
 validator can participate in the public round, but only one validator is fully recognized as an output submitter.
@@ -515,14 +503,10 @@ A *depositing transaction* is an L1 transaction that makes one or more [depositi
 
 ## Depositor
 
-[depositor]: glossary.md#depositor
-
 The *depositor* is the L1 account (contract or [EOA]) that makes (is the `msg.sender` of) the [depositing
 call][depositing-call]. The *depositor* is **NOT** the originator of the depositing transaction (i.e. `tx.origin`).
 
 ## Deposited Transaction Type
-
-[deposit-tx-type]: glossary.md#deposited-transaction-type
 
 The *deposited transaction type* is an [EIP-2718] [transaction type][transaction-type], which specifies the input fields
 and correct handling of a [deposited transaction][deposited].
@@ -562,8 +546,6 @@ The term *withdrawal* is somewhat ambiguous as these "transactions" exist at mul
   withdrawal.
 
 ## Relayer
-
-[relayer]: glossary.md#withdrawals
 
 An EOA on L1 which finalizes a withdrawal by submitting the data necessary to verify its inclusion on L2.
 
@@ -690,8 +672,6 @@ of blobdata) as quickly.
 
 ## Channel Timeout
 
-[channel-timeout]: glossary.md#channel-timeout
-
 The channel timeout is a duration (in L1 blocks) during which [channel frames][channel-frame] may land on L1 within
 [batcher transactions][batcher-transaction].
 
@@ -789,8 +769,6 @@ tools.
 
 ## L2 Chain Inception
 
-[l2-chain-inception]: glossary.md#L2-chain-inception
-
 The L1 block number at which the output roots for the [genesis block][l2-genesis] were proposed on the [output
 oracle][output-oracle] contract.
 
@@ -851,8 +829,6 @@ blocks older than two L1 epochs (64 L1 [time slots][time-slot]).
 # Other L2 Chain Concepts
 
 ## Address Aliasing
-
-[address-aliasing]: glossary.md#address-aliasing
 
 When a contract submits a [deposit][deposits] from L1 to L2, its address (as returned by `ORIGIN` and `CALLER`) will be
 aliased with a modified representation of the address of a contract.
@@ -934,14 +910,10 @@ and is an entry point of [output reward][output-reward] distribution and slash i
 
 ## Asset Manager Contract
 
-[asset-manager-contract]: glossary.md#asset-manager-contract
-
 An [L1] contract that oversees the delegation and undelegation of assets, and manages distributed rewards and slashing
 penalties in [Validator System V2][validator-system-v2].
 
 ## Colosseum Contract
-
-[colosseum-contract]: glossary.md#colosseum-contract
 
 An [L1] contract in which the [asserter][validator] and challenger argue with each other to fix
 invalid [L2 output roots][l2-output].
@@ -954,8 +926,6 @@ An on-chain *interactive* proof, performed by [validators][validator], that demo
 erroneous [output roots][l2-output] using zkEVM.
 
 ## Security Council
-
-[security-council]: glossary.md#security-council
 
 A group of entities composed of trusted parties responsible for the security of blockchain, such as fault-proof system,
 withdrawals, and contract upgrades.
@@ -1016,14 +986,12 @@ In these specifications, "execution engine" always refer to the L2 execution eng
 
 <!-- Internal Links -->
 [deposits-spec]: ./protocol/deposits.md
-[system-config]: ./protocol/system-config.md
 [exec-engine]: ./protocol/exec-engine.md
 [derivation-spec]: ./protocol/derivation.md
 [rollup-node-spec]: ./protocol/rollup-node.md
 
 <!-- External Links -->
 [mpt-details]: https://github.com/norswap/nanoeth/blob/d4c0c89cc774d4225d16970aa44c74114c1cfa63/src/com/norswap/nanoeth/trees/patricia/README.md
-[trie]: https://en.wikipedia.org/wiki/Trie
 [bloom filter]: https://en.wikipedia.org/wiki/Bloom_filter
 [Solidity events]: https://docs.soliditylang.org/en/latest/contracts.html?highlight=events#events
 [nano-header]: https://github.com/norswap/nanoeth/blob/cc5d94a349c90627024f3cd629a2d830008fec72/src/com/norswap/nanoeth/blocks/BlockHeader.java#L22-L156
@@ -1031,8 +999,5 @@ In these specifications, "execution engine" always refer to the L2 execution eng
 [engine-api]: https://github.com/ethereum/execution-apis/blob/main/src/engine/shanghai.md#PayloadAttributesV2
 [merge]: https://ethereum.org/en/eth2/merge/
 [mempool]: https://www.quicknode.com/guides/defi/how-to-access-ethereum-mempool
-[L1 consensus layer]: https://github.com/ethereum/consensus-specs/#readme
-[cannon]: https://github.com/ethereum-optimism/cannon
-[eip4844]: https://www.eip4844.com/
 [zkt-details]: https://github.com/kroma-network/zktrie
 [RLP format]: https://ethereum.org/en/developers/docs/data-structures-and-encoding/rlp

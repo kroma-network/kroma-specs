@@ -20,9 +20,7 @@
 
 <!-- All glossary references in this file. -->
 
-[g-l1]: ../glossary.md#layer-1-l1
 [g-l1-origin]: ../glossary.md#l1-origin
-[g-l2]: ../glossary.md#layer-2-l2
 
 ## Overview
 
@@ -169,8 +167,6 @@ The contained log events are filtered and processed as follows:
   - type `2`: `gasLimit` overwrite, as `uint64` payload.
   - type `3`: `unsafeBlockSigner` overwrite, as `address` payload.
   - type `4`: `validatorRewardScalar` overwrite, as `uint256` payload.
-
-[encodePacked]: https://docs.soliditylang.org/en/latest/abi-spec.html#non-standard-packed-mode
 
 Note that individual derivation stages may be processing different L1 blocks,
 and should thus maintain individual system configuration copies,
