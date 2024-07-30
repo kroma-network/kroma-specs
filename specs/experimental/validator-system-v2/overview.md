@@ -37,7 +37,7 @@
 The [previous permissionless validator system](../../protocol/validator.md#validator-pool-smart-contract) of Kroma
 requires validators to bond `REQUIRED_BOND_AMOUNT` of ETH each time the validator submits an
 [L2 output root][g-l2-output]. While successfully involving over 360 validators (as of 6/3/24), there are a few
-drawbacks in the current system that need to be addressed:
+drawbacks in the previous system that need to be addressed:
 
 - **Multiple Accounts on a Single Validator**: Since the probability of being selected as a priority validator is
   calculated to be the same if only `REQUIRED_BOND_AMOUNT` of ETH is deposited, a single validator can increase the

@@ -17,11 +17,11 @@
 - [Overview](#overview)
 - [Validator Registration](#validator-registration)
 - [Validator Management](#validator-management)
+  - [Bond](#bond)
   - [Validator Tree](#validator-tree)
   - [Status of Validator](#status-of-validator)
   - [Jail](#jail)
 - [Entry Point](#entry-point)
-  - [Bond](#bond)
   - [Slashing](#slashing)
   - [Reward Distribution](#reward-distribution)
 - [Summary of Definitions](#summary-of-definitions)
@@ -59,7 +59,7 @@ struct Validator {
 ```
 
 After registration, validators can receive delegations of KRO and KGH. When total deposited and delegated KRO exceeds
-`MIN_ACTIVATE_AMOUNT`, validators can be activated and become eligible to submit output. Note that if the validator
+`MIN_ACTIVATE_AMOUNT`, validators can be activated and become eligible to submit output. Note that if the validators
 don't meet the activation condition during registration and aren't automatically activated, the validator will need to
 activate manually.
 
@@ -68,6 +68,13 @@ activate manually.
 Once initiated, validators are managed using a data structure called validator tree and categorized by statuses to
 select priority validator and check output submission eligibility. Below are the implementation details for managing
 validators.
+
+### Bond
+
+Validator System V2 brings the similar bond mechanism as the previous system. The validator must deposit a portion of
+KRO deposited as a bond every time they submit an output or create a challenge. Bond amount for each output submission
+or challenge creation is defined as `BOND_AMOUNT`. If there is not enough deposited KRO to bond, the validator will no
+longer be able to submit outputs or create challenges.
 
 ### Validator Tree
 
@@ -129,12 +136,12 @@ Only validators with an `ACTIVE` status can submit outputs.
 If a validator has not submitted output when it was selected as a priority validator, the validator's
 `noSubmissionCount` is incremented by 1. If the validator submits output the next time it is selected as a priority
 validator, the `noSubmissionCount` is reset to 0. Otherwise, if the `noSubmissionCount` exceeds `JAIL_THRESHOLD`, the
-validator is deemed to have failed to fulfill its obligations. Accordingly, the validator is sent to jail and removed
-from the validator tree during `SOFT_JAIL_PERIOD`.
+validator is deemed to have failed to fulfill its obligations. Accordingly, the validator is sent to jail during
+`SOFT_JAIL_PERIOD` and removed from the validator tree.
 
-Additionally, the validator will be jailed if they submit incorrect outputs or challenge correctly submitted outputs. In
-other words, a loser of challenge will result in being jailed for the `HARD_JAIL_PERIOD`. This `HARD_JAIL_PERIOD` is
-longer than the `SOFT_JAIL_PERIOD` because such actions are considered threatening to the assets on Layer 2.
+Additionally, the validator will be jailed if they submit incorrect outputs or challenge incorrectly. In other words, a
+loser of challenge will result in being jailed for the `HARD_JAIL_PERIOD`. This `HARD_JAIL_PERIOD` is longer than the
+`SOFT_JAIL_PERIOD` because such actions are considered threatening to the assets on Layer 2.
 
 After each jail period has elapsed, the validator can be unjailed by calling `tryUnjail` function on its own and
 activated if the activation conditions are met.
@@ -144,16 +151,9 @@ activated if the activation conditions are met.
 Validator Manager contract acts as an entry point for external contracts to slash challenge losers or distribute output
 rewards. Below is a detailed description of each case.
 
-### Bond
-
-Validator System V2 brings the similar bond mechanism as the previous system. The validator must stake a portion of KRO
-deposited as a bond every time they submit an output or create a challenge. Bond amount for each output submission or
-challenge creation is defined as `BOND_AMOUNT`. If there is not enough deposited KRO to bond, the validator will no
-longer be able to submit outputs or create challenges.
-
 ### Slashing
 
-Slashing occurs during the challenge process. The assets subject to slashing are the bonds used for output submission or
+Slashing occurs during the challenge process. The assets subject to slashing are the bonds for output submission or
 challenge creation. Namely, the delegated KROs from KRO delegators are not subject to slashing. When a challenge
 concludes, the bond of the loser is slashed, with a portion imposed as tax to the security council and the remainder
 awarded to the validator who won the challenge.
@@ -175,7 +175,8 @@ given as the validator reward through the commission. The remaining boosted rewa
 remaining base rewards are shared among KRO delegators and the validator, proportional to the amount of KRO delegated
 and deposited.
 
-In addition, any pending challenge rewards accumulated as a result of slash are given to the validator.
+In addition, any pending challenge rewards accumulated as a result of slash are given to the validator who has won the
+challenge.
 
 ## Summary of Definitions
 
