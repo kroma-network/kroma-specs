@@ -12,12 +12,11 @@
 
 - [Overview](#overview)
 - [Composition of Asset Manager](#composition-of-asset-manager)
-- [Management of Rewards](#management-of-rewards)
+- [Reward Management](#reward-management)
   - [Base Rewards](#base-rewards)
   - [Boosted Rewards](#boosted-rewards)
 - [Validator Asset Management](#validator-asset-management)
 - [Undelegation Delay of 7 days from the Delegation](#undelegation-delay-of-7-days-from-the-delegation)
-- [Slashing](#slashing)
 - [Difference from ERC-4626](#difference-from-erc-4626)
   - [Non-transferable Shares](#non-transferable-shares)
   - [Global Vault Structure](#global-vault-structure)

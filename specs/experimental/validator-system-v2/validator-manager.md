@@ -21,6 +21,7 @@
   - [Status of Validator](#status-of-validator)
   - [Jail](#jail)
 - [Entry Point](#entry-point)
+  - [Bond](#bond)
   - [Slashing](#slashing)
   - [Reward Distribution](#reward-distribution)
 - [Summary of Definitions](#summary-of-definitions)
