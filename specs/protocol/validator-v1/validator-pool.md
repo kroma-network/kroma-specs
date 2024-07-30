@@ -18,7 +18,7 @@
 ## Validator Pool Smart Contract
 
 Only accounts registered as [Validator][g-validator] can submit [output][g-l2-output] to
-the [L2 Output Oracle](../validator.md#l2-output-oracle-smart-contract).
+the [L2 Output Oracle](../validation#l2-output-oracle-smart-contract).
 To register as a [Validator][g-validator], you must deposit at least `REQUIRED_BOND_AMOUNT` of ETH into
 the `ValidatorPool` contract.
 When submitting the output, the validator must bond Ethereum for `REQUIRED_BOND_AMOUNT`, which will be unbonded and
