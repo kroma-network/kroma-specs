@@ -1,4 +1,4 @@
-# Validiator Pool
+# ETH-based Validator System
 
 <!-- All glossary references in this file. -->
 
