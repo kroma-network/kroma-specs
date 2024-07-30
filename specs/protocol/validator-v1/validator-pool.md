@@ -189,7 +189,10 @@ Rewards received by the validator can be withdrawn to L1 via `withdraw()` in the
 
 ### Constants
 
-| Name                   | Value | Unit           |
-|------------------------|-------|----------------|
-| `REQUIRED_BOND_AMOUNT` | `0.2` | ETH            |
-| `REWARD_DIVIDER`       | `168` | num of outputs |
+| Name                   | Value  | Unit           |
+|------------------------|--------|----------------|
+| `REQUIRED_BOND_AMOUNT` | `0.2`  | ETH            |
+| `REWARD_DIVIDER`       | `168`  | num of outputs |
+| `SUBMISSION_INTERVAL`  | `1800` | blocks         |
+| `L2_BLOCK_TIME`        | `2`    | seconds        |
+| `ROUND_DURATION`       | `30`   | minutes        |
