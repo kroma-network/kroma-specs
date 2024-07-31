@@ -20,9 +20,7 @@
 
 <!-- All glossary references in this file. -->
 
-[g-l1]: ../glossary.md#layer-1-l1
 [g-l1-origin]: ../glossary.md#l1-origin
-[g-l2]: ../glossary.md#layer-2-l2
 
 ## Overview
 
@@ -127,7 +125,8 @@ policy. It is not a consensus level parameter.
 ### `validatorRewardScalar` (`uint256`)
 
 The scalar value to distribute [transaction fees](./exec-engine.md#transaction-fees) on L2 to validators as a reward of
-checkpoint output submission. The denominator is 10000.
+checkpoint output submission in [ETH-based Validator System](./validator-v1/validator-pool.md). The denominator is
+10000. In [KRO-based Validator System](./validator-v2/overview.md), it is set to zero.
 
 ## Writing the system config
 
@@ -169,8 +168,6 @@ The contained log events are filtered and processed as follows:
   - type `2`: `gasLimit` overwrite, as `uint64` payload.
   - type `3`: `unsafeBlockSigner` overwrite, as `address` payload.
   - type `4`: `validatorRewardScalar` overwrite, as `uint256` payload.
-
-[encodePacked]: https://docs.soliditylang.org/en/latest/abi-spec.html#non-standard-packed-mode
 
 Note that individual derivation stages may be processing different L1 blocks,
 and should thus maintain individual system configuration copies,

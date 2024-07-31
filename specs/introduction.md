@@ -178,8 +178,8 @@ Links to components mentioned in this diagram:
 - [Rollup Node](./protocol/rollup-node.md)
 - [Execution Engine](./protocol/exec-engine.md)
 - [Batcher](./protocol/batcher.md)
-- [L2 Output Oracle](./protocol/validator.md#l2-output-oracle-smart-contract)
-- [Validator](./protocol/validator.md#submitting-l2-output-commitments)
+- [L2 Output Oracle](./protocol/validation.md#l2-output-oracle-smart-contract)
+- [Validator](./protocol/validation.md#submitting-l2-output-commitments)
 
 ### Withdrawing
 
@@ -191,4 +191,4 @@ normal transactions on L2, but then completed using a transaction on L1 after th
 Links to components mentioned in this diagram:
 
 - [Kroma Portal](./protocol/deposits.md#deposit-contract)
-- [L2 Output Oracle](./protocol/validator.md#l2-output-oracle-smart-contract)
+- [L2 Output Oracle](./protocol/validation.md#l2-output-oracle-smart-contract)

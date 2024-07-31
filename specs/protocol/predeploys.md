@@ -164,7 +164,8 @@ withdrawn to an immutable address on L1.
 
 Address: `0x4200000000000000000000000000000000000008`
 
-The `ValidatorRewardVault` accumulates transaction fees and pays rewards to validators.
+The `ValidatorRewardVault` accumulates transaction fees and pays rewards to validators in
+[ETH-based Validator System](./validator-v1/validator-pool.md).
 When enough fees accumulate in this account, they can be withdrawn to an immutable L1 address.
 
 To change the L1 address that fees are withdrawn to, the contract must be

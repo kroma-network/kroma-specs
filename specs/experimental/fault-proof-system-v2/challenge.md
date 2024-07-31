@@ -2,17 +2,17 @@
 
 <!-- All glossary references in this file. -->
 
-[g-checkpoint-output]: ../glossary.md#checkpoint-output
-[g-state]: ../glossary.md#state
-[g-zk-fault-proof]: ../glossary.md#zk-fault-proof
-[g-l2-output]: ../glossary.md#l2-output-root
-[g-sequencer-batch]: ../glossary.md#sequencer-batch
-[g-user-deposited]: ../glossary.md#user-deposited-transaction
-[g-batcher-transaction]: ../glossary.md#batcher-transaction
-[g-channel]: ../glossary.md#channel
-[g-channel-frame]: ../glossary.md#channel-frame
-[g-sequencer]: ../glossary.md#sequencer
-[g-security-council]: ../glossary.md#security-council
+[g-checkpoint-output]: ../../glossary.md#checkpoint-output
+[g-state]: ../../glossary.md#state
+[g-zk-fault-proof]: ../../glossary.md#zk-fault-proof
+[g-l2-output]: ../../glossary.md#l2-output-root
+[g-sequencer-batch]: ../../glossary.md#sequencer-batch
+[g-user-deposited]: ../../glossary.md#user-deposited-transaction
+[g-batcher-transaction]: ../../glossary.md#batcher-transaction
+[g-channel]: ../../glossary.md#channel
+[g-channel-frame]: ../../glossary.md#channel-frame
+[g-sequencer]: ../../glossary.md#sequencer
+[g-security-council]: ../../glossary.md#security-council
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
@@ -34,7 +34,7 @@
 
 ## Overview
 
-Similar to [V1](../fault-proof/challenge.md), the challenge process in Fault Proof System V2 revolves around
+Similar to [V1](../../fault-proof/challenge.md), the challenge process in Fault Proof System V2 revolves around
 interactively dissecting [outputs][g-checkpoint-output] to find the first disagreeing block, thereby proving the
 validity of the [state][g-state] transition.
 
@@ -92,7 +92,7 @@ never be confirmed because the asserter will not be able to verify the ZK proof 
 rival edge at the higher depth cannot be confirmed because one of its children has not been confirmed, also the edge at
 depth zero submitted by the malicious asserter can never be confirmed.
 
-![edge-dissection](../static/assets/edge-dissection.svg)
+![edge-dissection](../../static/assets/edge-dissection.svg)
 
 While [BoLD](https://github.com/OffchainLabs/bold) bisects edges, Kroma dissects them. The choice for dissection lies in
 its ability to divide the range into more sections simultaneously, enabling asserters and challengers to identify the
@@ -361,9 +361,9 @@ transaction data in the target block on-chain and including it in the public inp
 asserter or challenger executed the correct transactions, as described in
 [Transaction Data Commitment](./transaction-data-commitment.md).
 
-The `OutputRootProof` and `PublicInputProof` in the previous [proving fault](../fault-proof/challenge.md#proving-fault)
-have been changed as follows. The `OutputRootProof` was changed accordingly by removing `nextBlockHash` from the
-[output root][g-l2-output] payload as described in
+The `OutputRootProof` and `PublicInputProof` in the previous
+[proving fault](../../fault-proof/challenge.md#proving-fault) have been changed as follows. The `OutputRootProof` was
+changed accordingly by removing `nextBlockHash` from the [output root][g-l2-output] payload as described in
 [Output Root Payload (Version 1)](./output-proposal.md#output-root-payload-version-1), and some fields for on-chain
 verification of [batch data][g-sequencer-batch] and [user-deposited transaction][g-user-deposited] data have been added
 to the `PublicInputProof`.

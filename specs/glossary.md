@@ -37,7 +37,10 @@
   - [SUBMISSION TIMEOUT](#submission-timeout)
   - [Priority Round](#priority-round)
   - [Public Round](#public-round)
+  - [Output Reward](#output-reward)
   - [Validator Reward](#validator-reward)
+  - [Base Reward](#base-reward)
+  - [Boosted Reward](#boosted-reward)
 - [Deposits](#deposits)
   - [Deposited Transaction](#deposited-transaction)
   - [L1 Attributes Deposited Transaction](#l1-attributes-deposited-transaction)
@@ -80,6 +83,8 @@
   - [L2 Output Root](#l2-output-root)
   - [L2 Output Oracle Contract](#l2-output-oracle-contract)
   - [Validator Pool Contract](#validator-pool-contract)
+  - [Validator Manager Contract](#validator-manager-contract)
+  - [Asset Manager Contract](#asset-manager-contract)
   - [Colosseum Contract](#colosseum-contract)
   - [ZK Fault Proof](#zk-fault-proof)
   - [Security Council](#security-council)
@@ -164,8 +169,6 @@ A [Merkle Patricia Trie][mpt] that represents storage slots.
 
 ## Storage Root
 
-[storage-root]: glossary.md#storage-root
-
 A merkle root of [Storage Trie][storage-trie].
 
 ## Keccak
@@ -187,8 +190,6 @@ proof to be constructed for any key-value mapping encoded in the tree. Such a pr
 verified against the Merkle root.
 
 ## ZK Trie
-
-[zk trie]: glossary.md#zk-trie
 
 A [ZK Trie (ZKT)][zkt-details] is a binary sparse trie, which is a tree-like structure that maps keys to values.
 The root hash of a ZKT is a commitment to the contents of the tree, which allows a
@@ -261,8 +262,6 @@ very short amount of time.
 
 # Sequencing
 
-[sequencing]: glossary.md#sequencing
-
 Transactions in the rollup can be included in two ways:
 
 - Through a [deposited transaction](#deposited-transaction), enforced by the system
@@ -309,8 +308,6 @@ for more details.
 
 ## L1 Origin
 
-[l1-origin]: glossary.md#l1-origin
-
 The L1 origin of an L2 block is the L1 block corresponding to its [sequencing epoch][sequencing-epoch].
 
 ---
@@ -322,7 +319,7 @@ The L1 origin of an L2 block is the L1 block corresponding to its [sequencing ep
 Because transactions are visible to anyone, nodes can derive state. Registered [validators][validator] can submit
 [checkpoint output][checkpoint-output] every [validating epoch][validating-epoch]. Validators receive rewards
 in return. If the checkpoint output turns out to be invalid, this is challenged by another validator who acts as a
-challenger. As a result, validator who submitted invalid checkpoint output will lose their bond.
+challenger. As a result, validator who submitted invalid checkpoint output will lose their asset.
 
 ## Checkpoint Output
 
@@ -335,12 +332,15 @@ Checkpoint output is the l2 output root that denotes state transition during [va
 [validator]: glossary.md#validator
 
 A validator is a decentralized actor, who does [validation]. To participate network as a validator, one needs to
-deposit to [ValidatorPool contract][validator-pool-contract].
-Then the validator is allowed to be able to submit checkpoint.
+deposit to [Validator Pool contract][validator-pool-contract] in
+[ETH-based Validator System][eth-based-validator-system], otherwise needs to register to
+[Validator Manager contract][validator-manager-contract] in [KRO-based Validator System][kro-based-validator-system].
+Then the validator becomes eligible to submit checkpoint output.
+
+[eth-based-validator-system]: ./protocol/validator-v1/validator-pool.md
+[kro-based-validator-system]: ./protocol/validator-v2/overview.md
 
 ## Trusted Validator
-
-[trusted-validator]: glossary.md#trusted-validator
 
 A trusted validator is an actor who is run by Lightscale. If validations are not done until
 [submission interval][submission-timeout], trusted validator will submit output for liveness of [L2].
@@ -371,30 +371,58 @@ A priority round is the period during which validator with output submission pri
 
 ## Public Round
 
-[public-round]: glossary.md#public-round
+A public round is the time period during which any account registered as a validator can submit the output. Any
+validator can participate in the public round, but only one validator is fully recognized as an output submitter.
 
-A public round is the time period during which any account registered as a Validator can submit the output.
+Consider a case where multiple validators competitively submit output in a public round. Except for the first-place
+validator with a valid output submission transaction in the L1 block, the remaining validators' transactions will fail
+and will not be recognized as output submitters.
 
-Any validator can participate in the public round, but only one validator is fully recognized as an output submitter.
+However, some of them will have already spent their gas. To handle this situation, we provide an option flag to indicate
+whether or not to participate in the public round. Since we're taking a conservative approach, the default value is set
+to false.
 
-Consider a case where multiple validators competitively submit output in a public round.
+## Output Reward
 
-Except for the first-place validator with a valid output submission transaction in the L1 block,
+[output-reward]: glossary.md#output-reward
 
-the remaining validators' transactions will fail and will not be recognized as output submitters.
+Output submission rewards are given as an incentive for validators to submit checkpoint output.
 
-However, some of them will have already spent their gas.
-
-To handle this situation, we provide an option flag to indicate whether or not to participate in the public round.
-
-Since we're taking a conservative approach, the default value is set to false.
+In [ETH-based Validator System][eth-based-validator-system], the output reward is the same as the
+[validator reward][validator-reward], otherwise in [KRO-based Validator System][kro-based-validator-system], it consists
+of the validator reward, [base reward][base-reward], and [boosted reward][boosted-reward].
 
 ## Validator Reward
 
 [validator-reward]: glossary.md#validator-reward
 
-The validator reward is calculated using the following formula:
-`(L2 base fee + L2 priority fee) * validator reward scalar / 10000`.
+In [ETH-based Validator System][eth-based-validator-system], the validator reward is calculated using the following
+formula: `(L2 base fee + L2 priority fee) * validator reward scalar / 10000`.
+
+In [KRO-based Validator System][kro-based-validator-system], the validator reward is given in terms of KRO tokens, and
+is calculated as the sum of the [base reward][base-reward] and [boosted reward][boosted-reward] multiplied by the
+commission rate.
+
+## Base Reward
+
+[base-reward]: glossary.md#base-reward
+
+The base validator reward is given to the vault of the validator who submits the output at
+[KRO-based Validator System][kro-based-validator-system]. The base reward is given in terms of a fixed amount of KRO
+tokens for each submission.
+
+## Boosted Reward
+
+[boosted-reward]: glossary.md#boosted-reward
+
+The boosted validator reward is given to the vault of the validator who submits the output at
+[KRO-based Validator System][kro-based-validator-system]. The boosted reward is given in terms of KRO tokens, and is
+calculated using the following formula: $$8 \times arctan(0.01 \times G_i)$$ where $G_i$ is the total amount of KGH NFTs
+delegated to the output submitter. This is designed to have the effect that the boosted reward is constantly decreasing
+while the number of delegated KGH increases. More information on boosted reward due to KGH can be found
+[here][kgh-boosting-validator-reward].
+
+[kgh-boosting-validator-reward]: https://docs.kroma.network/kroma-guardian-house/kgh-utilities#boosting-validator-reward
 
 ---
 
@@ -477,14 +505,10 @@ A *depositing transaction* is an L1 transaction that makes one or more [depositi
 
 ## Depositor
 
-[depositor]: glossary.md#depositor
-
 The *depositor* is the L1 account (contract or [EOA]) that makes (is the `msg.sender` of) the [depositing
 call][depositing-call]. The *depositor* is **NOT** the originator of the depositing transaction (i.e. `tx.origin`).
 
 ## Deposited Transaction Type
-
-[deposit-tx-type]: glossary.md#deposited-transaction-type
 
 The *deposited transaction type* is an [EIP-2718] [transaction type][transaction-type], which specifies the input fields
 and correct handling of a [deposited transaction][deposited].
@@ -524,8 +548,6 @@ The term *withdrawal* is somewhat ambiguous as these "transactions" exist at mul
   withdrawal.
 
 ## Relayer
-
-[relayer]: glossary.md#withdrawals
 
 An EOA on L1 which finalizes a withdrawal by submitting the data necessary to verify its inclusion on L2.
 
@@ -652,8 +674,6 @@ of blobdata) as quickly.
 
 ## Channel Timeout
 
-[channel-timeout]: glossary.md#channel-timeout
-
 The channel timeout is a duration (in L1 blocks) during which [channel frames][channel-frame] may land on L1 within
 [batcher transactions][batcher-transaction].
 
@@ -751,8 +771,6 @@ tools.
 
 ## L2 Chain Inception
 
-[l2-chain-inception]: glossary.md#L2-chain-inception
-
 The L1 block number at which the output roots for the [genesis block][l2-genesis] were proposed on the [output
 oracle][output-oracle] contract.
 
@@ -814,8 +832,6 @@ blocks older than two L1 epochs (64 L1 [time slots][time-slot]).
 
 ## Address Aliasing
 
-[address-aliasing]: glossary.md#address-aliasing
-
 When a contract submits a [deposit][deposits] from L1 to L2, its address (as returned by `ORIGIN` and `CALLER`) will be
 aliased with a modified representation of the address of a contract.
 
@@ -869,7 +885,7 @@ cf. [L1 Attributes Predeployed Contract Specification](./protocol/deposits.md#l1
 
 A 32 byte value which serves as a commitment to the current state of the L2 chain.
 
-cf. [Submitting L2 output commitments](./protocol/validator.md#submitting-l2-output-commitments)
+cf. [Submitting L2 output commitments](./protocol/validation.md#submitting-l2-output-commitments)
 
 ## L2 Output Oracle Contract
 
@@ -884,11 +900,22 @@ An L1 contract to which [L2 output roots][l2-output] are posted by the [validato
 [validator-pool-contract]: glossary.md#validator-pool-contract
 
 An [L1] contract that determines [validator] eligibility, selects the [validator] of next round, and manages bonding for
-[L2 output roots][l2-output] submissions.
+[L2 output roots][l2-output] submissions in [ETH-based Validator System][eth-based-validator-system].
+
+## Validator Manager Contract
+
+[validator-manager-contract]: glossary.md#validator-manager-contract
+
+An [L1] contract that manages the set of [validators][validator], selects the validator of next
+[priority round][priority-round], and is an entry point of [output reward][output-reward] distribution and slash in
+[KRO-based Validator System][kro-based-validator-system].
+
+## Asset Manager Contract
+
+An [L1] contract that oversees the delegation and undelegation of assets, and manages distributed rewards and slashing
+penalties in [KRO-based Validator System][kro-based-validator-system].
 
 ## Colosseum Contract
-
-[colosseum-contract]: glossary.md#colosseum-contract
 
 An [L1] contract in which the [asserter][validator] and challenger argue with each other to fix
 invalid [L2 output roots][l2-output].
@@ -901,8 +928,6 @@ An on-chain *interactive* proof, performed by [validators][validator], that demo
 erroneous [output roots][l2-output] using zkEVM.
 
 ## Security Council
-
-[security-council]: glossary.md#security-council
 
 A group of entities composed of trusted parties responsible for the security of blockchain, such as fault-proof system,
 withdrawals, and contract upgrades.
@@ -963,14 +988,12 @@ In these specifications, "execution engine" always refer to the L2 execution eng
 
 <!-- Internal Links -->
 [deposits-spec]: ./protocol/deposits.md
-[system-config]: ./protocol/system-config.md
 [exec-engine]: ./protocol/exec-engine.md
 [derivation-spec]: ./protocol/derivation.md
 [rollup-node-spec]: ./protocol/rollup-node.md
 
 <!-- External Links -->
 [mpt-details]: https://github.com/norswap/nanoeth/blob/d4c0c89cc774d4225d16970aa44c74114c1cfa63/src/com/norswap/nanoeth/trees/patricia/README.md
-[trie]: https://en.wikipedia.org/wiki/Trie
 [bloom filter]: https://en.wikipedia.org/wiki/Bloom_filter
 [Solidity events]: https://docs.soliditylang.org/en/latest/contracts.html?highlight=events#events
 [nano-header]: https://github.com/norswap/nanoeth/blob/cc5d94a349c90627024f3cd629a2d830008fec72/src/com/norswap/nanoeth/blocks/BlockHeader.java#L22-L156
@@ -978,8 +1001,5 @@ In these specifications, "execution engine" always refer to the L2 execution eng
 [engine-api]: https://github.com/ethereum/execution-apis/blob/main/src/engine/shanghai.md#PayloadAttributesV2
 [merge]: https://ethereum.org/en/eth2/merge/
 [mempool]: https://www.quicknode.com/guides/defi/how-to-access-ethereum-mempool
-[L1 consensus layer]: https://github.com/ethereum/consensus-specs/#readme
-[cannon]: https://github.com/ethereum-optimism/cannon
-[eip4844]: https://www.eip4844.com/
 [zkt-details]: https://github.com/kroma-network/zktrie
 [RLP format]: https://ethereum.org/en/developers/docs/data-structures-and-encoding/rlp

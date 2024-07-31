@@ -7,8 +7,8 @@
 [g-zktrie]: ../glossary.md#zk-trie
 [g-zk-fault-proof]: ../glossary.md#zk-fault-proof
 [g-system-config]: ../glossary.md#system-configuration
-[g-validation-rewards]: validator.md#validation-rewards
-[g-output-payload-v0]: validator.md#output-payloadversion-0
+[g-validation-rewards]: validation.md#validation-rewards
+[g-output-payload-v0]: validation.md#output-payloadversion-0
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
