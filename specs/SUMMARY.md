@@ -29,6 +29,7 @@
   - [Challenge](./fault-proof/challenge.md)
   - [zkEVM Prover](./fault-proof/zkevm-prover.md)
 - [Experimental]()
+  - [ZK Fault Dispute Game](./experimental/zk-fault-dipute-game/overview.md)
   - [Fault Proof System V2](./experimental/fault-proof-system-v2/overview.md)
     - [Definitions](./experimental/fault-proof-system-v2/definitions.md)
     - [Transaction Data Commitment](./experimental/fault-proof-system-v2/transaction-data-commitment.md)
@@ -36,4 +37,4 @@
     - [Challenge](./experimental/fault-proof-system-v2/challenge.md)
     - [Security Council Intervention](./experimental/fault-proof-system-v2/security-council-intervention.md)
     - [Improvements](./experimental/fault-proof-system-v2/improvements.md)
-- [Glossary](./glossary.md)
+  - [Glossary](./glossary.md)
