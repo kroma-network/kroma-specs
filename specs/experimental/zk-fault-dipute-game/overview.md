@@ -22,6 +22,7 @@
       - [Host Program](#host-program)
       - [Public Values of Proof](#public-values-of-proof)
       - [Zk Verify contract](#zk-verify-contract)
+  - [Prover as an RPC Server](#prover-as-an-rpc-server)
   - [Resolution of ZK Fault Dispute Game](#resolution-of-zk-fault-dispute-game)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
@@ -57,17 +58,24 @@ languages, such as Rust and Go.
 
 In the case of the ZK fault proof, the guest program is an extension of [L2 Chain Derivation][g-l2-chain-derivation]
 that includes a connectivity check among the blocks from L1 origin block and the specified block `C`. The hash of
-Block `C` is determined as the parent hash stored when the challenger initialized the [Dispute Game][g-dispute-game]
-by calling `create()` of the Dispute Game Factory.
-If the guest program consists only of L2 Chain Derivation, the challenger could create a proof with transactions that
-are not the actual transactions of the target block by manipulating an L1 Block that contains an
-[g-sequencer-batch][g-sequencer-batch].
+Block `C` is determined as the parent hash stored when the [Dispute Game][g-dispute-game] is created in Dispute Game
+Factory by calling `create()` of the Dispute Game Factory.
+If the attacker manipulates any data within the extension of L2 Chain Derivation, it will affect the block hash `C`.
+This is because all data is ultimately linked to the block hash `C` through the hash chain. Therefore if any data
+manipulating attack be thwarted by checking the block hash `C` value. For example, if an attacker creates a proof
+using a transaction that is not included in the [sequencer-batch][g-sequencer-batch], the block `C` value will change,
+preventing them from winning the challenge.
 
 #### Host Program
 
 The host program is a main part of the prover, responsible for delivering the guest program and its input to the zkVM.
-The host program first executes the same logic as the guest program to gather the necessary PreImages. Finally,
-the host program delivers the guest program and the PreImages to the zkVM to obtain the zkVM proof.
+The host program first executes the guest program logic to gather the necessary data, which is equal to what is stored
+in the [PreImageOracle] during the [Optimism's Dispute Game], but the block headers from the L1 block containing
+the [sequencer-batch][g-sequencer-batch] up to block `C` must be included. Finally, the host program delivers the guest
+program and the preimages to the zkVM to obtain the zkVM proof.
+
+[PreImageOracle]: https://github.com/ethereum-optimism/specs/blob/main/specs/fault-proof/stage-one/fault-dispute-game.md#preimageoracle
+[Optimism's Dispute Game]: https://github.com/ethereum-optimism/specs/blob/main/specs/fault-proof/stage-one/fault-dispute-game.md#fault-dispute-game
 
 #### Public Values of Proof
 
@@ -102,5 +110,18 @@ interface ZKVerifier {
     );
 }
 ```
+
+## Prover as an RPC Server
+
+`kroma-prover` is implemented as a jsonRPC server that generates a zkVM proof for the requested height block.
+It can be utilized as a local component on the challenger's machine or as a remote jsonRPC server (prover as a service).
+
+- Step 1:  An user (e.g., challenger) requests a zkVM-proof for a block of specific height to `kroma-prover` with
+  the extension of preimages of the desired block.
+- Step 2: A `kroma-prover` generates zkVM-proof for the target block, and return it to the user.
+
+Operating a `kroma-prover`, which is launched only when necessary, can alleviate the situation where
+regular challengers need to allocate excessive system resources due to the proof generation process
+that is occasionally executed (perhaps rarely executed).
 
 ## Resolution of ZK Fault Dispute Game
