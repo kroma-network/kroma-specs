@@ -4,26 +4,23 @@
 [g-zk-fault-proof]: ../../glossary.md#zk-fault-proof
 [g-l2-chain-derivation]: ../../glossary.md#l2-chain-derivation
 [g-sequencer-batch]: ../../glossary.md#sequencer-batch
-[g-dispute-game]: ../../experimental/zk-fault-dipute-game/overview.md
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**
 
-- [ZK Fault Dispute Game](#zk-fault-dispute-game)
-  - [Overview](#overview)
-  - [ZK Fault Dispute Game Creation](#zk-fault-dispute-game-creation)
-  - [Challenge Creation](#challenge-creation)
-  - [Dissection](#dissection)
-  - [Proving Fault using ZKVM](#proving-fault-using-zkvm)
-    - [Prover](#prover)
-    - [zkVM Proof](#zkvm-proof)
-      - [Guest Program](#guest-program)
-      - [Host Program](#host-program)
-      - [Public Values of Proof](#public-values-of-proof)
-      - [Zk Verify contract](#zk-verify-contract)
-  - [Prover as an RPC Server](#prover-as-an-rpc-server)
-  - [Resolution of ZK Fault Dispute Game](#resolution-of-zk-fault-dispute-game)
+- [Overview](#overview)
+- [ZK Fault Dispute Game Creation](#zk-fault-dispute-game-creation)
+- [Challenge Creation](#challenge-creation)
+- [Dissection](#dissection)
+- [Proving Fault using zkVM](#proving-fault-using-zkvm)
+  - [ZK Fault Proof](#zk-fault-proof)
+  - [zkVM](#zkvm)
+    - [Guest Program](#guest-program)
+    - [Host Program](#host-program)
+    - [Public Values of Proof](#public-values-of-proof)
+    - [`ZkVerifier` interface](#zkverifier-interface)
+- [Resolution of ZK Fault Dispute Game](#resolution-of-zk-fault-dispute-game)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -35,20 +32,16 @@
 
 ## Dissection
 
-## Proving Fault using ZKVM
+## Proving Fault using zkVM
 
-### Prover
+### ZK Fault Proof
 
-A prover plays a vital role in the challenge process, acting as an integral part of the challenger responsible
-for generating proof for the target block. This proof substantiates claims regarding the legitimacy of block data
-and state transitions.
 A [ZK fault proof][g-zk-fault-proof] demonstrates that a state transition from S to S’ is valid based on the
 transactions within the block. While this may seem similar to a validity proof, the key difference lies in its
 purpose. The ZK fault proof is used to demonstrate that a state transition from S to S’’ is incorrect by
-providing evidence of a valid state
-transition from S to S’.
+providing evidence of a valid state transition from S to S’.
 
-### zkVM Proof
+### zkVM
 
 The zkVM (Zero-Knowledge Virtual Machine) is a virtual machine that executes guest program compiled with a specified
 compiler generating zero-knowledge proofs for their execution. The guest program can be written in standard programming
@@ -56,50 +49,53 @@ languages, such as Rust and Go.
 
 #### Guest Program
 
-In the case of the ZK fault proof, the guest program is an extension of [L2 Chain Derivation][g-l2-chain-derivation]
-that includes a connectivity check among the blocks from L1 origin block and the specified block `C`. The hash of
-Block `C` is determined as the parent hash stored when the [Dispute Game][g-dispute-game] is created in Dispute Game
-Factory by calling `create()` of the Dispute Game Factory.
+For ZK Fault Dispute Game, the guest program is an extension of [L2 Chain Derivation][g-l2-chain-derivation] that
+includes a connectivity check among the blocks from L1 origin block to the specified block `C`. The hash of Block
+`C` is determined as the parent hash stored when the ZK Fault Dispute Game is created by calling `create()` of
+the [Dispute Game Factory].
+
 If the attacker manipulates any data within the extension of L2 Chain Derivation, it will affect the block hash `C`.
 This is because all data is ultimately linked to the block hash `C` through the hash chain. Therefore if any data
-manipulating attack be thwarted by checking the block hash `C` value. For example, if an attacker creates a proof
-using a transaction that is not included in the [sequencer-batch][g-sequencer-batch], the block `C` value will change,
+manipulating attack can be thwarted by checking the block hash `C` value. For example, if an attacker creates a proof
+using a transaction that is not included in the [sequencer batch][g-sequencer-batch], the block `C` value will change,
 preventing them from winning the challenge.
+
+[Dispute Game Factory]: https://github.com/ethereum-optimism/specs/blob/46d411bfea922c520a1d43329dbf78a2f6966ae0/specs/fault-proof/stage-one/dispute-game-interface.md#disputegamefactory-interface
 
 #### Host Program
 
 The host program is a main part of the prover, responsible for delivering the guest program and its input to the zkVM.
-The host program first executes the guest program logic to gather the necessary data, which is equal to what is stored
-in the [PreImageOracle] during the [Optimism's Dispute Game], but the block headers from the L1 block containing
-the [sequencer-batch][g-sequencer-batch] up to block `C` must be included. Finally, the host program delivers the guest
-program and the preimages to the zkVM to obtain the zkVM proof.
+The host program first executes the guest program to gather the necessary data, which is same as the data stored in
+[PreImageOracle] during [Optimism's Fault Dispute Game]. For ZKFDG, however, additional data is required, which is the
+L1 block data from the origin of target L2 block to block `C`. Finally, the host program delivers the guest program
+and the preimages to the zkVM to obtain the zkVM proof.
 
-[PreImageOracle]: https://github.com/ethereum-optimism/specs/blob/main/specs/fault-proof/stage-one/fault-dispute-game.md#preimageoracle
-[Optimism's Dispute Game]: https://github.com/ethereum-optimism/specs/blob/main/specs/fault-proof/stage-one/fault-dispute-game.md#fault-dispute-game
+[PreImageOracle]: https://github.com/ethereum-optimism/specs/blob/46d411bfea922c520a1d43329dbf78a2f6966ae0/specs/fault-proof/stage-one/fault-dispute-game.md#preimageoracle
+[Optimism's Fault Dispute Game]: https://github.com/ethereum-optimism/specs/blob/46d411bfea922c520a1d43329dbf78a2f6966ae0/specs/fault-proof/stage-one/fault-dispute-game.md#fault-dispute-game
 
 #### Public Values of Proof
 
 To mark which blocks have been executed, the proof publicly reveals the following data.
 
 ``` plain
-1. Output Root at parent block of the target
-2. Output Root at the target block
+1. Output root at the parent block of the target
+2. Output root at the target block
 3. Hash of the block C
 ```
 
-#### Zk Verify contract
+#### `ZkVerifier` interface
 
 The proof generated by a prover can be verified on a verifier contract that includes the following interface.
-The verification in a challenge process is implemented using the verify function provided by the verifier contract.
+The verification in a challenge process will be implemented using the verify function provided by the verifier contract.
 
 ``` solidity
 interface ZKVerifier {
     /// @notice The entrypoint for verifying the proof of zk fault proof.
-    /// @param _proofBytes The encoded proof.
     /// @param _publicValues The encoded public values.
-    /// @return parentOutputRoot output root at parent block of the target.
-    /// @return outputRoot output root at the target block.
-    /// @return L1EndHash hash of the l1 end block.
+    /// @param _proofBytes The encoded proof.
+    /// @return parentOutputRoot The output root at the parent block of the target.
+    /// @return outputRoot The output root at the target block.
+    /// @return L1EndHash The block hash of the l1 block stored in ZK fault dispute game contract.
     function verify(
       bytes calldata _publicValues, 
       bytes calldata _proofBytes
@@ -110,18 +106,5 @@ interface ZKVerifier {
     );
 }
 ```
-
-## Prover as an RPC Server
-
-`kroma-prover` is implemented as a jsonRPC server that generates a zkVM proof for the requested height block.
-It can be utilized as a local component on the challenger's machine or as a remote jsonRPC server (prover as a service).
-
-- Step 1:  An user (e.g., challenger) requests a zkVM-proof for a block of specific height to `kroma-prover` with
-  the extension of preimages of the desired block.
-- Step 2: A `kroma-prover` generates zkVM-proof for the target block, and return it to the user.
-
-Operating a `kroma-prover`, which is launched only when necessary, can alleviate the situation where
-regular challengers need to allocate excessive system resources due to the proof generation process
-that is occasionally executed (perhaps rarely executed).
 
 ## Resolution of ZK Fault Dispute Game
