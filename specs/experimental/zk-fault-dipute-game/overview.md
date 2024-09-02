@@ -9,18 +9,19 @@
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**
 
-- [Overview](#overview)
-- [ZK Fault Dispute Game Creation](#zk-fault-dispute-game-creation)
-- [Challenge Creation](#challenge-creation)
-- [Dissection](#dissection)
-- [Proving Fault using zkVM](#proving-fault-using-zkvm)
-  - [ZK Fault Proof](#zk-fault-proof)
-  - [zkVM](#zkvm)
-    - [Guest Program](#guest-program)
-    - [Host Program](#host-program)
-    - [Public Values of Proof](#public-values-of-proof)
-    - [`ZkVerifier` interface](#zkverifier-interface)
-- [Resolution of ZK Fault Dispute Game](#resolution-of-zk-fault-dispute-game)
+- [ZK Fault Dispute Game](#zk-fault-dispute-game)
+  - [Overview](#overview)
+  - [ZK Fault Dispute Game Creation](#zk-fault-dispute-game-creation)
+  - [Challenge Creation](#challenge-creation)
+  - [Dissection](#dissection)
+  - [Proving Fault using zkVM](#proving-fault-using-zkvm)
+    - [ZK Fault Proof](#zk-fault-proof)
+    - [zkVM Proving System](#zkvm-proving-system)
+      - [Guest Program](#guest-program)
+      - [Host Program](#host-program)
+      - [Public Values of Proof](#public-values-of-proof)
+      - [`ZkVerifier` interface](#zkverifier-interface)
+  - [Resolution of ZK Fault Dispute Game](#resolution-of-zk-fault-dispute-game)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -41,7 +42,7 @@ transactions within the block. While this may seem similar to a validity proof, 
 purpose. The ZK fault proof is used to demonstrate that a state transition from S to S’’ is incorrect by
 providing evidence of a valid state transition from S to S’.
 
-### zkVM
+### zkVM Proving System
 
 The zkVM (Zero-Knowledge Virtual Machine) is a virtual machine that executes guest program compiled with a specified
 compiler generating zero-knowledge proofs for their execution. The guest program can be written in standard programming
