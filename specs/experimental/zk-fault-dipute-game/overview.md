@@ -96,14 +96,14 @@ interface ZKVerifier {
     /// @param _proofBytes The encoded proof.
     /// @return parentOutputRoot The output root at the parent block of the target.
     /// @return outputRoot The output root at the target block.
-    /// @return L1EndHash The block hash of the l1 block stored in ZK fault dispute game contract.
+    /// @return l1Head The block hash of the l1 block stored in ZK fault dispute game contract.
     function verify(
       bytes calldata _publicValues, 
       bytes calldata _proofBytes
     ) public view returns (
       bytes32 parentOutputRoot, 
       bytes32 outputRoot, 
-      bytes32 L1EndHash
+      bytes32 l1Head
     );
 }
 ```
