@@ -20,8 +20,8 @@
 ## Overview
 
 The ZK Fault Dispute Game (ZKFDG) is a new type of dispute game compatible with the OP Stack. In ZKFDG, the first
-disagreeing root claim between defender and challenger is found by the process called "dissection". Then, both the
-derivation of L2 block corresponding to that root claim and the execution of the block's transactions are carried out
+disagreeing output root between defender and challenger is found by the process called "dissection". Then, both the
+derivation of L2 block corresponding to that output root and the execution of the block's transactions are carried out
 in zkVM. The validity of the execution is guaranteed by the ZK proof, which can be verified on-chain.
 
 The main difference from [Kroma's previous ZK Fault Proof System](../../fault-proof/challenge.md) is that ZKFDG uses a
@@ -49,19 +49,19 @@ prev_game_proxy      = bytes32
 When the ZKFDG is created by the validator, the followings are verified:
 
 - the validator should be eligible to submit a claim
-- The `current_l2_block_num` should be the next block number for submission of root claim
+- The `current_l2_block_num` should be the next block number for submission of root claim (output root)
 - The `prev_game_proxy` should be the right previous ZKFDG contract
 
 If all validations are passed, a new ZKFDG contract is created. The address of this ZKFDG contract is stored with
 current L2 block number on the L2OutputOracle contract, which can be used for the creation of the next ZKFDG. The root
-claim stored in `prev_game_proxy` is used as the starting root claim for the dissection process to find the first
+claim stored in `prev_game_proxy` is used as the starting output root for the dissection process to find the first
 disagreeing block.
 
 ## Challenge Creation
 
 As with Kroma's [previous Fault Proof System][g-challenge-creation], a challenge can be initiated by a validator who
 disagrees the submitted claim. The challenge process begins by submitting the intermediate segments between starting
-root claim and disputed root claim by challenger.
+output root and disputed output root by challenger.
 
 ```solidity
 /**
@@ -69,7 +69,7 @@ root claim and disputed root claim by challenger.
      *
      * @param _l1BlockHash   The block hash of L1 at the time the output L2 block was created.
      * @param _l1BlockNumber The block number of L1 with the specified L1 block hash.
-     * @param _segments      Array of the segments. A segment is the first root claims of a specific range.
+     * @param _segments      Array of the segments. A segment is the first output of a specific range.
      */
     function createChallenge(
         bytes32 _l1BlockHash,
@@ -81,8 +81,8 @@ root claim and disputed root claim by challenger.
 ## Dissection
 
 The dissection process is carried out in the same manner as in Kroma's [previous Fault Proof System][g-bisection].
-Through interactions between the challenger and the defender (the game creator), the first disagreeing root claim can be
-specified.
+Through interactions between the challenger and the defender (the game creator), the first disagreeing output root can
+be specified.
 
 ```solidity
     /**
@@ -90,7 +90,7 @@ specified.
      *
      * @param _challenger  Address of the challenger.
      * @param _pos         Position of the last valid segment.
-     * @param _segments    Array of the segments. A segment is the first root claims of a specific range.
+     * @param _segments    Array of the segments. A segment is the first output root of a specific range.
      */
     function dissect(
         address _challenger,
