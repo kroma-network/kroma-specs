@@ -37,4 +37,4 @@
     - [Challenge](./experimental/fault-proof-system-v2/challenge.md)
     - [Security Council Intervention](./experimental/fault-proof-system-v2/security-council-intervention.md)
     - [Improvements](./experimental/fault-proof-system-v2/improvements.md)
-  - [Glossary](./glossary.md)
+- [Glossary](./glossary.md)
