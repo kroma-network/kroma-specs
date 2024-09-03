@@ -1,5 +1,9 @@
 # ZK Fault Dispute Game
 
+<!-- All glossary references in this file. -->
+
+[g-withdrawals]: ../../glossary.md#withdrawals
+
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**
@@ -12,10 +16,6 @@
 - [Resolution of ZK Fault Dispute Game](#resolution-of-zk-fault-dispute-game)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
-
-[g-bisection]: ../../../specs/fault-proof/challenge.md#bisection
-[g-challenge-creation]: ../../../specs/fault-proof/challenge.md#challenge-creation
-[g-withdrawals]: ../../glossary.md#withdrawals
 
 ## Overview
 
@@ -33,8 +33,8 @@ game type. This also implies that it can be applied to the OP Stack's multi-proo
 
 ## ZK Fault Dispute Game Creation
 
-The ZK Fault Dispute Game is created by a validator selected as the
-[`ValidatorManager`](../../protocol/validator-v2/validator-manager.md) at intervals defined by the
+The ZK Fault Dispute Game is created by a validator selected by the
+[`ValidatorManager`](../../protocol/validator-v2/validator-manager.md) at intervals defined as the
 `SUBMISSION_INTERVAL` configured in the [`L2OutputOracle`](../../protocol/validation.md#l2-output-oracle-smart-contract)
 contract. The validator can create a ZKFDG-type dispute game through the `DisputeGameFactory` with an extra data. The
 extra data is composed as follows:
@@ -59,17 +59,19 @@ disagreeing block.
 
 ## Challenge Creation
 
-As with Kroma's [previous Fault Proof System][g-challenge-creation], a challenge can be initiated by a validator who
+As with Kroma's [previous Fault Proof System][prev-challenge-creation], a challenge can be initiated by a validator who
 disagrees the submitted claim. The challenge process begins by submitting the intermediate segments between starting
 output root and disputed output root by challenger.
 
+[prev-challenge-creation]: ../../../specs/fault-proof/challenge.md#challenge-creation
+
 ```solidity
-/**
+    /**
      * @notice Creates a challenge against an invalid claim.
      *
      * @param _l1BlockHash   The block hash of L1 at the time the output L2 block was created.
      * @param _l1BlockNumber The block number of L1 with the specified L1 block hash.
-     * @param _segments      Array of the segments. A segment is the first output of a specific range.
+     * @param _segments      Array of the segments. A segment is the first output root of a specific range.
      */
     function createChallenge(
         bytes32 _l1BlockHash,
@@ -80,9 +82,11 @@ output root and disputed output root by challenger.
 
 ## Dissection
 
-The dissection process is carried out in the same manner as in Kroma's [previous Fault Proof System][g-bisection].
+The dissection process is carried out in the same manner as in Kroma's [previous Fault Proof System][prev-bisection].
 Through interactions between the challenger and the defender (the game creator), the first disagreeing output root can
 be specified.
+
+[prev-bisection]: ../../../specs/fault-proof/challenge.md#bisection
 
 ```solidity
     /**
