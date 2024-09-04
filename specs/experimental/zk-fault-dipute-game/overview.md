@@ -190,10 +190,10 @@ will be implemented following the below interface.
 ```solidity
 interface ZKVerifier {
     /** 
-     * @notice The entrypoint for verifying the proof of ZK fault proof.
+     * @notice The entrypoint for verifying the ZK fault proof.
      *
      * @param _publicValues The encoded public values.
-     * @param _proofBytes The encoded proof.
+     * @param _proofBytes   The encoded proof.
      *
      * @return If verification of ZK proof is passed or not.
      */
