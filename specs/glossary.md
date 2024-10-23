@@ -417,10 +417,10 @@ tokens for each submission.
 
 The boosted validator reward is given to the vault of the validator who submits the output at
 [KRO-based Validator System][kro-based-validator-system]. The boosted reward is given in terms of KRO tokens, and is
-calculated using the following formula: $$8 \times arctan(0.01 \times G_i)$$ where $G_i$ is the total amount of KGH NFTs
-delegated to the output submitter. This is designed to have the effect that the boosted reward is constantly decreasing
-while the number of delegated KGH increases. More information on boosted reward due to KGH can be found
-[here][kgh-boosting-validator-reward].
+calculated using the following formula: $$\verb#BASE_REWARD# \times 0.4 \times arctan(0.01 \times G_i)$$ where $G_i$ is
+the total amount of KGH NFTs delegated to the output submitter. This is designed to have the effect that the boosted
+reward is constantly decreasing while the number of delegated KGH increases. More information on boosted reward due to
+KGH can be found [here][kgh-boosting-validator-reward].
 
 [kgh-boosting-validator-reward]: https://docs.kroma.network/kroma-guardian-house/kgh-utilities#boosting-validator-reward
 
