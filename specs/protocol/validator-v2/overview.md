@@ -108,6 +108,6 @@ commission rate.
 
 ### Constants
 
-| Name                   | Value                        | Unit |
-|------------------------|------------------------------|------|
-| `REQUIRED_BOND_AMOUNT` | 200000000000000000 (0.2 ETH) | wei  |
+| Name                   | Value | Unit |
+|------------------------|-------|------|
+| `REQUIRED_BOND_AMOUNT` | `0.2` | ETH  |
