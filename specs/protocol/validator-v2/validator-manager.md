@@ -181,13 +181,13 @@ challenge.
 
 ### Constants
 
-| Name                              | Value | Unit    |
-|-----------------------------------|-------|---------|
-| `MIN_REGISTER_AMOUNT`             | TBD   | KRO     |
-| `MIN_ACTIVATE_AMOUNT`             | TBD   | KRO     |
-| `COMMISSION_CHANGE_DELAY_SECONDS` | TBD   | seconds |
-| `SOFT_JAIL_PERIOD`                | TBD   | seconds |
-| `HARD_JAIL_PERIOD`                | TBD   | seconds |
-| `JAIL_THRESHOLD`                  | TBD   | number  |
-| `BOND_AMOUNT`                     | TBD   | KRO     |
-| `BASE_REWARD`                     | TBD   | KRO     |
+| Name                              | Value       | Unit    |
+|-----------------------------------|-------------|---------|
+| `MIN_REGISTER_AMOUNT`             | `10_000`    | KRO     |
+| `MIN_ACTIVATE_AMOUNT`             | `10_000`    | KRO     |
+| `COMMISSION_CHANGE_DELAY_SECONDS` | `1_209_600` | seconds |
+| `SOFT_JAIL_PERIOD`                | `259_200`   | seconds |
+| `HARD_JAIL_PERIOD`                | `604_800`   | seconds |
+| `JAIL_THRESHOLD`                  | `2`         | number  |
+| `BOND_AMOUNT`                     | `5_000`     | KRO     |
+| `BASE_REWARD`                     | `400`       | KRO     |
