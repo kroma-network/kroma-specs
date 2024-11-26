@@ -32,7 +32,7 @@ disagreeing output root between defender and challenger is found by the process 
 derivation of L2 block corresponding to that output root and the execution of the block's transactions are carried out
 in zkVM. The validity of the execution is guaranteed by the ZK proof, which can be verified on-chain.
 
-The main difference from [Kroma's previous ZK Fault Proof System](../../fault-proof/challenge.md) is that ZKFDG uses a
+The main difference from [Kroma's previous ZK Fault Proof System](../../zk-fault-proof/challenge.md) is that ZKFDG uses a
 "zkVM" instead of a "zkEVM" to handle the proving fault process. By using zkVM for fault proof, it is possible to verify
 the entire processes from derivation to execution without any additional developments of ZK circuit.
 
@@ -71,7 +71,7 @@ As with Kroma's [previous Fault Proof System][prev-challenge-creation], a challe
 disagrees the submitted claim. The challenge process begins by submitting the intermediate segments between starting
 output root and disputed output root by challenger.
 
-[prev-challenge-creation]: ../../../specs/fault-proof/challenge.md#challenge-creation
+[prev-challenge-creation]: ../../zk-fault-proof/challenge.md#challenge-creation
 
 ```solidity
     /**
@@ -94,7 +94,7 @@ The dissection process is carried out in the same manner as in Kroma's [previous
 Through interactions between the challenger and the defender (the game creator), the first disagreeing output root can
 be specified.
 
-[prev-bisection]: ../../../specs/fault-proof/challenge.md#bisection
+[prev-bisection]: ../../zk-fault-proof/challenge.md#bisection
 
 ```solidity
     /**

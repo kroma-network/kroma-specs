@@ -34,7 +34,7 @@
 
 ## Overview
 
-Similar to [V1](../../fault-proof/challenge.md), the challenge process in Fault Proof System V2 revolves around
+Similar to [V1](../../zk-fault-proof/challenge.md), the challenge process in Fault Proof System V2 revolves around
 interactively dissecting [outputs][g-checkpoint-output] to find the first disagreeing block, thereby proving the
 validity of the [state][g-state] transition.
 
@@ -362,7 +362,7 @@ asserter or challenger executed the correct transactions, as described in
 [Transaction Data Commitment](./transaction-data-commitment.md).
 
 The `OutputRootProof` and `PublicInputProof` in the previous
-[proving fault](../../fault-proof/challenge.md#proving-fault) have been changed as follows. The `OutputRootProof` was
+[proving fault](../../zk-fault-proof/challenge.md#proving-fault) have been changed as follows. The `OutputRootProof` was
 changed accordingly by removing `nextBlockHash` from the [output root][g-l2-output] payload as described in
 [Output Root Payload (Version 1)](./output-proposal.md#output-root-payload-version-1), and some fields for on-chain
 verification of [batch data][g-sequencer-batch] and [user-deposited transaction][g-user-deposited] data have been added

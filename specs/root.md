@@ -31,8 +31,8 @@ that maintains 1:1 compatibility with Ethereum.
 - [Messengers](./protocol/messengers.md)
 - [Bridges](./protocol/bridges.md)
 - [Predeploys](./protocol/predeploys.md)
-- [Challenge](./fault-proof/challenge.md)
-- [zkEVM Prover](./fault-proof/zkevm-prover.md)
+- [Challenge](zk-fault-proof/challenge.md)
+- [zkEVM Prover](zk-fault-proof/zkevm-prover.md)
 - [SystemConfig](./protocol/system-config.md)
 - [Glossary](./glossary.md)
 

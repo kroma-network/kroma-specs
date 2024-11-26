@@ -55,7 +55,7 @@ incorporating delegation system based on Kroma's governance token (KRO) and Krom
 
 **Validator System V2** is a new network security model of Kroma, which introduces KRO tokenomics and delegation to the
 validator system. It is compatible with current [ZK fault proof][g-zk-fault-proof] and
-[challenge system](../../fault-proof/challenge.md), while introducing two new contracts:
+[challenge system](../../zk-fault-proof/challenge.md), while introducing two new contracts:
 [**Validator Manager**][g-validator-manager-contract] and [**Asset Manager** contract][g-asset-manager-contract]. These
 contracts replace the existing [Validator Pool contract][g-validator-pool-contract], handling jobs such as validator
 management, delegation, next priority validator selection, [output reward][g-output-reward] distribution, and challenge

@@ -27,7 +27,7 @@
 
 ## Background
 
-The initial version, [Fault Proof System V1](../../fault-proof/challenge.md) introduced a permissionless
+The initial version, [Fault Proof System V1](../../zk-fault-proof/challenge.md) introduced a permissionless
 [validator][g-validator] system. However, it encountered several limitations:
 
 - **Challenge Invalidity**: There was no assurance that a valid [output][g-checkpoint-output] would always win in
