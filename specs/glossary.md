@@ -337,7 +337,7 @@ deposit to [Validator Pool contract][validator-pool-contract] in
 [Validator Manager contract][validator-manager-contract] in [KRO-based Validator System][kro-based-validator-system].
 Then the validator becomes eligible to submit checkpoint output.
 
-[eth-based-validator-system]: ./protocol/validator-v1/validator-pool.md
+[eth-based-validator-system]: deprecated/validator-v1/validator-pool.md
 [kro-based-validator-system]: ./protocol/validator-v2/overview.md
 
 ## Trusted Validator

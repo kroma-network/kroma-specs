@@ -125,7 +125,7 @@ policy. It is not a consensus level parameter.
 ### `validatorRewardScalar` (`uint256`)
 
 The scalar value to distribute [transaction fees](./exec-engine.md#transaction-fees) on L2 to validators as a reward of
-checkpoint output submission in [ETH-based Validator System](./validator-v1/validator-pool.md). The denominator is
+checkpoint output submission in [ETH-based Validator System](../deprecated/validator-v1/validator-pool.md). The denominator is
 10000. In [KRO-based Validator System](./validator-v2/overview.md), it is set to zero.
 
 ## Writing the system config

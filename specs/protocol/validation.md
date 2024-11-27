@@ -40,7 +40,7 @@ with a bond at stake if the proof is wrong.
 
 > **_NOTE:_**
 > Before the introduction of the KRO governance token, the
-> [validator system was ETH-based](./validator-v1/validator-pool.md). With introduction of KRO token, the
+> [validator system was ETH-based](../deprecated/validator-v1/validator-pool.md). With introduction of KRO token, the
 > system had been transited to [KRO-based validator system](./validator-v2/overview.md), mitigating several limitations
 > of the ETH-based system.
 

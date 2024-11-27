@@ -70,7 +70,7 @@ token deposits (tokens are locked on L1, then minted on L2 via a deposited trans
 - **L2OutputOracle**: A smart contract that stores [L2 output roots][g-l2-output] for use with withdrawals
   and fault proofs.
 - **ValidatorPool**: A smart contract that stores validators and their deposits in
-  [ETH-based Validator System](./validator-v1/validator-pool.md).
+  [ETH-based Validator System](../deprecated/validator-v1/validator-pool.md).
 - **ValidatorManager**: A smart contract that manages validators in
   [KRO-based Validator System](./validator-v2/overview.md).
 - **AssetManager**: A smart contract that manages validator and delegators' assets in
