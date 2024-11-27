@@ -28,6 +28,7 @@
 - [Fault Proof]()
   - [Challenge](zk-fault-proof/challenge.md)
   - [zkEVM Prover](zk-fault-proof/zkevm-prover.md)
+  - [zkVM Prover](zk-fault-proof/zkvm-prover.md)
 - [Experimental]()
   - [ZK Fault Dispute Game](./experimental/zk-fault-dipute-game/overview.md)
   - [Fault Proof System V2](./experimental/fault-proof-system-v2/overview.md)
