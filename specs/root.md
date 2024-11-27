@@ -32,7 +32,7 @@ that maintains 1:1 compatibility with Ethereum.
 - [Bridges](./protocol/bridges.md)
 - [Predeploys](./protocol/predeploys.md)
 - [Challenge](zk-fault-proof/challenge.md)
-- [zkEVM Prover](deprecated/zkevm-prover.md)
+- [zkVM Prover](zk-fault-proof/zkvm-prover.md)
 - [SystemConfig](./protocol/system-config.md)
 - [Glossary](./glossary.md)
 

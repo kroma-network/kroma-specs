@@ -2,8 +2,6 @@
 <!-- All glossary references in this file. -->
 
 [g-zk-fault-proof]: ../../glossary.md#zk-fault-proof
-[g-l2-chain-derivation]: ../../glossary.md#l2-chain-derivation
-[g-sequencer-batch]: ../../glossary.md#sequencer-batch
 [g-withdrawals]: ../../glossary.md#withdrawals
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
@@ -28,9 +26,9 @@ disagreeing output root between defender and challenger is found by the process 
 derivation of L2 block corresponding to that output root and the execution of the block's transactions are carried out
 in zkVM. The validity of the execution is guaranteed by the ZK proof, which can be verified on-chain.
 
-The main difference from [Kroma's previous ZK Fault Proof System](../../zk-fault-proof/challenge.md) is that ZKFDG uses a
-"zkVM" instead of a "zkEVM" to handle the proving fault process. By using zkVM for fault proof, it is possible to verify
-the entire processes from derivation to execution without any additional developments of ZK circuit.
+The main difference from [Kroma's previous ZK Fault Proof System](../../zk-fault-proof/challenge.md) is that ZKFDG uses
+a "zkVM" instead of a "zkEVM" to handle the proving fault process. By using zkVM for fault proof, it is possible to
+verify the entire processes from derivation to execution without any additional developments of ZK circuit.
 
 ZKFDG implements the OP Stack's `IDisputeGame`, implying that it is fully compatible as one of the OP Stack's dispute
 game type. This also implies that it can be applied to the OP Stack's multi-proof system in the future.

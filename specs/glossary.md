@@ -82,7 +82,6 @@
   - [L1 Attributes Predeployed Contract](#l1-attributes-predeployed-contract)
   - [L2 Output Root](#l2-output-root)
   - [L2 Output Oracle Contract](#l2-output-oracle-contract)
-  - [Validator Pool Contract](#validator-pool-contract)
   - [Validator Manager Contract](#validator-manager-contract)
   - [Asset Manager Contract](#asset-manager-contract)
   - [Colosseum Contract](#colosseum-contract)
@@ -173,8 +172,6 @@ A merkle root of [Storage Trie][storage-trie].
 
 ## Keccak
 
-[keccak]: glossary.md#Keccak
-
 [Keccak][keccak-wiki] is a hash function used in [L1] for various purposes. Some examples are deriving address of
 [EOA] and computing path of [MPT] which is called Secure Trie.
 
@@ -196,9 +193,7 @@ The root hash of a ZKT is a commitment to the contents of the tree, which allows
 proof to be constructed for any key-value mapping encoded in the tree. Such a proof is called a Merkle proof, and can be
 verified against the Merkle root.
 
-Whereas [L1] uses [MPT][mpt] to represent state, [L2] uses ZKT. This is because ZKT enables faster proof
-generation by avoiding [Keccak][keccak] and [RLP encoding][RLP format].
-To accomplish this, ZKT uses poseidon hash to calculate the path and concatenates leaf values in bytes.
+ZK Trie is now deprecated, and Kroma uses [Merkle Patricia Trie][mpt-details] instead.
 
 ## Chain Re-Organization
 
@@ -332,12 +327,9 @@ Checkpoint output is the l2 output root that denotes state transition during [va
 [validator]: glossary.md#validator
 
 A validator is a decentralized actor, who does [validation]. To participate network as a validator, one needs to
-deposit to [Validator Pool contract][validator-pool-contract] in
-[ETH-based Validator System][eth-based-validator-system], otherwise needs to register to
-[Validator Manager contract][validator-manager-contract] in [KRO-based Validator System][kro-based-validator-system].
+register to [Validator Manager contract][validator-manager-contract] in [Validator System][kro-based-validator-system].
 Then the validator becomes eligible to submit checkpoint output.
 
-[eth-based-validator-system]: deprecated/validator-v1/validator-pool.md
 [kro-based-validator-system]: ./protocol/validator-v2/overview.md
 
 ## Trusted Validator
@@ -349,7 +341,7 @@ A trusted validator is an actor who is run by Lightscale. If validations are not
 
 [validating-epoch]: glossary.md#validating-epoch
 
-c of [L2] [blocks][block] where needs to be checkpointed.
+Number of [L2][L2] [blocks][block] where needs to be checkpointed.
 
 Each epoch is identified by an epoch number, which is incremented by 1.
 
@@ -388,18 +380,12 @@ to false.
 
 Output submission rewards are given as an incentive for validators to submit checkpoint output.
 
-In [ETH-based Validator System][eth-based-validator-system], the output reward is the same as the
-[validator reward][validator-reward], otherwise in [KRO-based Validator System][kro-based-validator-system], it consists
-of the validator reward, [base reward][base-reward], and [boosted reward][boosted-reward].
+In [validator system][kro-based-validator-system], it consists of the validator reward, [base reward][base-reward], and
+[boosted reward][boosted-reward].
 
 ## Validator Reward
 
-[validator-reward]: glossary.md#validator-reward
-
-In [ETH-based Validator System][eth-based-validator-system], the validator reward is calculated using the following
-formula: `(L2 base fee + L2 priority fee) * validator reward scalar / 10000`.
-
-In [KRO-based Validator System][kro-based-validator-system], the validator reward is given in terms of KRO tokens, and
+In [validator system][kro-based-validator-system], the validator reward is given in terms of KRO tokens, and
 is calculated as the sum of the [base reward][base-reward] and [boosted reward][boosted-reward] multiplied by the
 commission rate.
 
@@ -408,7 +394,7 @@ commission rate.
 [base-reward]: glossary.md#base-reward
 
 The base validator reward is given to the vault of the validator who submits the output at
-[KRO-based Validator System][kro-based-validator-system]. The base reward is given in terms of a fixed amount of KRO
+[validator system][kro-based-validator-system]. The base reward is given in terms of a fixed amount of KRO
 tokens for each submission.
 
 ## Boosted Reward
@@ -416,7 +402,7 @@ tokens for each submission.
 [boosted-reward]: glossary.md#boosted-reward
 
 The boosted validator reward is given to the vault of the validator who submits the output at
-[KRO-based Validator System][kro-based-validator-system]. The boosted reward is given in terms of KRO tokens, and is
+[validator system][kro-based-validator-system]. The boosted reward is given in terms of KRO tokens, and is
 calculated using the following formula: $$\verb#BASE_REWARD# \times 0.4 \times arctan(0.01 \times G_i)$$ where $G_i$ is
 the total amount of KGH NFTs delegated to the output submitter. This is designed to have the effect that the boosted
 reward is constantly decreasing while the number of delegated KGH increases. More information on boosted reward due to
@@ -558,8 +544,8 @@ An EOA on L1 which finalizes a withdrawal by submitting the data necessary to ve
 The finalization period — sometimes also called *withdrawal delay* — is the minimum amount of time (in seconds) that
 must elapse before a [withdrawal][withdrawals] can be finalized.
 
-The finalization period is necessary to afford sufficient time for [validators][validator] to make a
-[ZK fault proof][zk-fault-proof].
+The finalization period is necessary to afford sufficient time for [validators][validator] to avoid L1 censorship
+attacks.
 
 > **TODO** specify current value for finalization period
 
@@ -895,25 +881,18 @@ An L1 contract to which [L2 output roots][l2-output] are posted by the [validato
 
 > **TODO** expand
 
-## Validator Pool Contract
-
-[validator-pool-contract]: glossary.md#validator-pool-contract
-
-An [L1] contract that determines [validator] eligibility, selects the [validator] of next round, and manages bonding for
-[L2 output roots][l2-output] submissions in [ETH-based Validator System][eth-based-validator-system].
-
 ## Validator Manager Contract
 
 [validator-manager-contract]: glossary.md#validator-manager-contract
 
 An [L1] contract that manages the set of [validators][validator], selects the validator of next
 [priority round][priority-round], and is an entry point of [output reward][output-reward] distribution and slash in
-[KRO-based Validator System][kro-based-validator-system].
+[validator system][kro-based-validator-system].
 
 ## Asset Manager Contract
 
 An [L1] contract that oversees the delegation and undelegation of assets, and manages distributed rewards and slashing
-penalties in [KRO-based Validator System][kro-based-validator-system].
+penalties in [validator system][kro-based-validator-system].
 
 ## Colosseum Contract
 
@@ -1002,4 +981,3 @@ In these specifications, "execution engine" always refer to the L2 execution eng
 [merge]: https://ethereum.org/en/eth2/merge/
 [mempool]: https://www.quicknode.com/guides/defi/how-to-access-ethereum-mempool
 [zkt-details]: https://github.com/kroma-network/zktrie
-[RLP format]: https://ethereum.org/en/developers/docs/data-structures-and-encoding/rlp

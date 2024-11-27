@@ -3,12 +3,7 @@
 <!-- All glossary references in this file. -->
 
 [g-l2-output-root]: ../glossary.md#l2-output-root
-[g-mpt]: ../glossary.md#merkle-patricia-trie
-[g-zktrie]: ../glossary.md#zk-trie
 [g-zk-fault-proof]: ../glossary.md#zk-fault-proof
-[g-system-config]: ../glossary.md#system-configuration
-[g-validation-rewards]: validation.md#validation-rewards
-[g-output-payload-v0]: validation.md#output-payloadversion-0
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
@@ -17,9 +12,6 @@
 - [Nodes](#nodes)
   - [Verifier -> Validator](#verifier---validator)
   - [Compositions](#compositions)
-  - [Adding field to System Configuration](#adding-field-to-system-configuration)
-  - [Adding field to Output Payload](#adding-field-to-output-payload)
-- [Geth](#geth)
 - [Validator](#validator)
   - [ZK fault proof](#zk-fault-proof)
 
@@ -71,73 +63,10 @@ The followings are components that are used to run different types of nodes:
 **NOTE:** Here `L2 EL client` means `kroma-geth` and `L2 CL client` means `kroma-node`. `L2 EL client` can
 be expanded to other clients for pragmatic decentralization.
 
-### Adding field to System Configuration
-
-The `ValidatorRewardScalar` field was added to [system configuration][g-system-config].
-
-```go
-type L1BlockInfo struct {
-    Number    uint64
-    Time      uint64
-    BaseFee   *big.Int
-    BlockHash common.Hash
-    // Not strictly a piece of L1 information. Represents the number of L2 blocks since the start of the epoch,
-    // i.e. when the actual L1 info was first introduced.
-    SequenceNumber uint64
-    // BatcherHash version 0 is just the address with 0 padding to the left.
-    BatcherAddr   common.Address
-    L1FeeOverhead eth.Bytes32
-    L1FeeScalar   eth.Bytes32
-    // [Kroma: START]
-    ValidatorRewardScalar eth.Bytes32
-    // [Kroma: END]
-}
-```
-
-[Code here](https://github.com/kroma-network/kroma/blob/dev/op-node/rollup/derive/l1_block_info.go)
-
-This value is set via the `SystemConfig` contract on L1 and passed through the L2 derivation process and used as an
-ingredient in the reward calculation. (Detailed calculations : [Validation Rewards][g-validation-rewards])
-
-### Adding field to Output Payload
-
-The `next_block_hash` field was added to [Output Payload][g-output-payload-v0].
-
-```go
-type OutputV0 struct {
-    StateRoot                Bytes32
-    MessagePasserStorageRoot Bytes32
-    BlockHash                common.Hash
-    // [Kroma: START]
-    NextBlockHash common.Hash
-    // [Kroma: END]
-}
-```
-
-[Code here](https://github.com/kroma-network/kroma/blob/dev/op-service/eth/output.go)
-
-This value is used as an additional material for the [verification process][g-zk-fault-proof] of the fault
-proof system.
-It is used to validate the relationship between the Source OutputRootProof and Dest OutputRootProof, and the validation
-of the public input.
-
-## Geth
-
-To prepare for migration to ZK Rollup, we use a [ZK Trie][g-zktrie] to represent state. Currently, this makes
-the chain slower than [Merkle Patrica Trie][g-mpt]. As the bottleneck is the time to produce ZK proof right now,
-we adopt it from [Scroll]. When we overcome the proof generation time problem, we will smoothly migrate state
-without a hard fork or huge changes. Thus, you might face an unexpected result when retrieving JSON-RPC such as
-`eth_getProof`.
-
-Additionally, to produce a zkEVM proof, geth should return so called `execution trace` via JSON-RPC
-`kroma_getBlockTraceByNumberOrHash` which provides zkEVM prover with data as a witness.
-
-[scroll]: https://scroll.io/
-
 ## Validator
 
 ### ZK fault proof
 
-Instead of [cannon], Kroma uses zkEVM for [ZK fault proof][g-zk-fault-proof].
+Instead of [cannon], Kroma uses zkVM for [ZK fault proof][g-zk-fault-proof].
 
 [cannon]: https://github.com/ethereum-optimism/cannon

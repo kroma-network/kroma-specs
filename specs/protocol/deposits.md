@@ -338,8 +338,8 @@ The predeploy stores the following values:
     The `overhead` value is dropped as it is no longer used in the
     [Ecotone L1 fee formula](exec-engine.md#ecotone-l1-cost-fee-changes-eip-4844-da).
   - `scalar` (`uint256`): The L1 fee scalar to apply to L1 cost computation of transactions in this L2 block.
-- Parameters to calculate a validator reward. It's only used for
-  [ETH-based Validator System](../deprecated/validator-v1/validator-pool.md), and set to zero in
+- Parameters to calculate a validator reward. It was only used for
+  [ETH-based Validator System](../deprecated/validator-v1/validator-pool.md), and had set to zero in
   [KRO-based Validator System](./validator-v2/overview.md)
   - `validatorRewardScalar` (`uint256`): A number between 0 and 10000. A [validator reward][g-validator-reward] is
   calculated with the expression.
