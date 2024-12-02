@@ -6,10 +6,13 @@
 
 - [Overview](#overview)
 - [Timestamp Activation](#timestamp-activation)
+- [Historical RPC](#historical-rpc)
+  - [`eth_` namespace](#eth_-namespace)
+  - [`debug_` namespace](#debug_-namespace)
 - [EVM Changes](#evm-changes)
-  - [Transition from ZK Trie to MPT](#transition-from-zk-trie-to-mpt)
+  - [Transition from ZK Trie to Merkle Patricia Trie](#transition-from-zk-trie-to-merkle-patricia-trie)
   - [`SELFDESTRUCT` opcode](#selfdestruct-opcode)
-  - [`isSystemTransaction` boolean at transaction struct](#issystemtransaction-boolean-at-transaction-struct)
+  - [`isSystemTransaction` field in `DepositTx` type](#issystemtransaction-field-in-deposittx-type)
 - [Fee Distribution Process](#fee-distribution-process)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
@@ -29,9 +32,33 @@ Vanilla OP Stack.
 Kroma MPT Migration upgrade, like other network upgrades, is activated at a timestamp. Changes to the L2 Block execution
 rules are applied when the `L2 Timestamp >= activation time`.
 
+## Historical RPC
+
+Since the underlying trie structure is changed from the ZK Trie to the Merkle Patricia Trie, the historical RPC is used
+for the RPC calls that are related to the historical data before the Kroma MPT Migration upgrade. The historical RPC
+provides the historical data that is stored in the ZK Trie. The following endpoints will route the call to the
+historical RPC if the requested timestamp is before the activation time of the Kroma MPT Migration upgrade:
+
+### `eth_` namespace
+
+- `eth_getBalance`
+- `eth_getProof`
+- `eth_getCode`
+- `eth_getStorageAt`
+- `eth_call`
+- `eth_estimateGas`
+- `eth_createAccessList`
+- `eth_getTransactionCount`
+
+### `debug_` namespace
+
+- `debug_traceBlockByNumber`
+- `debug_traceBlockByHash`
+- `debug_traceTransaction`
+
 ## EVM Changes
 
-### Transition from ZK Trie to MPT
+### Transition from ZK Trie to Merkle Patricia Trie
 
 The underlying trie structure of the execution client is changed from the ZK Trie to the Merkle Patricia Trie. This
 enhances the performance of the execution client, and reduces the operational cost of maintaining zkEVM circuits by
@@ -45,7 +72,7 @@ rules that are defined at [EIP-6780].
 
 [EIP-6780]: https://eips.ethereum.org/EIPS/eip-6780
 
-### `isSystemTransaction` boolean at transaction struct
+### `isSystemTransaction` field in `DepositTx` type
 
 In the previous version of the protocol, the `isSystemTransaction` boolean was removed. To enhance the compatibility
 with vanilla OP Stack, the `isSystemTransaction` boolean is re-enabled.
