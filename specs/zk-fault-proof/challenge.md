@@ -376,4 +376,3 @@ Colosseum contract should be deployed behind upgradable proxies.
 | `BISECTION_TIMEOUT`           | 3600                                                               | seconds           |
 | `PROVING_TIMEOUT`             | 28800                                                              | seconds           |
 | `SEGMENTS_LENGTHS`            | [9, 6, 10, 6]                                                      | array of integers |
-| `DUMMY_HASH`                  | 0xedf1ae3da135c124658e215a9bf53477facb442a1dcd5a92388332cb6193237f | bytes32           |

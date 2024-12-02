@@ -39,26 +39,26 @@ network forking.
 Predeploy addresses exist in 1 byte namespace `0x42000000000000000000000000000000000000xx`.
 Proxies are set at each possible predeploy address except for the `ProxyAdmin` and the `WETH9`.
 
-| Name                       | Address                                    | Introduced | Deprecated | Proxied |
-|----------------------------|--------------------------------------------|------------|------------|---------|
-| ProxyAdmin                 | 0x4200000000000000000000000000000000000000 | Legacy     | No         | No      |
-| WETH9                      | 0x4200000000000000000000000000000000000001 | Legacy     | No         | No      |
-| L1Block (*deprecated*)     | 0x4200000000000000000000000000000000000002 | Bedrock    | Yes        | Yes     |
-| L2ToL1MessagePasser        | 0x4200000000000000000000000000000000000003 | Legacy     | No         | Yes     |
-| L2CrossDomainMessenger     | 0x4200000000000000000000000000000000000004 | Legacy     | No         | Yes     |
-| GasPriceOracle             | 0x4200000000000000000000000000000000000005 | Legacy     | No         | Yes     |
-| ProtocolVault              | 0x4200000000000000000000000000000000000006 | Bedrock    | Yes        | Yes     |
-| L1FeeVault (*deprecated*)  | 0x4200000000000000000000000000000000000007 | Bedrock    | Yes        | Yes     |
-| ValidatorRewardVault       | 0x4200000000000000000000000000000000000008 | Bedrock    | Yes        | Yes     |
-| L2StandardBridge           | 0x4200000000000000000000000000000000000009 | Bedrock    | No         | Yes     |
-| L2ERC721Bridge             | 0x420000000000000000000000000000000000000A | Legacy     | No         | Yes     |
-| KromaMintableERC20Factory  | 0x420000000000000000000000000000000000000B | Legacy     | No         | Yes     |
-| KromaMintableERC721Factory | 0x420000000000000000000000000000000000000C | Bedrock    | No         | Yes     |
-| SequencerFeeVault          | 0x4200000000000000000000000000000000000011 | Legacy     | No         | Yes     |
-| L1Block                    | 0x4200000000000000000000000000000000000015 | Bedrock    | No         | Yes     |
-| BaseFeeVault               | 0x4200000000000000000000000000000000000019 | Yes        | No         | Yes     |
-| L1FeeVault                 | 0x420000000000000000000000000000000000001a | Bedrock    | No         | Yes     |
-| BeaconBlockRoot            | 0x000F3df6D732807Ef1319fB7B8bB8522d0Beac02 | Ecotone    | No         | No      |
+| Name                                | Address                                    | Introduced | Deprecated | Proxied |
+|-------------------------------------|--------------------------------------------|------------|------------|---------|
+| ProxyAdmin                          | 0x4200000000000000000000000000000000000000 | Legacy     | No         | No      |
+| WETH9                               | 0x4200000000000000000000000000000000000001 | Legacy     | No         | No      |
+| L1Block (*deprecated*)              | 0x4200000000000000000000000000000000000002 | Bedrock    | Yes        | Yes     |
+| L2ToL1MessagePasser                 | 0x4200000000000000000000000000000000000003 | Legacy     | No         | Yes     |
+| L2CrossDomainMessenger              | 0x4200000000000000000000000000000000000004 | Legacy     | No         | Yes     |
+| GasPriceOracle                      | 0x4200000000000000000000000000000000000005 | Legacy     | No         | Yes     |
+| ProtocolVault (*deprecated*)        | 0x4200000000000000000000000000000000000006 | Bedrock    | Yes        | Yes     |
+| L1FeeVault (*deprecated*)           | 0x4200000000000000000000000000000000000007 | Bedrock    | Yes        | Yes     |
+| ValidatorRewardVault (*deprecated*) | 0x4200000000000000000000000000000000000008 | Bedrock    | Yes        | Yes     |
+| L2StandardBridge                    | 0x4200000000000000000000000000000000000009 | Bedrock    | No         | Yes     |
+| L2ERC721Bridge                      | 0x420000000000000000000000000000000000000A | Legacy     | No         | Yes     |
+| KromaMintableERC20Factory           | 0x420000000000000000000000000000000000000B | Legacy     | No         | Yes     |
+| KromaMintableERC721Factory          | 0x420000000000000000000000000000000000000C | Bedrock    | No         | Yes     |
+| SequencerFeeVault                   | 0x4200000000000000000000000000000000000011 | Legacy     | No         | Yes     |
+| L1Block                             | 0x4200000000000000000000000000000000000015 | Bedrock    | No         | Yes     |
+| BaseFeeVault                        | 0x4200000000000000000000000000000000000019 | Yes        | No         | Yes     |
+| L1FeeVault                          | 0x420000000000000000000000000000000000001a | Bedrock    | No         | Yes     |
+| BeaconBlockRoot                     | 0x000F3df6D732807Ef1319fB7B8bB8522d0Beac02 | Ecotone    | No         | No      |
 
 ## ProxyAdmin
 
