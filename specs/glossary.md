@@ -193,7 +193,7 @@ The root hash of a ZKT is a commitment to the contents of the tree, which allows
 proof to be constructed for any key-value mapping encoded in the tree. Such a proof is called a Merkle proof, and can be
 verified against the Merkle root.
 
-ZK Trie is now deprecated, and Kroma uses [Merkle Patricia Trie][mpt-details] instead.
+ZK Trie is now deprecated, and Kroma uses [Merkle Patricia Trie][mpt-details] instead after MPT hard fork.
 
 ## Chain Re-Organization
 

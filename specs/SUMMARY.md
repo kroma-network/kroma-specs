@@ -24,7 +24,7 @@
         - [Asset Manager](protocol/validator-v2/asset-manager.md)
   - [Predeploys](./protocol/predeploys.md)
   - [System Config](./protocol/system-config.md)
-- [Fault Proof]()
+- [ZK Fault Proof]()
   - [Challenge](zk-fault-proof/challenge.md)
   - [zkVM Prover](zk-fault-proof/zkvm-prover.md)
 - [Experimental]()

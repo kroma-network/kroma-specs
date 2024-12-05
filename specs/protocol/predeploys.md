@@ -7,11 +7,13 @@
 - [Overview](#overview)
 - [ProxyAdmin](#proxyadmin)
 - [WETH9](#weth9)
+- [[DEPRECATED] L1Block](#deprecated-l1block)
 - [L2ToL1MessagePasser](#l2tol1messagepasser)
 - [L2CrossDomainMessenger](#l2crossdomainmessenger)
 - [GasPriceOracle](#gaspriceoracle)
-- [ProtocolVault](#protocolvault)
-- [ValidatorRewardVault](#validatorrewardvault)
+- [[DEPRECATED] ProtocolVault](#deprecated-protocolvault)
+- [[DEPRECATED] L1FeeVault](#deprecated-l1feevault)
+- [[DEPRECATED] ValidatorRewardVault](#deprecated-validatorrewardvault)
 - [L2StandardBridge](#l2standardbridge)
 - [KromaMintableERC20Factory](#kromamintableerc20factory)
 - [KromaMintableERC721Factory](#kromamintableerc721factory)
@@ -54,10 +56,10 @@ Proxies are set at each possible predeploy address except for the `ProxyAdmin` a
 | L2ERC721Bridge                      | 0x420000000000000000000000000000000000000A | Legacy     | No         | Yes     |
 | KromaMintableERC20Factory           | 0x420000000000000000000000000000000000000B | Legacy     | No         | Yes     |
 | KromaMintableERC721Factory          | 0x420000000000000000000000000000000000000C | Bedrock    | No         | Yes     |
-| SequencerFeeVault                   | 0x4200000000000000000000000000000000000011 | Legacy     | No         | Yes     |
-| L1Block                             | 0x4200000000000000000000000000000000000015 | Bedrock    | No         | Yes     |
-| BaseFeeVault                        | 0x4200000000000000000000000000000000000019 | Yes        | No         | Yes     |
-| L1FeeVault                          | 0x420000000000000000000000000000000000001a | Bedrock    | No         | Yes     |
+| SequencerFeeVault                   | 0x4200000000000000000000000000000000000011 | Kroma MPT  | No         | Yes     |
+| L1Block                             | 0x4200000000000000000000000000000000000015 | Kroma MPT  | No         | Yes     |
+| BaseFeeVault                        | 0x4200000000000000000000000000000000000019 | Kroma MPT  | No         | Yes     |
+| L1FeeVault                          | 0x420000000000000000000000000000000000001a | Kroma MPT  | No         | Yes     |
 | BeaconBlockRoot                     | 0x000F3df6D732807Ef1319fB7B8bB8522d0Beac02 | Ecotone    | No         | No      |
 
 ## ProxyAdmin
@@ -79,6 +81,19 @@ Address: `0x4200000000000000000000000000000000000001`
 `WETH9` is the standard implementation of Wrapped Ether on Kroma. It is a
 commonly used contract and is placed as a predeploy so that it is at a
 deterministic address across Kroma based networks.
+
+## [DEPRECATED] L1Block
+
+[Implementation](https://github.com/kroma-network/kroma/blob/main/packages/contracts/contracts/L2/L1Block.sol)
+
+**NOTE**: This contract is deprecated, and the functionality has been moved to the another address.
+
+Address: `0x4200000000000000000000000000000000000002`
+
+[l1-block-predeploy]: ../glossary.md#l1-attributes-predeployed-contract
+
+The [L1Block][l1-block-predeploy] is responsible for maintaining L1 context in L2.
+This allows for L1 state to be accessed in L2.
 
 ## L2ToL1MessagePasser
 
@@ -135,7 +150,7 @@ These values are managed by the `SystemConfig` contract on L2. The `scalar` and
 `overhead` values are sent to the `L1Block` contract each block and the `decimals`
 value is hardcoded to 6.
 
-## ProtocolVault
+## [DEPRECATED] ProtocolVault
 
 **NOTE**: This contract is deprecated and no longer in use.
 
@@ -147,7 +162,19 @@ The `ProtocolVault` predeploy accumulates transaction fees to fund network opera
 Once the contract has received a certain amount of fees, the ETH can be
 withdrawn to an immutable address on L1.
 
-## ValidatorRewardVault
+## [DEPRECATED] L1FeeVault
+
+**NOTE**: This contract is deprecated, and the functionality has been moved to the another address.
+
+[Implementation](https://github.com/kroma-network/kroma/blob/main/packages/contracts/contracts/L2/L1FeeVault.sol)
+
+Address: `0x4200000000000000000000000000000000000007`
+
+The `L1FeeVault` predeploy receives the L1 portion of the transaction fees.
+Once the contract has received a certain amount of fees, the ETH can be
+withdrawn to an immutable address on L1.
+
+## [DEPRECATED] ValidatorRewardVault
 
 **NOTE**: This contract is deprecated and no longer in use.
 
@@ -213,7 +240,7 @@ depositing native L1 NFTs into.
 
 ## SequencerFeeVault
 
-[Implementation](https://github.com/ethereum-optimism/optimism/blob/develop/packages/contracts-bedrock/src/L2/SequencerFeeVault.sol)
+[Implementation](https://github.com/kroma-network/kroma/blob/main/packages/contracts/contracts/L2/ProtocolVault.sol)
 
 Address: `0x4200000000000000000000000000000000000011`
 
@@ -230,14 +257,12 @@ upgraded by changing its proxy's implementation key.
 
 Address: `0x4200000000000000000000000000000000000015`
 
-[l1-block-predeploy]: ../glossary.md#l1-attributes-predeployed-contract
-
 The [L1Block][l1-block-predeploy] is responsible for maintaining L1 context in L2.
 This allows for L1 state to be accessed in L2.
 
 ## BaseFeeVault
 
-[Implementation](https://github.com/ethereum-optimism/optimism/blob/develop/packages/contracts-bedrock/src/L2/BaseFeeVault.sol)
+[Implementation](https://github.com/kroma-network/kroma/blob/main/packages/contracts/contracts/L2/ProtocolVault.sol)
 
 Address: `0x4200000000000000000000000000000000000019`
 

@@ -12,6 +12,7 @@
     - [Ecotone `scalar`, `overhead` (`uint256,uint256`) change](#ecotone-scalar-overhead-uint256uint256-change)
   - [`gasLimit` (`uint64`)](#gaslimit-uint64)
   - [`unsafeBlockSigner` (`address`)](#unsafeblocksigner-address)
+  - [[DEPRECATED] `validatorRewardScalar` (`uint256`)](#deprecated-validatorrewardscalar-uint256)
 - [Writing the system config](#writing-the-system-config)
 - [Reading the system config](#reading-the-system-config)
 
@@ -120,6 +121,14 @@ manner, it is stored at a special storage slot corresponding to
 
 Unlike the other values, the `unsafeBlockSigner` only operates on blockchain
 policy. It is not a consensus level parameter.
+
+### [DEPRECATED] `validatorRewardScalar` (`uint256`)
+
+Note: This field is deprecated and is no longer used in the current system.
+
+The scalar value to distribute [transaction fees](./exec-engine.md#transaction-fees) on L2 to validators as a reward of
+checkpoint output submission in [ETH-based Validator System](../deprecated/validator-v1/validator-pool.md). The
+denominator is 10000. In [KRO-based Validator System](./validator-v2/overview.md), it is set to zero.
 
 ## Writing the system config
 

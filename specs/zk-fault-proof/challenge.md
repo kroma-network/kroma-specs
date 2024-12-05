@@ -110,11 +110,11 @@ Here we give a simple example with a small number to show you how it works. Let'
 block is the block a challenger wants to argue against and this number is decomposed into 5 and 2. Also, let's assume
 that both of them agree the state transitions to the 2nd block.
 
-| Turn       | Action            | Segment Start | Segment Length | Segments        | Condition          |
-|------------|-------------------|---------------|----------------|-----------------|--------------------|
-| Challenger | createChallenge   | 0             | 6              | [0, 2, ..., 10] | No                 |
-| Asserter   | bisect(2)         | 2             | 3              | [2, 3', 4']     | 2 = 2 && 4 != 4'   |
-| Challenger | proveFaultZkVm(2) | 2             | 2              | [2, 3'']        | 2 = 2 && 3' != 3'' |
+| Turn       | Action                | Segment Start | Segment Length | Segments        | Condition          |
+|------------|-----------------------|---------------|----------------|-----------------|--------------------|
+| Challenger | createChallenge       | 0             | 6              | [0, 2, ..., 10] | No                 |
+| Asserter   | bisect(2)             | 2             | 3              | [2, 3', 4']     | 2 = 2 && 4 != 4'   |
+| Challenger | proveFaultWithZkVm(2) | 2             | 2              | [2, 3'']        | 2 = 2 && 3' != 3'' |
 
 You can notice that in each turn, the first element of the segments must be same with the element at the same index of
 the previous segments. Whereas, the last element of the segments must be different from the element at the same index of
@@ -126,7 +126,7 @@ the challenge will be canceled automatically.
 ## Proving Fault
 
 Since Colosseum verifies public input along with [zkVM proof](zkvm-prover.md#zkvm-proving-system), challengers should
-enclose the below public input to the `proveFaultZkVm` transaction.
+enclose the below public input `publicValues` and `zkVmProof` to the `proveFaultWithZkVm` transaction.
 
 ```text
 publicValues = output_root_parent ++ output_root_target ++ l1_head
@@ -137,16 +137,16 @@ function](zkvm-prover.md#proving-fault):
 
 1. Check whether the challenge is ready to prove. The status of challenge should be `READY_TO_PROVE`
    or `ASSERTER_TIMEOUT`.
-2. Check whether `srcOutputRootProof` is the preimage of the first output root of the segment.
-3. Check whether `dstOutputRootProof` is the preimage of the next output root of the segment.
-4. Verify that the `l1Head` in `Challenge` is included as the `publicValues` at `zkVmProof`.
-5. Verify the `zkVmProof` using `publicValues` and `ZKVM_PROGRAM_V_KEY`. The `ZKVM_PROGRAM_V_KEY` is given as a constant
-   defined at the `ZKProofVerifier` contract, while `zkVmProof` and `publicValues` are submitted by the challenger
-   directly.
-6. Delete the output and request validation of the challenge to [Security Council][g-security-council] if there is any
-    undeniable bugs such as soundness error.
-7. If the deleted output was valid so the challenge has an undeniable bug, Security Council will
-    [dismiss](#dismiss-challenge) the challenge and roll back the output.
+2. Check whether the first 32 bytes of `publicValues` is the preimage of the parent output root stored onchain.
+3. Check whether the second 32 bytes of `publicValues` is the preimage of the target output root stored onchain.
+4. Verify that the `l1Head` stored in `Challenge` is included as the `publicValues`.
+5. Verify `zkVmProgramVKey` used to generate `zkVmProof` is same as `ZKVM_PROGRAM_V_KEY`, which is given as a constant
+   defined at the `ZKProofVerifier` contract.
+6. Verify the `zkVmProof` with `publicValues` and `ZKVM_PROGRAM_V_KEY` in a ZK verifier contract.
+7. Delete the output and request validation of the challenge to [Security Council][g-security-council] if there is any
+   undeniable bugs such as soundness error.
+8. If the deleted output was valid so the challenge has an undeniable bug, Security Council will
+   [dismiss](#dismiss-challenge) the challenge and roll back the output.
 
 ## Dismiss Challenge
 
@@ -370,9 +370,6 @@ Colosseum contract should be deployed behind upgradable proxies.
 
 | Name                          | Value                                                              | Unit              |
 |-------------------------------|--------------------------------------------------------------------|-------------------|
-| `REQUIRED_BOND_AMOUNT`        | 200000000000000000 (0.2 ETH)                                       | wei               |
-| `FINALIZATION_PERIOD_SECONDS` | 604800                                                             | seconds           |
-| `CREATION_PERIOD_SECONDS`     | 518400                                                             | seconds           |
 | `BISECTION_TIMEOUT`           | 3600                                                               | seconds           |
 | `PROVING_TIMEOUT`             | 28800                                                              | seconds           |
 | `SEGMENTS_LENGTHS`            | [9, 6, 10, 6]                                                      | array of integers |
