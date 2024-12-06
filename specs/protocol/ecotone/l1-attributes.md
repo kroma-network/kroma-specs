@@ -79,14 +79,14 @@ The `overhead` and `scalar` values can continue to be accessed after the Ecotone
 but no longer have any effect on system operation. These fields were also known as the `l1FeeOverhead`
 and the `l1FeeScalar`.
 
-After running `pnpm build` in the `packages/contracts-bedrock` directory, the bytecode to add to
+After running `pnpm build` in the `packages/contracts` directory, the bytecode to add to
 the genesis file will be located in the `deployedBytecode` field of the build artifacts file at
-`/packages/contracts-bedrock/forge-artifacts/L1Block.sol/L1Block.json`.
+`/packages/contracts/forge-artifacts/L1Block.sol/L1Block.json`.
 
 ### Ecotone L1Block upgrade
 
 The L1 Attributes Predeployed contract, `L1Block.sol`, is upgraded as part of the Ecotone upgrade.
-The version is incremented to `1.2.0`, one new storage slot is introduced, and one existing slot
+The version is incremented to `1.1.0`, one new storage slot is introduced, and one existing slot
 begins to store additional data:
 
 - `blobBaseFee` (`uint256`): The L1 blob base fee.

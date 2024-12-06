@@ -13,7 +13,7 @@
   - [Transition from ZK Trie to Merkle Patricia Trie](#transition-from-zk-trie-to-merkle-patricia-trie)
   - [`SELFDESTRUCT` opcode](#selfdestruct-opcode)
   - [`isSystemTransaction` field in `DepositTx` type](#issystemtransaction-field-in-deposittx-type)
-- [Fee Distribution Process](#fee-distribution-process)
+  - [Fee Distribution Process](#fee-distribution-process)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -37,7 +37,7 @@ rules are applied when the `L2 Timestamp >= activation time`.
 Since the underlying trie structure is changed from the ZK Trie to the Merkle Patricia Trie, the historical RPC is used
 for the RPC calls that are related to the historical data before the Kroma MPT Migration upgrade. The historical RPC
 provides the historical data that is stored in the ZK Trie. The following endpoints will route the call to the
-historical RPC if the requested timestamp is before the activation time of the Kroma MPT Migration upgrade:
+historical RPC if the requested block timestamp is before the activation time of the Kroma MPT Migration upgrade:
 
 ### `eth_` namespace
 
@@ -80,7 +80,7 @@ with vanilla OP Stack, the `isSystemTransaction` boolean is re-enabled.
 However, since `isSystemTransaction` was disabled as in the [Regolith upgrade](../regolith/overview.md), system
 transactions remain to use the same gas accounting rules as regular deposits.
 
-## Fee Distribution Process
+### Fee Distribution Process
 
 The fee distribution process is updated to be compatible with OP Stack. Previously, the fee distribution process was
 defined to support robustness of validator system.

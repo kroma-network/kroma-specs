@@ -17,6 +17,8 @@ The Regolith upgrade, named after a material best described as "deposited dust o
 implements minor changes to deposit processing, based on reports of the Sherlock Audit-contest and findings in
 the Bedrock Optimism Goerli testnet.
 
+Regolith has been integrated and activated from the genesis block on Kroma.
+
 Summary of changes:
 
 - The `isSystemTx` boolean is disabled, system transactions now use the same gas accounting rules as regular deposits.
