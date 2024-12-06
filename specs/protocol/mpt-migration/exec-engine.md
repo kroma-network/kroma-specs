@@ -62,7 +62,7 @@ historical RPC if the requested block timestamp is before the activation time of
 
 The underlying trie structure of the execution client is changed from the ZK Trie to the Merkle Patricia Trie. This
 enhances the performance of the execution client, and reduces the operational cost of maintaining zkEVM circuits by
-enabling the proving scheme transition to zkVM.
+enabling the proving scheme transition to [zkVM](../../zk-fault-proof/zkvm-prover.md).
 
 ### `SELFDESTRUCT` opcode
 
