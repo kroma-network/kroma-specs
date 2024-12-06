@@ -18,7 +18,8 @@
   - [Verifier -> Validator](#verifier---validator)
   - [Compositions](#compositions)
 - [Validator](#validator)
-  - [ZK fault proof](#zk-fault-proof)
+  - [ZK fault proof system](#zk-fault-proof-system)
+  - [DPoS Validator System](#dpos-validator-system)
 - [(Deprecated) zkEVM Fault Proof and ZK Trie](#deprecated-zkevm-fault-proof-and-zk-trie)
   - [(Deprecated) Adding field to System Configuration](#deprecated-adding-field-to-system-configuration)
   - [(Deprecated) Adding field to Output Payload](#deprecated-adding-field-to-output-payload)
@@ -74,11 +75,15 @@ be expanded to other clients for pragmatic decentralization.
 
 ## Validator
 
-### ZK fault proof
+### ZK fault proof system
 
-Instead of [cannon], Kroma uses zkVM for [ZK fault proof][g-zk-fault-proof].
+Instead of fault proof system based on [cannon], Kroma uses zkVM for [ZK fault proof][g-zk-fault-proof].
 
 [cannon]: https://github.com/ethereum-optimism/cannon
+
+### DPoS Validator System
+
+Kroma has its own [DPoS validator system](validator-v2/overview.md) utilizing its governance token.
 
 ## (Deprecated) zkEVM Fault Proof and ZK Trie
 
