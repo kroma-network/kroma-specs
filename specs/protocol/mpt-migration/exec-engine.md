@@ -100,3 +100,6 @@ as follows:
 | `SequencerFeeVault` | `0x4200000000000000000000000000000000000011` | `priority_fee` |
 | `BaseFeeVault`      | `0x4200000000000000000000000000000000000019` | `base_fee`     |
 | `L1FeeVault`        | `0x420000000000000000000000000000000000001a` | `l1_cost`      |
+
+Note that after Kroma MPT hard fork, the block fee-recipient (a.k.a. coinbase address) is set to the Sequencer Fee Vault
+address.
