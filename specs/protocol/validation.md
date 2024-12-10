@@ -122,7 +122,7 @@ where:
    L2toL1MessagePasser's storage root directly, thus reducing the verification cost of withdrawals on L1.
 
 The height of the block where the output is submitted has been delayed by one. Note that `next_block_hash` is deprecated
-and not used in the construction of the output root after Kroma MPT migration fork.
+and not used in the construction of the output root after [Kroma MPT migration fork](./mpt-migration/overview.md).
 
 ## L2 Output Oracle Smart Contract
 
