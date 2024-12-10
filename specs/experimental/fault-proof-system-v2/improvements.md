@@ -21,8 +21,8 @@
 ## Overview
 
 Fault Proof System V2 has been designed to address the key limitations identified in
-[Fault Proof System V1](../../fault-proof/challenge.md), as outlined in the [Background](./overview.md#background). This
-document details how each of the four main limitations of V1 has been effectively resolved in V2.
+[Fault Proof System V1](../../zk-fault-proof/challenge.md), as outlined in the [Background](./overview.md#background).
+This document details how each of the four main limitations of V1 has been effectively resolved in V2.
 
 ## Guaranteed Win of Valid Output
 

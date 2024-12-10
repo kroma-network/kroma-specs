@@ -17,11 +17,13 @@
 - [Nodes](#nodes)
   - [Verifier -> Validator](#verifier---validator)
   - [Compositions](#compositions)
-  - [Adding field to System Configuration](#adding-field-to-system-configuration)
-  - [Adding field to Output Payload](#adding-field-to-output-payload)
-- [Geth](#geth)
 - [Validator](#validator)
-  - [ZK fault proof](#zk-fault-proof)
+  - [ZK fault proof system](#zk-fault-proof-system)
+  - [DPoS Validator System](#dpos-validator-system)
+- [(Deprecated) zkEVM Fault Proof and ZK Trie](#deprecated-zkevm-fault-proof-and-zk-trie)
+  - [(Deprecated) Adding field to System Configuration](#deprecated-adding-field-to-system-configuration)
+  - [(Deprecated) Adding field to Output Payload](#deprecated-adding-field-to-output-payload)
+  - [(Deprecated) Geth Changes](#deprecated-geth-changes)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -71,7 +73,21 @@ The followings are components that are used to run different types of nodes:
 **NOTE:** Here `L2 EL client` means `kroma-geth` and `L2 CL client` means `kroma-node`. `L2 EL client` can
 be expanded to other clients for pragmatic decentralization.
 
-### Adding field to System Configuration
+## Validator
+
+### ZK fault proof system
+
+Instead of fault proof system based on [cannon], Kroma uses zkVM for [ZK fault proof][g-zk-fault-proof].
+
+[cannon]: https://github.com/ethereum-optimism/cannon
+
+### DPoS Validator System
+
+Kroma has its own [DPoS validator system](validator-v2/overview.md) utilizing its governance token.
+
+## (Deprecated) zkEVM Fault Proof and ZK Trie
+
+### (Deprecated) Adding field to System Configuration
 
 The `ValidatorRewardScalar` field was added to [system configuration][g-system-config].
 
@@ -99,7 +115,7 @@ type L1BlockInfo struct {
 This value is set via the `SystemConfig` contract on L1 and passed through the L2 derivation process and used as an
 ingredient in the reward calculation. (Detailed calculations : [Validation Rewards][g-validation-rewards])
 
-### Adding field to Output Payload
+### (Deprecated) Adding field to Output Payload
 
 The `next_block_hash` field was added to [Output Payload][g-output-payload-v0].
 
@@ -121,7 +137,7 @@ proof system.
 It is used to validate the relationship between the Source OutputRootProof and Dest OutputRootProof, and the validation
 of the public input.
 
-## Geth
+### (Deprecated) Geth Changes
 
 To prepare for migration to ZK Rollup, we use a [ZK Trie][g-zktrie] to represent state. Currently, this makes
 the chain slower than [Merkle Patrica Trie][g-mpt]. As the bottleneck is the time to produce ZK proof right now,
@@ -133,11 +149,3 @@ Additionally, to produce a zkEVM proof, geth should return so called `execution 
 `kroma_getBlockTraceByNumberOrHash` which provides zkEVM prover with data as a witness.
 
 [scroll]: https://scroll.io/
-
-## Validator
-
-### ZK fault proof
-
-Instead of [cannon], Kroma uses zkEVM for [ZK fault proof][g-zk-fault-proof].
-
-[cannon]: https://github.com/ethereum-optimism/cannon

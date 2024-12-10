@@ -22,7 +22,7 @@
 [g-l1]: ../glossary.md#layer-1-l1
 [g-l2]: ../glossary.md#layer-2-l2
 [g-zk-fault-proof]: ../glossary.md#zk-fault-proof
-[g-zktrie]: ../glossary.md#zk-trie
+[g-mpt]: ../glossary.md#merkle-patricia-trie
 [g-priority-round]: ../glossary.md#priority-round
 [g-public-round]: ../glossary.md#public-round
 
@@ -40,7 +40,7 @@ with a bond at stake if the proof is wrong.
 
 > **_NOTE:_**
 > Before the introduction of the KRO governance token, the
-> [validator system was ETH-based](./validator-v1/validator-pool.md). With introduction of KRO token, the
+> [validator system was ETH-based](../deprecated/validator-v1/validator-pool.md). With introduction of KRO token, the
 > system had been transited to [KRO-based validator system](./validator-v2/overview.md), mitigating several limitations
 > of the ETH-based system.
 
@@ -103,27 +103,26 @@ where:
 The version 0 payload is defined as:
 
 ```pseudocode
-payload = state_root || withdrawal_storage_root || block_hash || next_block_hash
+payload = state_root || withdrawal_storage_root || block_hash
 ```
 
 where:
 
 1. The `block_hash` (`bytes32`) is the block hash for the [L2][g-l2] block that the output is generated from.
 
-2. The `state_root` (`bytes32`) is the [ZK-Trie][g-zktrie] root of all execution-layer accounts.
+2. The `state_root` (`bytes32`) is the [Merkle Patricia Trie][g-mpt] root of all execution-layer accounts.
    This value is frequently used and thus elevated closer to the L2 output root, which removes the need to prove its
    inclusion in the pre-image of the `block_hash`. This reduces the merkle proof depth and cost of accessing the
    L2 state root on L1.
 
-3. The `withdrawal_storage_root` (`bytes32`) elevates the ZK Trie root of the
+3. The `withdrawal_storage_root` (`bytes32`) elevates the Merkle Trie root of the
    [L2ToL1MessagePasser contract](withdrawals.md#the-l2tol1messagepasser-contract) storage. Instead of making a
-   [ZKT][g-zktrie] proof for a withdrawal against the state root (proving first the storage root of the
+   [MPT][g-mpt] proof for a withdrawal against the state root (proving first the storage root of the
    L2toL1MessagePasser against the state root, then the withdrawal against that storage root), we can prove against the
    L2toL1MessagePasser's storage root directly, thus reducing the verification cost of withdrawals on L1.
 
-4. The `next_block_hash` (`bytes32`) is the next block hash for the block that is next to the `block_hash`.
-
-The height of the block where the output is submitted has been delayed by one.
+The height of the block where the output is submitted has been delayed by one. Note that `next_block_hash` is deprecated
+and not used in the construction of the output root after Kroma MPT migration fork.
 
 ## L2 Output Oracle Smart Contract
 
@@ -141,7 +140,11 @@ interface L2OutputOracle {
         uint256 l1Timestamp
     );
 
-    event OutputReplaced(uint256 indexed outputIndex, bytes32 newOutputRoot);
+    event OutputReplaced(
+        uint256 indexed outputIndex,
+        address indexed newSubmitter,
+        bytes32 newOutputRoot
+    );
 
     function replaceL2Output(
         uint256 _l2OutputIndex,

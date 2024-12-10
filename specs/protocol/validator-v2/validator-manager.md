@@ -157,7 +157,7 @@ challenge creation. Namely, the delegated KROs from KRO delegators are not subje
 concludes, the bond of the loser is slashed, with a portion imposed as tax to the security council and the remainder
 awarded to the validator who won the challenge.
 
-When the bond is slashed, [Colosseum](../../fault-proof/challenge.md#contract-interface) contract calls Validator
+When the bond is slashed, [Colosseum](../../zk-fault-proof/challenge.md#contract-interface) contract calls Validator
 Manager, which calls Asset Manager's slash function to deduct the bond from the validator's assets.
 
 ### Reward Distribution

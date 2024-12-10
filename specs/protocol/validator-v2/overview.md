@@ -34,10 +34,10 @@
 
 ## Background
 
-The [previous permissionless validator system](../validator-v1/validator-pool.md) of Kroma requires validators to bond
-`REQUIRED_BOND_AMOUNT` of ETH each time the validator submits an [L2 output root][g-l2-output]. While successfully
-involving over 360 validators (as of 6/3/24), there are a few drawbacks in the previous system that need to be
-addressed:
+The [previous permissionless validator system](../../deprecated/validator-v1/validator-pool.md) of Kroma requires
+validators to bond `REQUIRED_BOND_AMOUNT` of ETH each time the validator submits an [L2 output root][g-l2-output].
+While successfully involving over 360 validators (as of 6/3/24), there are a few drawbacks in the previous system that
+need to be addressed:
 
 - **Multiple Accounts on a Single Validator**: Since the probability of being selected as a priority validator is
   calculated to be the same if only `REQUIRED_BOND_AMOUNT` of ETH is deposited, a single validator can increase the
@@ -55,7 +55,7 @@ incorporating delegation system based on Kroma's governance token (KRO) and Krom
 
 **Validator System V2** is a new network security model of Kroma, which introduces KRO tokenomics and delegation to the
 validator system. It is compatible with current [ZK fault proof][g-zk-fault-proof] and
-[challenge system](../../fault-proof/challenge.md), while introducing two new contracts:
+[challenge system](../../zk-fault-proof/challenge.md), while introducing two new contracts:
 [**Validator Manager**][g-validator-manager-contract] and [**Asset Manager** contract][g-asset-manager-contract]. These
 contracts replace the existing [Validator Pool contract][g-validator-pool-contract], handling jobs such as validator
 management, delegation, next priority validator selection, [output reward][g-output-reward] distribution, and challenge

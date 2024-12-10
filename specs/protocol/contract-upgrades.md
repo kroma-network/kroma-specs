@@ -15,13 +15,12 @@
 [Smart contract upgrades](https://docs.openzeppelin.com/upgrades-plugins/1.x/proxies) are executed through the
 [governance](https://docs.openzeppelin.com/contracts/4.x/api/governance) of the Security Council. The
 authority to perform proxy upgrades lies with the Security Council's governor.
-When a proposal for an upgrade is approved, it undergoes a mandatory 7-day timelock delay period before execution.
 
 ## Upgrade By Governance
 
 When an on-chain proposal for a contract upgrade is submitted by a member of Security Council, the member votes on the
 proposal during the voting period. Once a proposal is approved, the Security Council queues the proposal to the batch
-to be executed with a 7-day timelock. After the timelock delay, the upgrade can be executed.
+to be executed, and the upgrade can be executed.
 
 ### Interface
 

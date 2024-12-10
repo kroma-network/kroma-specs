@@ -9,7 +9,8 @@
   - [Deposited transaction boundaries](#deposited-transaction-boundaries)
 - [Fees](#fees)
   - [Fee Vaults](#fee-vaults)
-  - [Transaction Fees](#transaction-fees)
+  - [Priority fees (Sequencer Fee Vault)](#priority-fees-sequencer-fee-vault)
+  - [Base fees (Base Fee Vault)](#base-fees-base-fee-vault)
   - [L1-Cost fees (L1 Fee Vault)](#l1-cost-fees-l1-fee-vault)
     - [Pre-Ecotone](#pre-ecotone)
     - [Ecotone L1-Cost fee changes (EIP-4844 DA)](#ecotone-l1-cost-fee-changes-eip-4844-da)
@@ -70,8 +71,8 @@ Deposited transactions MUST never be consumed from the transaction pool.
 
 ## Fees
 
-Sequenced transactions (i.e. not applicable to deposits) are charged with 2 types of fees:
-transaction fees(priority fees + base fees), and L1-cost fees.
+Sequenced transactions (i.e. not applicable to deposits) are charged with 3 types of fees:
+priority fees, base fees, and L1-cost fees.
 
 ### Fee Vaults
 
@@ -81,25 +82,21 @@ fee payments are not registered as internal EVM calls, and thus distinguished be
 These are hardcoded addresses, pointing at pre-deployed proxy contracts.
 The proxies are backed by vault contract deployments, based on `FeeVault`, to route vault funds to L1 securely.
 
-| Vault Name             | Predeploy                                                      |
-|------------------------|----------------------------------------------------------------|
-| Validator Reward Vault | [`ValidatorRewardVault`](./predeploys.md#ValidatorRewardVault) |
-| Protocol Vault         | [`ProtocolVault`](./predeploys.md#ProtocolVault)               |
-| L1 Fee Vault           | [`L1FeeVault`](./predeploys.md#L1FeeVault)                     |
+| Vault Name          | Predeploy                                              |
+| ------------------- | ------------------------------------------------------ |
+| Sequencer Fee Vault | [`SequencerFeeVault`](predeploys.md#sequencerfeevault) |
+| Base Fee Vault      | [`BaseFeeVault`](predeploys.md#basefeevault)           |
+| L1 Fee Vault        | [`L1FeeVault`](predeploys.md#l1feevault)               |
 
-### Transaction Fees
+### Priority fees (Sequencer Fee Vault)
 
-Transaction fees in Kroma are different from [eip-1559] specification.
-The Base Fee is not burned, and there is no distinction between Base Fee and Priority Fee.
-The transaction fee is distributed to two vaults, Validator Reward Vault and Protocol Fee, during
-[ETH-based Validator System](./validator-v1/validator-pool.md) is live. After transiting to
-[KRO-based Validator System](./validator-v2/overview.md), the transaction fee is only accumulated to Protocol Fee with
-zero `ValidatorRewardScalar`.
+Priority fees follow the [eip-1559] specification, and are collected by the fee-recipient of the L2 block.
+The block fee-recipient (a.k.a. coinbase address) is set to the Sequencer Fee Vault address.
 
-- Validator Reward Vault: `(baseFee + priorityFee) * ValidatorRewardScalar / 10000`
-- Protocol Vault: `(baseFee + priorityFee) * (10000 - ValidatorRewardScalar) / 10000`
+### Base fees (Base Fee Vault)
 
-`ValidatorRewardScalar` value is recorded in the [`L1Block`](./predeploys.md#L1block) contract.
+Base fees largely follow the [eip-1559] specification, with the exception that base fees are not burned,
+but add up to the Base Fee Vault ETH account balance.
 
 ### L1-Cost fees (L1 Fee Vault)
 
