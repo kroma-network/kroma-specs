@@ -341,7 +341,7 @@ A trusted validator is an actor who is run by Lightscale. If validations are not
 
 [validating-epoch]: glossary.md#validating-epoch
 
-Number of [L2][L2] [blocks][block] where needs to be checkpointed.
+The number of [L2][L2] [blocks][block] that need to be checkpointed.
 
 Each epoch is identified by an epoch number, which is incremented by 1.
 
