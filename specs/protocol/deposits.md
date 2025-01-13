@@ -16,6 +16,7 @@
   - [L1 Attributes Deposited Transaction Calldata](#l1-attributes-deposited-transaction-calldata)
     - [L1 Attributes - Genesis, Canyon, Delta](#l1-attributes---genesis-canyon-delta)
     - [L1 Attributes - Ecotone](#l1-attributes---ecotone)
+    - [L1 Attributes - Kroma MPT](#l1-attributes---kroma-mpt)
 - [Special Accounts on L2](#special-accounts-on-l2)
   - [L1 Attributes Depositor Account](#l1-attributes-depositor-account)
   - [L1 Attributes Predeployed Contract](#l1-attributes-predeployed-contract)
@@ -299,6 +300,24 @@ and also set the following new attributes:
   Or `1` if the L1 block does not support blobs.
   The `1` value is derived from the EIP-4844 `MIN_BLOB_GASPRICE`.
 
+#### L1 Attributes - Kroma MPT
+
+After Kroma MPT activation, the calldata of the L1 attributes deposited transaction excludes the deprecated
+`validatorRewardScalar` argument. The overall calldata layout is as follows:
+
+| Input arg             | Type    | Calldata bytes | Segment |
+|-----------------------| ------- |----------------|---------|
+| {0x440a5e20}          |         | 0-3            | n/a     |
+| baseFeeScalar         | uint32  | 4-7            | 1       |
+| blobBaseFeeScalar     | uint32  | 8-11           |         |
+| sequenceNumber        | uint64  | 12-19          |         |
+| l1BlockTimestamp      | uint64  | 20-27          |         |
+| l1BlockNumber         | uint64  | 28-35          |         |
+| basefee               | uint256 | 36-67          | 2       |
+| blobBaseFee           | uint256 | 68-99          | 3       |
+| l1BlockHash           | bytes32 | 100-131        | 4       |
+| batcherHash           | bytes32 | 132-163        | 5       |
+
 ## Special Accounts on L2
 
 The L1 attributes deposit transaction involves two special purpose accounts:
@@ -338,8 +357,8 @@ The predeploy stores the following values:
     The `overhead` value is dropped as it is no longer used in the
     [Ecotone L1 fee formula](exec-engine.md#ecotone-l1-cost-fee-changes-eip-4844-da).
   - `scalar` (`uint256`): The L1 fee scalar to apply to L1 cost computation of transactions in this L2 block.
-- Parameters to calculate a validator reward. It's only used for
-  [ETH-based Validator System](./validator-v1/validator-pool.md), and set to zero in
+- Parameters to calculate a validator reward. It was only used for
+  [ETH-based Validator System](../deprecated/validator-v1/validator-pool.md), and had set to zero in
   [KRO-based Validator System](./validator-v2/overview.md)
   - `validatorRewardScalar` (`uint256`): A number between 0 and 10000. A [validator reward][g-validator-reward] is
   calculated with the expression.

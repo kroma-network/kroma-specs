@@ -20,14 +20,14 @@
 ## Validator Pool Smart Contract
 
 Only accounts registered as [Validator][g-validator] can submit [output][g-l2-output] to
-the [L2 Output Oracle](../validation.md#l2-output-oracle-smart-contract).
+the [L2 Output Oracle](../../protocol/validation.md#l2-output-oracle-smart-contract).
 To register as a [Validator][g-validator], you must deposit at least `REQUIRED_BOND_AMOUNT` of ETH into
 the `ValidatorPool` contract.
 When submitting the output, the validator must bond Ethereum for `REQUIRED_BOND_AMOUNT`, which will be unbonded and
 rewarded to the L2 `ValidatorRewardVault` contract when the output is finalized.
 
 Also, validators should stake their bond for disputing challenge. This bond will be given to the winner of the challenge
-as a reward. When this reward distributed, a [tax](../../fault-proof/challenge.md) is imposed to prevent collusive
+as a reward. When this reward distributed, a [tax](../../zk-fault-proof/challenge.md) is imposed to prevent collusive
 attacks of asserter and challenger.
 
 Validator Pool Smart Contract implements the following interface:

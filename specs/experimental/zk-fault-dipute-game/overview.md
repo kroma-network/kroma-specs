@@ -2,8 +2,6 @@
 <!-- All glossary references in this file. -->
 
 [g-zk-fault-proof]: ../../glossary.md#zk-fault-proof
-[g-l2-chain-derivation]: ../../glossary.md#l2-chain-derivation
-[g-sequencer-batch]: ../../glossary.md#sequencer-batch
 [g-withdrawals]: ../../glossary.md#withdrawals
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
@@ -17,10 +15,6 @@
 - [Proving Fault using zkVM](#proving-fault-using-zkvm)
   - [ZK Fault Proof](#zk-fault-proof)
   - [zkVM Proving System](#zkvm-proving-system)
-    - [Guest Program](#guest-program)
-    - [Host Program](#host-program)
-    - [Public Values of Proof](#public-values-of-proof)
-    - [Proving Fault](#proving-fault)
 - [Resolution of ZK Fault Dispute Game](#resolution-of-zk-fault-dispute-game)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
@@ -32,9 +26,9 @@ disagreeing output root between defender and challenger is found by the process 
 derivation of L2 block corresponding to that output root and the execution of the block's transactions are carried out
 in zkVM. The validity of the execution is guaranteed by the ZK proof, which can be verified on-chain.
 
-The main difference from [Kroma's previous ZK Fault Proof System](../../fault-proof/challenge.md) is that ZKFDG uses a
-"zkVM" instead of a "zkEVM" to handle the proving fault process. By using zkVM for fault proof, it is possible to verify
-the entire processes from derivation to execution without any additional developments of ZK circuit.
+The main difference from [Kroma's previous ZK Fault Proof System](../../zk-fault-proof/challenge.md) is that ZKFDG uses
+a "zkVM" instead of a "zkEVM" to handle the proving fault process. By using zkVM for fault proof, it is possible to
+verify the entire processes from derivation to execution without any additional developments of ZK circuit.
 
 ZKFDG implements the OP Stack's `IDisputeGame`, implying that it is fully compatible as one of the OP Stack's dispute
 game type. This also implies that it can be applied to the OP Stack's multi-proof system in the future.
@@ -71,7 +65,7 @@ As with Kroma's [previous Fault Proof System][prev-challenge-creation], a challe
 disagrees the submitted claim. The challenge process begins by submitting the intermediate segments between starting
 output root and disputed output root by challenger.
 
-[prev-challenge-creation]: ../../../specs/fault-proof/challenge.md#challenge-creation
+[prev-challenge-creation]: ../../zk-fault-proof/challenge.md#challenge-creation
 
 ```solidity
     /**
@@ -94,7 +88,7 @@ The dissection process is carried out in the same manner as in Kroma's [previous
 Through interactions between the challenger and the defender (the game creator), the first disagreeing output root can
 be specified.
 
-[prev-bisection]: ../../../specs/fault-proof/challenge.md#bisection
+[prev-bisection]: ../../zk-fault-proof/challenge.md#bisection
 
 ```solidity
     /**
@@ -125,90 +119,7 @@ providing evidence of a valid state transition from S to S’.
 
 ### zkVM Proving System
 
-The zkVM (Zero-Knowledge Virtual Machine) is a virtual machine that executes guest program compiled with a specified
-compiler generating zero-knowledge proofs for their execution. The guest program can be written in standard programming
-languages, such as Rust and Go.
-
-#### Guest Program
-
-For ZK Fault Dispute Game, the guest program is an extension of [L2 Chain Derivation][g-l2-chain-derivation] that
-includes a connectivity check among the blocks from L1 origin block to the specified block `C`. The hash of Block
-`C` is determined as the parent hash stored when the ZK Fault Dispute Game is created by calling `create()` of
-the [Dispute Game Factory].
-
-If the attacker manipulates any data within the extension of L2 Chain Derivation, it will affect the block hash `C`.
-This is because all data is ultimately linked to the block hash `C` through the hash chain. Therefore if any data
-manipulating attack can be thwarted by checking the block hash `C` value. For example, if an attacker creates a proof
-using a transaction that is not included in the [sequencer batch][g-sequencer-batch], the block `C` value will change,
-preventing them from winning the challenge.
-
-[Dispute Game Factory]: https://github.com/ethereum-optimism/specs/blob/46d411bfea922c520a1d43329dbf78a2f6966ae0/specs/fault-proof/stage-one/dispute-game-interface.md#disputegamefactory-interface
-
-#### Host Program
-
-The host program is a main part of the prover, responsible for delivering the guest program and its input to the zkVM.
-The host program first executes the guest program to gather the necessary data, which is same as the data stored in
-[PreImageOracle] during [Optimism's Fault Dispute Game]. For ZKFDG, however, additional data is required, which is the
-L1 block data from the origin of target L2 block to block `C`. Finally, the host program delivers the guest program
-and the preimages to the zkVM to obtain the zkVM proof.
-
-[PreImageOracle]: https://github.com/ethereum-optimism/specs/blob/46d411bfea922c520a1d43329dbf78a2f6966ae0/specs/fault-proof/stage-one/fault-dispute-game.md#preimageoracle
-[Optimism's Fault Dispute Game]: https://github.com/ethereum-optimism/specs/blob/46d411bfea922c520a1d43329dbf78a2f6966ae0/specs/fault-proof/stage-one/fault-dispute-game.md#fault-dispute-game
-
-#### Public Values of Proof
-
-To mark which blocks have been executed, the proof publicly reveals the following data.
-
-``` plain
-1. Output root at the parent block of the target
-2. Output root at the target block
-3. Hash of the block C
-```
-
-#### Proving Fault
-
-The ZK proof generated by a prover can be verified on chain.
-
-```solidity
-    /**
-     * @notice Proves that a specific output is invalid using ZK proof.
-     *
-     * @param _pos          Position of the last valid segment.
-     * @param _targetOutput The output root of target block.
-     * @param _zkProof      SP1 proofs composed of points and scalars.
-     */
-    function proveFault(
-        uint256 _pos,
-        bytes32 _targetOutput,
-        uint256[] calldata _zkProof
-    ) external;
-```
-
-The verify function of `ZKVerifier` contract, which will be used in `proveFault` for verification of provided ZK proof,
-will be implemented following the below interface.
-
-```solidity
-interface ZKVerifier {
-    /** 
-     * @notice The entrypoint for verifying the ZK fault proof.
-     *
-     * @param _publicValues The encoded public values.
-     * @param _proofBytes   The encoded proof.
-     *
-     * @return If verification of ZK proof is passed or not.
-     */
-    function verify(
-      bytes calldata _publicValues, 
-      bytes calldata _proofBytes
-    ) public view returns (bool);
-}
-```
-
-where the `_publicValues` is concatenated value of public values as described [above](#public-values-of-proof).
-
-```text
-_publicValues = output_root_parent ++ output_root_target ++ l1_head
-```
+See [zkVM Prover](../../zk-fault-proof/zkvm-prover.md#zkvm-proving-system) for details.
 
 ## Resolution of ZK Fault Dispute Game
 

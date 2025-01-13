@@ -43,7 +43,7 @@ the one who submitted the first valid ZK fault proof is given the asserter's sta
 against collusion between asserters and challengers, tax is imposed. If there are any ongoing challenges,
 the challenges are canceled, and staked bonds are refunded to the respective challengers.
 
-In the ZK fault-proof challenge process, the following undeniable bug might arise, prompting the intervention of the
+In the ZK fault proof challenge process, the following undeniable bug might arise, prompting the intervention of the
 [Security Council][g-security-council]:
 
 - The deletion of a valid output due to two valid and contradictory ZK proofs
@@ -110,11 +110,11 @@ Here we give a simple example with a small number to show you how it works. Let'
 block is the block a challenger wants to argue against and this number is decomposed into 5 and 2. Also, let's assume
 that both of them agree the state transitions to the 2nd block.
 
-| Turn       | Action          | Segment Start | Segment Length | Segments        | Condition          |
-|------------|-----------------|---------------|----------------|-----------------|--------------------|
-| Challenger | createChallenge | 0             | 6              | [0, 2, ..., 10] | No                 |
-| Asserter   | bisect(2)       | 2             | 3              | [2, 3', 4']     | 2 = 2 && 4 != 4'   |
-| Challenger | proveFault(2)   | 2             | 2              | [2, 3'']        | 2 = 2 && 3' != 3'' |
+| Turn       | Action                | Segment Start | Segment Length | Segments        | Condition          |
+|------------|-----------------------|---------------|----------------|-----------------|--------------------|
+| Challenger | createChallenge       | 0             | 6              | [0, 2, ..., 10] | No                 |
+| Asserter   | bisect(2)             | 2             | 3              | [2, 3', 4']     | 2 = 2 && 4 != 4'   |
+| Challenger | proveFaultWithZkVm(2) | 2             | 2              | [2, 3'']        | 2 = 2 && 3' != 3'' |
 
 You can notice that in each turn, the first element of the segments must be same with the element at the same index of
 the previous segments. Whereas, the last element of the segments must be different from the element at the same index of
@@ -125,101 +125,28 @@ the challenge will be canceled automatically.
 
 ## Proving Fault
 
-Since Colosseum verifies public input along with [zkEVM-proof](zkevm-prover.md#zkevm-proof), challengers should
-calculate as below and enclose the public input to the `proveFault` transaction.
+Since Colosseum verifies public input along with [zkVM proof](zkvm-prover.md#zkvm-proving-system), challengers should
+enclose the below public input `publicValues` and `zkVmProof` to the `proveFaultWithZkVm` transaction.
 
-```ts
-import { DataOptions, hexlify } from '@ethersproject/bytes';
-import { Wallet, constants } from 'ethers';
-import { keccak256 } from 'ethers/lib/utils';
-
-function strip0x(str: string): string {
-  if (str.startsWith('0x')) {
-    return str.slice(2);
-  }
-  return str;
-}
-
-function toFixedBuffer(
-  value: string | number,
-  length,
-  padding = '0',
-): Buffer {
-  const options: DataOptions = {
-      hexPad: 'left',
-  };
-  return hexToBuffer(
-      strip0x(hexlify(value, options)).padStart(length * 2, padding),
-  );
-}
-
-async function getDummyTxHash(chainId: number): Promise<string> {
-  const sk = hex.toFixedBuffer(1, 32);
-  const signer = new Wallet(sk);
-  const rlp = await signer.signTransaction({
-    nonce: 0,
-    gasLimit: 0,
-    gasPrice: 0,
-    to: constants.AddressZero,
-    value: 0,
-    data: '0x',
-    chainId,
-  });
-  return keccak256(rlp);
-}
-
-async function computePublicInput(block: RPCBlock, chainId: number): Promise<[string, string]> {
-  const maxTxs = 100;
-
-  const buf = Buffer.concat([
-    hex.toFixedBuffer(prevStateRoot, 32),
-    hex.toFixedBuffer(block.stateRoot, 32),
-    hex.toFixedBuffer(block.withdrawalsRoot ?? 0, 32),
-    hex.toFixedBuffer(block.hash, 32),
-    hex.toFixedBuffer(block.parentHash, 32),
-    hex.toFixedBuffer(block.number, 8),
-    hex.toFixedBuffer(block.timestamp, 8),
-    hex.toFixedBuffer(block.baseFeePerGas ?? 0, 32),
-    hex.toFixedBuffer(block.gasLimit, 8),
-    hex.toFixedBuffer(block.transactions.length, 2),
-    Buffer.concat(
-      block.transactions.map((txHash: string) => {
-        return toFixedBuffer(txHash, 32);
-      }),
-    ),
-    Buffer.concat(
-      Array(maxTxs - block.transactions.length).fill(
-        toFixedBuffer(await getDummyTxHash(chainId), 32),
-      ),
-    ),
-  ]);
-  const h = hex.toFixedBuffer(keccak256(buf), 32);
-  return [
-    '0x' + h.subarray(0, 16).toString('hex'),
-    '0x' + h.subarray(16, 32).toString('hex'),
-  ];
-}
+```text
+publicValues = output_root_parent ++ output_root_target ++ l1_head
 ```
 
-The following is the verification process of invalid output by
-[ZK Verifier Contract](zkevm-prover.md#the-zk-verifier-contract):
+The following is the [verification process of invalid output at `proveFaultWithZkVm`
+function](zkvm-prover.md#proving-fault):
 
 1. Check whether the challenge is ready to prove. The status of challenge should be `READY_TO_PROVE`
    or `ASSERTER_TIMEOUT`.
-2. Check whether `srcOutputRootProof` is the preimage of the first output root of the segment.
-3. Check whether `dstOutputRootProof` is the preimage of the next output root of the segment.
-4. Verify that the `nextBlockHash` in `srcOutputRootProof` matches the `blockHash` in `dstOutputRootProof`.
-5. Verify that the `stateRoot` in `publicInput` matches the `stateRoot` in `dstOutputRootProof`.
-6. Verify that the `nextBlockHash` in `srcOutputRootProof` matches the block hash derived from `publicInput` and `rlps`.
-7. Verify that the `withdrawalStorageRoot` in `dstOutputRootProof` is contained in `stateRoot` in `dstOutputRootProof`
-   using `merkleProof`.
-8. If the length of transaction hashes in `publicInput` is less than `MAX_TXS`, fill it with `DUMMY_HASH`.
-9. Verify the `_zkproof` using `_pair` and `publicInputHash`. The `publicInputHash` is derived from the `publicInput`
-   and `stateRoot` of `srcOutputRootProof`, while `_zkproof` and `_pair` are submitted by the challenger directly.
-10. Delete the output and request validation of the challenge to [Security Council][g-security-council] if there is any
-    undeniable bugs such as soundness error.
-11. If the deleted output was valid so the challenge has an undeniable bug, Security Council will
-    [dismiss](#dismiss-challenge) the challenge and roll back the output.
+2. Check whether the first 32 bytes of `publicValues` is the preimage of the parent output root stored onchain.
+3. Check whether the second 32 bytes of `publicValues` is the preimage of the target output root stored onchain.
+4. Verify that the `l1Head` stored in `Challenge` is included as the `publicValues`.
+5. Verify `zkVmProgramVKey` used to generate `zkVmProof` is same as `ZKVM_PROGRAM_V_KEY`, which is given as a constant
+   defined at the `ZKProofVerifier` contract.
+6. Verify the `zkVmProof` with `publicValues` and `ZKVM_PROGRAM_V_KEY` in a ZK verifier contract.
+7. Delete the output and request validation of the challenge to [Security Council][g-security-council] if there is any
+   undeniable bugs such as soundness error.
+8. If the deleted output was valid so the challenge has an undeniable bug, Security Council will
+   [dismiss](#dismiss-challenge) the challenge and roll back the output.
 
 ## Dismiss Challenge
 
@@ -330,7 +257,7 @@ interface Colosseum {
     );
 
     /**
-       * @notice Creates a challenge against an invalid output.
+     * @notice Creates a challenge against an invalid output.
      *
      * @param _outputIndex   Index of the invalid L2 checkpoint output.
      * @param _l1BlockHash   The block hash of L1 at the time the output L2 block was created.
@@ -345,7 +272,7 @@ interface Colosseum {
     ) external;
 
     /**
-       * @notice Selects an invalid section and submit segments of that section.
+     * @notice Selects an invalid section and submit segments of that section.
      *
      * @param _outputIndex Index of the L2 checkpoint output.
      * @param _challenger  Address of the challenger.
@@ -360,22 +287,31 @@ interface Colosseum {
     ) external;
 
     /**
-       * @notice Proves that a specific output is invalid using ZKP.
-     *         This function can only be called in the READY_TO_PROVE and ASSERTER_TIMEOUT states.
-     *
-     * @param _outputIndex Index of the L2 checkpoint output.
-     * @param _pos         Position of the last valid segment.
-     * @param _proof       Proof for public input validation.
-     * @param _zkproof     Halo2 proofs composed of points and scalars.
-     *                     See https://zcash.github.io/halo2/design/implementation/proofs.html.
-     * @param _pair        Aggregated multi-opening proofs and public inputs. (Currently only 2 public inputs)
-     */
-    function proveFault(
+      * @notice Proves that a specific output is invalid using zkEVM proof.
+      *         This function can only be called in the READY_TO_PROVE and ASSERTER_TIMEOUT statuses.
+      * 
+      * @param _outputIndex Index of the L2 checkpoint output.
+      * @param _pos         Position of the last valid segment.
+      * @param _zkEvmProof  The public input and proof using zkEVM.
+      */
+    function proveFaultWithZkEvm(
         uint256 _outputIndex,
         uint256 _pos,
-        Types.PublicInputProof calldata _proof,
-        uint256[] calldata _zkproof,
-        uint256[] calldata _pair
+        Types.ZkEvmProof calldata _zkEvmProof
+    ) external;
+
+    /**
+      * @notice Proves that a specific output is invalid using zkVM proof.
+      *         This function can only be called in the READY_TO_PROVE and ASSERTER_TIMEOUT statuses.
+      *
+      * @param _outputIndex Index of the L2 checkpoint output.
+      * @param _pos         Position of the last valid segment.
+      * @param _zkVmProof   The public input and proof using zkVM.
+      */
+    function proveFaultWithZkVm(
+        uint256 _outputIndex,
+        uint256 _pos,
+        Types.ZkVmProof calldata _zkVmProof
     ) external;
 
     /**
@@ -434,11 +370,6 @@ Colosseum contract should be deployed behind upgradable proxies.
 
 | Name                          | Value                                                              | Unit              |
 |-------------------------------|--------------------------------------------------------------------|-------------------|
-| `REQUIRED_BOND_AMOUNT`        | 200000000000000000 (0.2 ETH)                                       | wei               |
-| `FINALIZATION_PERIOD_SECONDS` | 604800                                                             | seconds           |
-| `CREATION_PERIOD_SECONDS`     | 518400                                                             | seconds           |
 | `BISECTION_TIMEOUT`           | 3600                                                               | seconds           |
 | `PROVING_TIMEOUT`             | 28800                                                              | seconds           |
 | `SEGMENTS_LENGTHS`            | [9, 6, 10, 6]                                                      | array of integers |
-| `MAX_TXS`                     | 100                                                                | uint256           |
-| `DUMMY_HASH`                  | 0xedf1ae3da135c124658e215a9bf53477facb442a1dcd5a92388332cb6193237f | bytes32           |

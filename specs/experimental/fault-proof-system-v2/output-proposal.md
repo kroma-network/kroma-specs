@@ -25,8 +25,8 @@
 This document addresses one of the limitations of
 [the previous output proposal process](../../protocol/validation.md#submitting-l2-output-commitments) in Fault Proof
 System V1. When consecutive invalid [outputs][g-checkpoint-output] are proposed, the previous system's sequential
-[challenge](../../fault-proof/challenge.md) and deletion mechanism for the first invalid output could lead to
-insufficient time to [prove fault](../../fault-proof/challenge.md#proving-fault) in subsequent challenges before
+[challenge](../../zk-fault-proof/challenge.md) and deletion mechanism for the first invalid output could lead to
+insufficient time to [prove fault](../../zk-fault-proof/challenge.md#proving-fault) in subsequent challenges before
 finalization. Additionally, the limited participation in each challenge (only designated asserters and challengers)
 increased the risk of losing challenges due to timeouts, even for honest parties.
 
@@ -63,7 +63,7 @@ payload = state_root || withdrawal_storage_root || block_hash
 
 This version removes the `next_block_hash`, which was added as a means to ensure that the asserter and challenger
 executed the same transactions in the target block in the
-[previous ZK proof verification process](../../fault-proof/challenge.md#proving-fault). The elimination of
+[previous ZK proof verification process](../../zk-fault-proof/challenge.md#proving-fault). The elimination of
 `next_block_hash` is feasible now that [transaction data is verifiable on-chain](./transaction-data-commitment.md). This
 change addresses the incorrect identification of the first disagreeing block in dissection, as noted in the
 [Background](./overview.md#background).

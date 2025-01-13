@@ -12,7 +12,7 @@
 - [Foundations](#foundations)
   - [Blockchain Trilemma](#blockchain-trilemma)
   - [What is Ethereum scalability?](#what-is-ethereum-scalability)
-  - [What is a Layer2?](#what-is-a-layer2)
+  - [What is a Layer 2?](#what-is-a-layer-2)
   - [What is a Rollup?](#what-is-a-rollup)
   - [What is EVM Equivalence?](#what-is-evm-equivalence)
   - [🎶 All together now 🎶](#-all-together-now-)
@@ -53,7 +53,7 @@ processed on the network. Of the three resources, computation and storage are cu
 bottlenecks. These bottlenecks limit the supply of transactions, leading to extremely high fees. Scaling ethereum and
 reducing fees can be achieved by better utilizing bandwidth, computation and storage.
 
-### What is a Layer2?
+### What is a Layer 2?
 
 Layer 2 is a solution for Ethereum scalability. The key is to do state transition at not onchain but offchain.
 This means the transaction execution is not part of the consensus. Why? because the more participants re-execute
@@ -85,11 +85,6 @@ finalized.
 with the state transition function described in the Ethereum yellow paper, the formal definition of the protocol. By
 conforming to the Ethereum standard across EVM equivalent rollups, smart contract developers can write once and deploy
 anywhere.
-
-**NOTE:** At this moment, `OP_SELFDESTRUCT` is disabled. We are actively trying to fully cover the evm spec. But like
-[eip-4758] suggests, we don't recommend users to rely on this opcode.
-
-[eip-4758]: https://eips.ethereum.org/EIPS/eip-4758
 
 ### 🎶 All together now 🎶
 

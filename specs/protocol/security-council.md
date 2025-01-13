@@ -25,8 +25,8 @@ all actions are carried out through multi-sig transaction or governance processe
 When an undeniable bug occurs within the [ZK Fault Proof System](../glossary.md#zk-fault-proof), assets locked in
 Layer 2 may be exposed to potential risks. To prevent this, the Security Council has the authority to rectify such
 issues. The Security Council intervenes in cases where two valid and contradictory ZK proofs exist
-([ZK soundness error](../fault-proof/challenge.md#dismiss-challenge)) or fail to prove with a valid proof
-([ZK completeness error](../fault-proof/challenge.md#force-delete-output)).
+([ZK soundness error](../zk-fault-proof/challenge.md#dismiss-challenge)) or fail to prove with a valid proof
+([ZK completeness error](../zk-fault-proof/challenge.md#force-delete-output)).
 Their intervention aims to prevent invalid outputs from being finalized,
 thereby safeguarding the assets locked in Layer 2.
 
@@ -61,5 +61,4 @@ is configured to be Security Council.
 
 All contract upgrades deployed on [Layer 1][g-l1] are conducted by the
 [governance of the Security Council](contract-upgrades.md#upgrade-by-governance). These upgrades are proposed by a
-member of Security Council and are determined through the voting of these members. If a proposal passes, it typically
-has a 7-day timelock delay for execution.
+member of Security Council and are determined through the voting of these members.
