@@ -33,6 +33,7 @@
       - [L1 attributes](./protocol/ecotone/l1-attributes.md)
     - [Kroma MPT Migration](./protocol/mpt-migration/overview.md)
       - [Execution Engine](./protocol/mpt-migration/exec-engine.md)
+      - [Predeploys](./protocol/mpt-migration/predeploys.md)
 - [ZK Fault Proof]()
   - [Challenge](zk-fault-proof/challenge.md)
   - [zkVM Prover](zk-fault-proof/zkvm-prover.md)
